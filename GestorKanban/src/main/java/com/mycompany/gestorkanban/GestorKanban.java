@@ -4,6 +4,8 @@
 
 package com.mycompany.gestorkanban;
 
+import interfacegrafica.Janela;
+
 /**
  *
  * @author FranciscoTavares
@@ -11,6 +13,6 @@ package com.mycompany.gestorkanban;
 public class GestorKanban {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        Janela janela = new Janela();
     }
 }
