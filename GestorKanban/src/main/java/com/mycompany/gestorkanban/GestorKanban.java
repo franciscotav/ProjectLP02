@@ -3,8 +3,8 @@
  */
 
 package com.mycompany.gestorkanban;
+import window.frame.*;
 
-import interfacegrafica.Janela;
 
 /**
  *
@@ -13,6 +13,11 @@ import interfacegrafica.Janela;
 public class GestorKanban {
 
     public static void main(String[] args) {
-        Janela janela = new Janela();
+      
+        Window window = new Window();
+        window.add(new Sticker());
+        window.add(new Sticker());
+        window.setVisible(true);
+
     }
 }
