@@ -25,6 +25,7 @@ public class Sticker extends JPanel{
         this.setPreferredSize(new Dimension(250,250));
         this.setBackground(stickerColor);
         this.setLayout(new BorderLayout());
+        this.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 
         addMouseListener(new MouseAdapter() {
 
@@ -58,7 +59,22 @@ public class Sticker extends JPanel{
     private void configurarComportamentoMenu(){
         
         stickerMenu.getEditlButton().addActionListener(e -> {
-            stickerBody.changeLabels();
+            //stickerBody.changeLabels();
+            JTextField campoTitulo = new JTextField(15);
+            JTextField campoDescricao = new JTextField(15);
+            
+            JPanel editPanel = new JPanel(new GridLayout(0,1));
+            editPanel.add(new JLabel("Titulo:"));
+            editPanel.add(campoTitulo);
+            editPanel.add(new JLabel("Descrição:"));
+            editPanel.add(campoDescricao);
+            
+            int result = JOptionPane.showConfirmDialog(null, editPanel, "Editar Sticker", JOptionPane.OK_CANCEL_OPTION);
+            
+            if(result == JOptionPane.OK_OPTION){
+                stickerBody.atualizarDados(campoTitulo.getText(), campoDescricao.getText());
+            }
+            
         });
     }
 
@@ -94,10 +110,10 @@ class StickerBody extends JPanel{
         bodyLabel = new JLabel(bodyString);
         formatLabel(bodyLabel);
     }
-    
-    public void changeLabels(){
-        tituloString = new String("Test");
-        descricaoString = new String("aaaaaa");
+   
+    public void atualizarDados(String titulo, String descricao){
+        tituloString = titulo;
+        descricaoString = descricao;
         
         String bodyString = "<html>" +
                                 "<p style='text-align: center'>" + 
@@ -108,7 +124,7 @@ class StickerBody extends JPanel{
                             "</html>";
                 
         bodyLabel.setText(bodyString);
-        formatLabel(bodyLabel);
+                
         revalidate();
         repaint();
     }
