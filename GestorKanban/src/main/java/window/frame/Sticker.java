@@ -14,34 +14,24 @@ import javax.swing.*;
  */
 public class Sticker extends JPanel{
 
+    
+    //vars
     private Color stickerColor;
-
     private StickerMenu stickerMenu;
     private StickerBody stickerBody;
 
+    //construtor
     public Sticker() {
+        
         stickerColor = new Color(100,200,200);
-
+        
+        
         this.setPreferredSize(new Dimension(250,250));
         this.setBackground(stickerColor);
         this.setLayout(new BorderLayout());
         this.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
-
-        addMouseListener(new MouseAdapter() {
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                stickerMenu.setVisible(true);
-            }
-            
-            @Override
-            public void mouseExited(MouseEvent e) {
-                if (!contains(e.getPoint())) {
-                    stickerMenu.setVisible(false);
-                }
-            }
-            
-        });
+        this.mouseEventos();
+        
         
         
         stickerMenu = new StickerMenu(stickerColor);
@@ -56,6 +46,52 @@ public class Sticker extends JPanel{
         stickerMenu.setVisible(false);
     }
 
+    
+    private void mouseEventos(){
+
+        // Create the adapter and store it in a variable
+        MouseAdapter stickerMouseAdapter = new MouseAdapter() {
+
+            Point origem;
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                // Save the exact pixel grabbed
+                origem = e.getPoint();
+            }
+
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                // 1. Get the Sticker's current location in the parent window
+                Point currentLocation = getLocation();
+
+                // 2. Calculate the movement delta (current mouse pos - origin)
+                int deltax = e.getX() - origem.x;
+                int deltay = e.getY() - origem.y;
+
+                // 3. Add the delta to the current location
+                setLocation(currentLocation.x + deltax, currentLocation.y + deltay);
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                stickerMenu.setVisible(true);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                if (!contains(e.getPoint())) {
+                    stickerMenu.setVisible(false);
+                }
+            }
+        };
+
+        // IMPORTANT: Add the adapter to BOTH listener types
+        this.addMouseListener(stickerMouseAdapter);
+        this.addMouseMotionListener(stickerMouseAdapter);
+    }
+    
+    
     private void configurarComportamentoMenu(){
         
         stickerMenu.getEditlButton().addActionListener(e -> {

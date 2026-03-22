@@ -12,12 +12,14 @@ import javax.swing.*;
  * @author CasaSFT
  */
 
+
+//maini JFRAME
 public class Window extends JFrame{
     public Window(){
         super("Sticker Teste");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(1920, 1080);
-        this.setLayout(new FlowLayout());
+        this.setLayout(new BorderLayout());
         this.setVisible(true);
     }
 }
