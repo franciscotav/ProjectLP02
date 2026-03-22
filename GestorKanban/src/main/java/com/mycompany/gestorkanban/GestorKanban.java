@@ -17,6 +17,7 @@ public class GestorKanban {
         Window window = new Window();
         window.add(new Sticker());
         window.add(new Sticker());
+        window.add(new Sticker());
         window.setVisible(true);
 
     }
