@@ -15,9 +15,7 @@ public class GestorKanban {
     public static void main(String[] args) {
       
         Window window = new Window();
-        window.add(new Quadro());
         
-        window.setVisible(true);
 
     }
 }
