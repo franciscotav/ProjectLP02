@@ -16,9 +16,7 @@ public class GestorKanban {
         
         
         Projeto proj1 = new Projeto("projeto1");
-        
-                
-        
+
         System.out.println(proj1);
         
         //Window window = new Window();

@@ -22,16 +22,18 @@ public class Projeto{
         this.nome = nome;
         this.grupo = new Grupo();
         this.estados = new ArrayList<Estado>();
+        this.estados.add(new Estado("coluna1")); //Obejeto Hardcoded
+        this.estados.add(new Estado("coluna2")); //Obejeto Hardcoded
     }
 
     @Override
     public String toString() {
         String output = new String();
         for (Estado e : estados) {
-            output += e;
+            output += e + ",";
         }
-        if (estados.isEmpty()) {output="[]";}
-        return "{" + "\"nome\":" + '"' + nome + "\"" + ", \"grupo\":" + grupo + ", \"estados\":" + output + '}';
+        if (output.isEmpty()){output = "";}else{output = output.substring(0, output.length() - 1);}
+        return "{\"nome\": \"" + nome + "\", \"grupo\":" + grupo + ", \"estados\":[" + output + "]}";
     }
 
     public String getNome() {
@@ -56,14 +58,22 @@ class Estado {
     private String nome;
     private List<Tarefa> tarefas;
 
+    public Estado(String nome) {
+        this.nome = nome;
+        this.tarefas =  new ArrayList<Tarefa>();
+        this.tarefas.add(new Tarefa("Tarefa1","nada de jeito")); //Obejeto Hardcoded
+        this.tarefas.add(new Tarefa("Tarefa2","nada de jeito")); //Obejeto Hardcoded
+    }
+
+    
     @Override
     public String toString() {
         String output = new String();
         for (Tarefa t : tarefas) {
-            output += t;
+            output += t + ",";
         }
-        if (tarefas.isEmpty()) {output="[]";}
-        return "Estado{" + "nome=" + nome + ", tarefas=" + output + '}';
+        if (output.isEmpty()){output = "";}else{output = output.substring(0, output.length() - 1);}
+        return "{\"nome\": \"" + nome + "\" , \"tarefas\":[" + output + "]}";
     }
 
     public String getNome() {
@@ -92,10 +102,10 @@ class Tarefa {
     public String toString() {
         String output = new String();
         for (Pessoa p : pessoas) {
-            output += p;
+            output += p+",";
         }
-        if (pessoas.isEmpty()) {output="[]";}
-        return "Tarefa{" + "nome=" + nome + ", descricao=" + descricao + ", pessoas=" + output + '}';
+        if (output.isEmpty()){output = "";}else{output = output.substring(0, output.length() - 1);}
+        return "{ \"nome\": \"" + nome + "\", \"descricao\": \"" + descricao + "\", \"pessoas\":[" + output + "]}";
     }
 
     public String getNome() {
@@ -122,8 +132,8 @@ class Grupo{
 
     public Grupo() {
         this.pessoas = new ArrayList<Pessoa>();
-        pessoas.add(new Pessoa("ze"));
-        pessoas.add(new Pessoa("to"));
+        pessoas.add(new Pessoa("ze")); //Obejeto Hardcoded
+        pessoas.add(new Pessoa("to")); //Obejeto Hardcoded
     }
 
     @Override
@@ -132,7 +142,7 @@ class Grupo{
         for (Pessoa p : pessoas) {
             output += p +",";
         }
-        output = output.substring(0, output.length() - 1);
+        if (output.isEmpty()){output = "";}else{output = output.substring(0, output.length() - 1);}
         return "[" + output + ']';
     }
     
