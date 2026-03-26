@@ -15,11 +15,11 @@ public class GestorKanban {
     public static void main(String[] args) {
         
         
-        Database data = new Database();
-        data.addProjeto("projeto 1");
+        Projeto proj1 = new Projeto("projeto1");
+        
                 
         
-        System.out.println(data);
+        System.out.println(proj1);
         
         //Window window = new Window();
         

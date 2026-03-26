@@ -10,34 +10,9 @@ import java.util.ArrayList;
 /**
  *
  * @author bernardos
- */
-public class Database {
-    private List<Projeto> projetos;
+*/
 
-    public Database() {
-        this.projetos = new ArrayList<Projeto>();
-    }
-
-    @Override
-    public String toString() {
-        
-        String output = new String();
-        for (Projeto p : projetos) {
-            output += p;
-        }
-        
-        if (projetos.isEmpty()) {output="[]";}
-        
-        return "Database{" + "projetos=" + output + '}';
-    }
-    
-    public void addProjeto(String nome){
-        this.projetos.add(new Projeto(nome));
-    }
-    
-}
-
-class Projeto{
+public class Projeto{
     private String nome;
     private Grupo grupo;
     private List<Estado> estados;
@@ -56,7 +31,7 @@ class Projeto{
             output += e;
         }
         if (estados.isEmpty()) {output="[]";}
-        return "Projeto{" + "nome=" + nome + ", grupo=" + grupo + ", estados=" + output + '}';
+        return "{" + "\"nome\":" + '"' + nome + "\"" + ", \"grupo\":" + grupo + ", \"estados\":" + output + '}';
     }
 
     public String getNome() {
@@ -147,16 +122,18 @@ class Grupo{
 
     public Grupo() {
         this.pessoas = new ArrayList<Pessoa>();
+        pessoas.add(new Pessoa("ze"));
+        pessoas.add(new Pessoa("to"));
     }
 
     @Override
     public String toString() {
         String output = new String();
         for (Pessoa p : pessoas) {
-            output += p; 
+            output += p +",";
         }
-        if (pessoas.isEmpty()) {output="[]";}
-        return "Grupo{" + "pessoas=" + output + '}';
+        output = output.substring(0, output.length() - 1);
+        return "[" + output + ']';
     }
     
 
@@ -166,9 +143,15 @@ class Grupo{
 class Pessoa{
     private String nome;
 
+    public Pessoa(String nome) {
+        this.nome = nome;
+    }
+
+    
+    
     @Override
     public String toString() {
-        return "Pessoa{" + "nome=" + nome + '}';
+        return "{\"nome\":\"" + nome + "\"}";
     }
 
     public String getNome() {
