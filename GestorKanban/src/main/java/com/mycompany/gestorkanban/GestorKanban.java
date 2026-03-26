@@ -16,6 +16,8 @@ public class GestorKanban {
         
         
         Database data = new Database();
+        data.addProjeto("projeto 1");
+                
         
         System.out.println(data);
         

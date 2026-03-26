@@ -31,6 +31,9 @@ public class Database {
         return "Database{" + "projetos=" + output + '}';
     }
     
+    public void addProjeto(String nome){
+        this.projetos.add(new Projeto(nome));
+    }
     
 }
 
@@ -40,6 +43,7 @@ class Projeto{
     private List<Estado> estados;
 
     public Projeto(String nome) {
+        
         this.nome = nome;
         this.grupo = new Grupo();
         this.estados = new ArrayList<Estado>();
@@ -55,7 +59,22 @@ class Projeto{
         return "Projeto{" + "nome=" + nome + ", grupo=" + grupo + ", estados=" + output + '}';
     }
 
-    
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public Grupo getGrupo() {
+        return grupo;
+    }
+
+    public void setGrupo(Grupo grupo) {
+        this.grupo = grupo;
+    }
+  
 }
 
 class Estado {
@@ -72,6 +91,14 @@ class Estado {
         return "Estado{" + "nome=" + nome + ", tarefas=" + output + '}';
     }
 
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+    
 }
 
 class Tarefa {
@@ -95,6 +122,23 @@ class Tarefa {
         if (pessoas.isEmpty()) {output="[]";}
         return "Tarefa{" + "nome=" + nome + ", descricao=" + descricao + ", pessoas=" + output + '}';
     }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+    
     
 }
 
@@ -125,6 +169,14 @@ class Pessoa{
     @Override
     public String toString() {
         return "Pessoa{" + "nome=" + nome + '}';
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
     
 }
