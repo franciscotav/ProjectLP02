@@ -4,7 +4,7 @@
 
 package com.mycompany.gestorkanban;
 import window.frame.*;
-
+import database.model.*;
 
 /**
  *
@@ -13,8 +13,13 @@ import window.frame.*;
 public class GestorKanban {
 
     public static void main(String[] args) {
-      
-        Window window = new Window();
+        
+        
+        Database data = new Database();
+        
+        System.out.println(data);
+        
+        //Window window = new Window();
         
 
     }
