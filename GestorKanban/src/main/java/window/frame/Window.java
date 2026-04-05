@@ -156,6 +156,7 @@ class Quadro extends JPanel{
         quadroConstraints.weighty = 1;
         
         sideQuadro = new SideQuadro();
+        
         add(sideQuadro,quadroConstraints);
         
         
@@ -174,12 +175,12 @@ class Quadro extends JPanel{
     
 }
 
-class SideQuadro extends JScrollPane {
+class SideQuadro extends JPanel {
     
-    private ScrollPaneLayout sideQuadroLayout;
+    private FlowLayout sideQuadroLayout;
 
     public SideQuadro(){
-        sideQuadroLayout = new ScrollPaneLayout();
+        sideQuadroLayout = new FlowLayout();
         setLayout(sideQuadroLayout);
 
         //Debug Area
@@ -190,21 +191,35 @@ class SideQuadro extends JScrollPane {
     }
 }
 
-class MainQuadro extends JPanel {
-    private FlowLayout mainQuadroLayout;
+
+class MainQuadro extends JScrollPane {
+    private JPanel jPanelMainQuadro;
+    private FlowLayout jPanelMainQuadroLayout;
     
 
     public MainQuadro(){
-        mainQuadroLayout = new FlowLayout();
-        setLayout(mainQuadroLayout);
-
+        jPanelMainQuadro = new JPanel();
+        jPanelMainQuadroLayout = new FlowLayout(FlowLayout.LEFT);
+        
+        jPanelMainQuadro.setLayout(jPanelMainQuadroLayout);
+        
         //Debug Area
         Border borda = BorderFactory.createLineBorder(Color.DARK_GRAY, 2);
-        setBorder(borda);
-        
+        jPanelMainQuadro.setBorder(borda);
+       
         Sticker stickerA = new Sticker();
-        add(stickerA);
+        Sticker stickerB = new Sticker();
+        
+        Estado estadoA = new Estado();
+        estadoA.add(stickerA);
+        estadoA.add(stickerB);
+        
+        
+        jPanelMainQuadro.add(estadoA);
+        
         
         //-----
+        
+        setViewportView(jPanelMainQuadro);
     }
 }

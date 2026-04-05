@@ -25,13 +25,11 @@ public class Sticker extends JPanel{
         
         stickerColor = new Color(100,200,200);
         
-        
         this.setPreferredSize(new Dimension(250,250));
         this.setBackground(stickerColor);
         this.setLayout(new BorderLayout());
         this.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
         this.mouseEventos();
-        
         
         
         stickerMenu = new StickerMenu(stickerColor);
