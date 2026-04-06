@@ -98,20 +98,22 @@ public class StikerTarefa extends JPanel {
             JTextArea areaDesc = new JTextArea(stringDescricao, 5, 20);
             JTextField fieldResp = new JTextField(labelResponsavel.getText().replace("👤 ", ""));
 
-            panelEdicao.add(new JLabel("Título:"));
+            panelEdicao.add(new JLabel("Titulo:"));
             panelEdicao.add(fieldTitulo);
             panelEdicao.add(new JLabel("Descrição:"));
             panelEdicao.add(new JScrollPane(areaDesc));
             panelEdicao.add(new JLabel("Responsável:"));
             panelEdicao.add(fieldResp);
 
-            int result = JOptionPane.showConfirmDialog(null, panelEdicao, 
+            int result = JOptionPane.showConfirmDialog(this, panelEdicao, 
                        "Editar Tarefa", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
             if (result == JOptionPane.OK_OPTION) {
                 labelTitulo.setText(fieldTitulo.getText());
                 stringDescricao = areaDesc.getText();
-                
+                if(stringDescricao.length() > 275){
+                    stringDescricao = stringDescricao.substring(0, 275);
+                }
                 labelDescricao.setText("<html><body style='width: 180px;'>" + stringDescricao + "</body></html>");
                 labelResponsavel.setText("👤 " + fieldResp.getText());
 
@@ -254,10 +256,9 @@ public class StikerTarefa extends JPanel {
 }
 
 class StickerAddicionar extends JPanel{
-    private Dimension tamanho;
     
     public StickerAddicionar() {
-        tamanho = new Dimension(250, 250);
+        Dimension tamanho = new Dimension(250, 250);
         
         setPreferredSize(tamanho);
         setMaximumSize(tamanho);
