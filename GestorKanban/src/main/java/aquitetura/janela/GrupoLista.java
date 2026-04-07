@@ -221,9 +221,18 @@ class Responsavel extends JPanel{
             panelEdicao.setLayout(new BoxLayout(panelEdicao, BoxLayout.Y_AXIS));
             
             JTextField fieldTitulo = new JTextField(name);
-
+            
+            JPanel selectSticker = new JPanel();
+            selectSticker.setLayout(new BoxLayout(selectSticker, BoxLayout.Y_AXIS));
+            for(StikerTarefa sticker : stickersAtribuidos){
+                JCheckBox checkBox = new JCheckBox(sticker.getLabelTitulo().getText() + " #" + sticker.getStickerindex());
+                checkBox.setSelected(true);
+                selectSticker.add(checkBox);
+            }
+            
             panelEdicao.add(new JLabel("Nome:"));
             panelEdicao.add(fieldTitulo);
+            panelEdicao.add(selectSticker);
             
             int result = JOptionPane.showConfirmDialog(this, panelEdicao, 
                        "Editar Membro #" + index , JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
@@ -231,6 +240,17 @@ class Responsavel extends JPanel{
             if (result == JOptionPane.OK_OPTION) {
                 name = fieldTitulo.getText();
                 labelname.setText("<html><body style='width: 180px;'>" + "👤 " + name + "</body></html>");
+                
+                for(int i = 0; i < selectSticker.getComponentCount(); i++){
+                    if(selectSticker.getComponent(i) instanceof JCheckBox){
+                        JCheckBox checkBox = (JCheckBox) selectSticker.getComponent(i);
+                        if(!checkBox.isSelected()){
+                            stickersAtribuidos.get(i).removeResponsavel(this);
+                            removeStickers(stickersAtribuidos.get(i));
+                        }
+                    }
+                }
+                
                 updateStickers();
                 revalidate();
                 repaint();
@@ -283,6 +303,11 @@ class Responsavel extends JPanel{
     public String getName() {
         return name;
     }
+
+    public int getIndex() {
+        return index;
+    }
+
     
     public void removeStickers(StikerTarefa sticker){
         stickersAtribuidos.remove(sticker);

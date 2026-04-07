@@ -103,14 +103,20 @@ public class StikerTarefa extends JPanel {
             
             JTextField fieldTitulo = new JTextField(labelTitulo.getText());
             JTextArea areaDesc = new JTextArea(stringDescricao, 5, 20);
-            //JTextField fieldResp = new JTextField(labelResponsavel.getText().replace("👤 ", ""));
-
+            
+            JPanel selectResponsavel = new JPanel();
+            selectResponsavel.setLayout(new BoxLayout(selectResponsavel, BoxLayout.Y_AXIS));
+            for(Responsavel resp : membrosAtribuidos){
+                JCheckBox checkBox = new JCheckBox(resp.getName() + " #" + resp.getIndex());
+                checkBox.setSelected(true);
+                selectResponsavel.add(checkBox);
+            }
+            
             panelEdicao.add(new JLabel("Titulo:"));
             panelEdicao.add(fieldTitulo);
             panelEdicao.add(new JLabel("Descrição:"));
             panelEdicao.add(new JScrollPane(areaDesc));
-            //panelEdicao.add(new JLabel("Responsável:"));
-            //panelEdicao.add(fieldResp);
+            panelEdicao.add(selectResponsavel);
 
             int result = JOptionPane.showConfirmDialog(this, panelEdicao, 
                        "Editar Tarefa #" + stickerindex, JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
@@ -120,8 +126,17 @@ public class StikerTarefa extends JPanel {
                 stringDescricao = areaDesc.getText();
                 labelDescricao.setText("<html><body style='width: 180px;'>" + stringDescricao + "</body></html>");
                 
+                for(int i = 0; i < selectResponsavel.getComponentCount(); i++){
+                    if(selectResponsavel.getComponent(i) instanceof JCheckBox){
+                        JCheckBox checkBox = (JCheckBox) selectResponsavel.getComponent(i);
+                        if(!checkBox.isSelected()){
+                            membrosAtribuidos.get(i).removeStickers(this);
+                            removeResponsavel(membrosAtribuidos.get(i));
+                        }
+                    }
+                }
+                
                 updateStickers();
-
                 this.revalidate();
                 this.repaint();
             }
@@ -306,7 +321,13 @@ public class StikerTarefa extends JPanel {
         
         membrosAtribuidos = null;
     }
+
+    public int getStickerindex() {
+        return stickerindex;
+    }
     
+    
+
 }
 
     
