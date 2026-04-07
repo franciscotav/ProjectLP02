@@ -6,6 +6,7 @@ package aquitetura.janela;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.*;
 
@@ -18,7 +19,7 @@ public class StikerTarefa extends JPanel {
     private JLabel labelTitulo;
     private String stringDescricao;
     private JLabel labelDescricao;
-    private JLabel labelResponsavel;
+    //private JLabel labelResponsavel;
     private JButton buttonEditar;
     private JButton buttonRemover;
     
@@ -26,6 +27,11 @@ public class StikerTarefa extends JPanel {
     private TarefaColuna originalParent;
     private int originalIndex;
     private boolean mouseDragged;
+    
+    private static int indexGlobal = 0;
+    private int stickerindex;
+    
+    private ArrayList<Responsavel> membrosAtribuidos;
     
     private void iniStikerTarefa(){
         setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
@@ -39,6 +45,9 @@ public class StikerTarefa extends JPanel {
         setAlignmentX(Component.CENTER_ALIGNMENT);
         
         mouseDragged = false;
+        indexGlobal++;
+        stickerindex = indexGlobal;
+        membrosAtribuidos = new ArrayList<>();
     }
     
     private void setupVariavels(String titulo, String descricao){
@@ -56,12 +65,11 @@ public class StikerTarefa extends JPanel {
         labelDescricao.setAlignmentX(Component.LEFT_ALIGNMENT);
         labelDescricao.setBorder(BorderFactory.createEmptyBorder(0, 15, 10, 15));
         
-        labelResponsavel = new JLabel("👤 " + "Responsavel");
-        labelResponsavel.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 15));
-        labelResponsavel.setForeground(new Color(60, 60, 60));
-        labelResponsavel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        labelResponsavel.setBorder(BorderFactory.createEmptyBorder(10, 15, 0, 15));
-        
+//        labelResponsavel = new JLabel("👤 " + "Responsavel");
+//        labelResponsavel.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 15));
+//        labelResponsavel.setForeground(new Color(60, 60, 60));
+//        labelResponsavel.setAlignmentX(Component.LEFT_ALIGNMENT);
+//        labelResponsavel.setBorder(BorderFactory.createEmptyBorder(10, 15, 0, 15));
         
         JPanel panelButtons = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         panelButtons.setOpaque(false);
@@ -96,17 +104,17 @@ public class StikerTarefa extends JPanel {
             
             JTextField fieldTitulo = new JTextField(labelTitulo.getText());
             JTextArea areaDesc = new JTextArea(stringDescricao, 5, 20);
-            JTextField fieldResp = new JTextField(labelResponsavel.getText().replace("👤 ", ""));
+            //JTextField fieldResp = new JTextField(labelResponsavel.getText().replace("👤 ", ""));
 
             panelEdicao.add(new JLabel("Titulo:"));
             panelEdicao.add(fieldTitulo);
             panelEdicao.add(new JLabel("Descrição:"));
             panelEdicao.add(new JScrollPane(areaDesc));
-            panelEdicao.add(new JLabel("Responsável:"));
-            panelEdicao.add(fieldResp);
+            //panelEdicao.add(new JLabel("Responsável:"));
+            //panelEdicao.add(fieldResp);
 
             int result = JOptionPane.showConfirmDialog(this, panelEdicao, 
-                       "Editar Tarefa", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+                       "Editar Tarefa #" + stickerindex, JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
             if (result == JOptionPane.OK_OPTION) {
                 labelTitulo.setText(fieldTitulo.getText());
@@ -115,7 +123,7 @@ public class StikerTarefa extends JPanel {
                     stringDescricao = stringDescricao.substring(0, 275);
                 }
                 labelDescricao.setText("<html><body style='width: 180px;'>" + stringDescricao + "</body></html>");
-                labelResponsavel.setText("👤 " + fieldResp.getText());
+                //labelResponsavel.setText("👤 " + fieldResp.getText());
 
                 this.revalidate();
                 this.repaint();
@@ -125,10 +133,20 @@ public class StikerTarefa extends JPanel {
         add(labelTitulo);
         add(labelDescricao);
         add(Box.createVerticalGlue());
-        add(labelResponsavel);
+        //add(labelResponsavel);
         add(panelButtons);
         add(Box.createRigidArea(new Dimension(0, 5)));
      }
+    
+    private void addResponsavel(Responsavel membro){
+        membrosAtribuidos.add(membro);
+        JLabel labelResponsavel = new JLabel("👤 " + membro.getName());
+        labelResponsavel.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 15));
+        labelResponsavel.setForeground(new Color(60, 60, 60));
+        labelResponsavel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        labelResponsavel.setBorder(BorderFactory.createEmptyBorder(10, 15, 0, 15));
+        add(labelResponsavel, getComponentCount() - 1);
+    }
     
     private void buttonStyle(JButton button) {
         button.setFont(new Font("Segoe UI Symbol", Font.BOLD, 45));
