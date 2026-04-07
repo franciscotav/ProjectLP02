@@ -89,6 +89,7 @@ public class StikerTarefa extends JPanel {
                 TarefaColuna coluna = (TarefaColuna) getParent();
                 int index = coluna.getComponentZOrder(this);
                 coluna.remove(index + 1);
+                removeInGrupos();
                 coluna.remove(this);
                 coluna.revalidate();
                 coluna.repaint();
@@ -139,7 +140,6 @@ public class StikerTarefa extends JPanel {
         labelResponsavel.setForeground(new Color(60, 60, 60));
         labelResponsavel.setBorder(BorderFactory.createEmptyBorder(10, 15, 0, 15));
         panelResponsaveis.add(labelResponsavel);
-        //panelResponsaveis.setMaximumSize(new Dimension(250, 100));
         
         panelResponsaveis.revalidate();
         panelResponsaveis.repaint();
@@ -272,7 +272,37 @@ public class StikerTarefa extends JPanel {
         });
     }
     
+    public void removeResponsavel(Responsavel membro){
+        membrosAtribuidos.remove(membro);
+        updatePanelResponsaveis();
+    }
+    
+    private void updatePanelResponsaveis(){
+        panelResponsaveis.removeAll();
+        
+        for(Responsavel membro : membrosAtribuidos){
+            JLabel labelResponsavel = new JLabel("👤 " + membro.getName());
+            labelResponsavel.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 15));
+            labelResponsavel.setForeground(new Color(60, 60, 60));
+            labelResponsavel.setBorder(BorderFactory.createEmptyBorder(10, 15, 0, 15));
+            panelResponsaveis.add(labelResponsavel);
+        }
+        
+        panelResponsaveis.revalidate();
+        panelResponsaveis.repaint();
+    }
+    
+    private void removeInGrupos(){
+        for(Responsavel responsavel : membrosAtribuidos){
+            responsavel.removeStickers(this);
+        }
+        
+        membrosAtribuidos = null;
+    }
+    
 }
+
+    
 
 class StickerAddicionar extends JPanel{
     

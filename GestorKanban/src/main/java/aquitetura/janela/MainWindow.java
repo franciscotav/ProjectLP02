@@ -31,4 +31,10 @@ public class MainWindow extends JFrame {
         
         setVisible(true);
     }
+
+    public Quadro getQuadro() {
+        return quadro;
+    }
+    
+    
 }

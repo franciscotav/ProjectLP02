@@ -22,6 +22,11 @@ public class Quadro extends JScrollPane {
         this.setViewportView(estados);
         
     }
+
+    public Estados getEstados() {
+        return estados;
+    }
+
 }
 
 class Estados extends JPanel {
