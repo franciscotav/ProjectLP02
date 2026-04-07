@@ -119,7 +119,8 @@ public class StikerTarefa extends JPanel {
                 labelTitulo.setText(fieldTitulo.getText());
                 stringDescricao = areaDesc.getText();
                 labelDescricao.setText("<html><body style='width: 180px;'>" + stringDescricao + "</body></html>");
-                //labelResponsavel.setText("👤 " + fieldResp.getText());
+                
+                updateStickers();
 
                 this.revalidate();
                 this.repaint();
@@ -277,7 +278,7 @@ public class StikerTarefa extends JPanel {
         updatePanelResponsaveis();
     }
     
-    private void updatePanelResponsaveis(){
+    public void updatePanelResponsaveis(){
         panelResponsaveis.removeAll();
         
         for(Responsavel membro : membrosAtribuidos){
@@ -290,6 +291,12 @@ public class StikerTarefa extends JPanel {
         
         panelResponsaveis.revalidate();
         panelResponsaveis.repaint();
+    }
+    
+    public void updateStickers(){
+        for(Responsavel membro : membrosAtribuidos){
+            membro.updateStickersAtribuidos();
+        }
     }
     
     private void removeInGrupos(){

@@ -231,9 +231,9 @@ class Responsavel extends JPanel{
             if (result == JOptionPane.OK_OPTION) {
                 name = fieldTitulo.getText();
                 labelname.setText("<html><body style='width: 180px;'>" + "👤 " + name + "</body></html>");
-                
-                this.revalidate();
-                this.repaint();
+                updateStickers();
+                revalidate();
+                repaint();
             }
         });
         
@@ -289,7 +289,13 @@ class Responsavel extends JPanel{
         updateStickersAtribuidos();
     }
     
-    private void updateStickersAtribuidos(){
+    public void updateStickers(){
+        for(StikerTarefa sticker : stickersAtribuidos){
+            sticker.updatePanelResponsaveis();
+        }
+    }
+    
+    public void updateStickersAtribuidos(){
         panelTarefas.removeAll();
         
         for(StikerTarefa sticker : stickersAtribuidos){
