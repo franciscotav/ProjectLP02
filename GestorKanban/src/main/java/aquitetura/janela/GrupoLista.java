@@ -29,7 +29,7 @@ class GrupoListaPanel extends JPanel{
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setAlignmentX(Component.CENTER_ALIGNMENT);
         
-        Border margin = BorderFactory.createEmptyBorder(10, 15, 10, 15);
+        Border margin = BorderFactory.createEmptyBorder(10, 20, 10, 20);
         Border line = BorderFactory.createLineBorder(Color.GRAY,1);
         Border combined = BorderFactory.createCompoundBorder(line, margin);
         setBorder(combined);
@@ -90,7 +90,7 @@ class Responsavel extends JPanel{
         index = indexGlobal;
         stickersAtribuidos = new ArrayList<>();
                 
-        Dimension tamanho = new Dimension(250, 125);
+        Dimension tamanho = new Dimension(250, 250);
         setPreferredSize(tamanho);
         setMaximumSize(tamanho);
         setMinimumSize(tamanho);
@@ -168,53 +168,33 @@ class Responsavel extends JPanel{
                 if(dragLabel == null) return;
                 
                 JLayeredPane lp = getRootPane().getLayeredPane();
+                
+                Point dropPoint = SwingUtilities.convertPoint(local(), e.getPoint(), lp);
+                dragLabel.setVisible(false);
+                Component target = SwingUtilities.getDeepestComponentAt(lp, dropPoint.x, dropPoint.y);
+                dragLabel.setVisible(true);
+                
+                StikerTarefa sticker = null;
+                Component check = target;
+                while(check != null){
+                    if(check instanceof StikerTarefa){
+                        sticker = (StikerTarefa) check;
+                        break;
+                    }
+                    check = check.getParent();
+                }
+                
+                if(sticker != null){
+                    sticker.addResponsavel(local());
+                    addTarefa(sticker);
+                    
+                }
+                
                 lp.remove(dragLabel);
                 dragLabel = null;
                 lp.revalidate();
                 lp.repaint();
-//                
-//                Point dropPoint = SwingUtilities.convertPoint(local(), e.getPoint(), lp);
-//
-//                setVisible(false);
-//                Component target = SwingUtilities.getDeepestComponentAt(lp, dropPoint.x, dropPoint.y);
-//                setVisible(true);
-//
-//                TarefaColuna newColumn = null;
-//                Component check = target;
-//                while (check != null) {
-//                    if (check instanceof TarefaColuna) {
-//                        newColumn = (TarefaColuna) check;
-//                        break;
-//                    }
-//                    
-//                    check = check.getParent();
-//                }
-//
-//                lp.remove(local());
-//
-//                if(newColumn != null) {
-//                    if (newColumn == originalParent) {
-//                        newColumn.add(local(), originalIndex);
-//                        newColumn.add(Box.createRigidArea(new Dimension(0, 10)), originalIndex + 1);
-//                    } else {
-//                        int pos = Math.max(0, newColumn.getComponentCount() - 1);
-//                        newColumn.add(local(), pos);
-//                        newColumn.add(Box.createRigidArea(new Dimension(0, 10)), pos + 1);
-//                    }
-//                } else {
-//                    originalParent.add(local(), originalIndex);
-//                    originalParent.add(Box.createRigidArea(new Dimension(0, 10)), originalIndex + 1);
-//                }
-//
-//                if (newColumn != null) {
-//                    newColumn.revalidate();
-//                    newColumn.repaint();
-//                }
-//                
-//                originalParent.revalidate();
-//                originalParent.repaint();
-//                
-//                originalParent = null;
+                
             }
             
         });
@@ -256,6 +236,16 @@ class Responsavel extends JPanel{
     
     private Responsavel local(){
         return this;
+    }
+    
+    private void addTarefa(StikerTarefa sticker){
+        stickersAtribuidos.add(sticker);
+        JLabel stickername = new JLabel("<html><body style='width: 180px;'>" + sticker.getLabelTitulo().getText() + "</body></html>");
+        stickername.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 15));
+        stickername.setForeground(Color.BLACK);
+        stickername.setAlignmentX(Component.LEFT_ALIGNMENT);
+        stickername.setBorder(BorderFactory.createEmptyBorder(10, 15, 5, 15));
+        add(stickername,getComponentCount() - 2);
     }
     
     private void buttonStyle(JButton button) {
