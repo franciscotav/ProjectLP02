@@ -4,41 +4,44 @@
  */
 package database.model;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author bernardos
-*/
-public class Model{
-    
-    private List<Projeto> projetos = new ArrayList<>();
+ */
+public class Grupo{
+    private List<Pessoa> pessoas;
 
-    public List<Projeto> getProjetos() {
-        return projetos;
+    public Grupo() {
+        this.pessoas = new ArrayList<>();
+        
     }
 
-    public void addProjeto(Projeto projeto) {
-        this.projetos.add(projeto);
+    public void addPessoa(Pessoa pessoa){
+     pessoas.add(pessoa);
     }
     
-    public void removeProjeto(String id) {
-        for(Projeto p : projetos){
+    public void removePessoa(String id){
+        for(Pessoa p : pessoas){
             if (p.getId().equals(id)) {
-            this.projetos.remove(p);
+            this.pessoas.remove(p);
             break;
             }
         }
     }
     
-    public Projeto getProjetoById(String id){
-        for(Projeto p : projetos){
+    public Pessoa getPessoaById(String id){
+        for(Pessoa p : pessoas){
             if (p.getId().equals(id)) {
                 return p;
             }
         }
         return null;
     }
-    
+
+    public List<Pessoa> getPessoas() {
+        return pessoas;
+    }
 }
