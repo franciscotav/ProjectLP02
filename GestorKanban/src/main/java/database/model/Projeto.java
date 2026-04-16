@@ -13,19 +13,18 @@ import java.util.List;
  */
 public class Projeto {
     
-
+    private int id;
     private String nome;
+    
     private Grupo grupo;
     private List<Estado> estados;
-    private String id;
 
-    public Projeto(String id, String nome, Grupo grupo) {
-        
-        this.nome = nome;
-        this.grupo = grupo;
-        this.estados = new ArrayList<>();
+    public Projeto(int id, String nome) {
         this.id = id;
+        this.nome = nome;
         
+        this.grupo = new Grupo();
+        this.estados = new ArrayList<>();
     }
     
     public void addEstado(Estado estado){
@@ -70,7 +69,7 @@ public class Projeto {
         this.grupo = grupo;
     }
     
-    public String getId() {
+    public int getId() {
         return id;
     }
 

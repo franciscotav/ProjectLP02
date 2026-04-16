@@ -6,7 +6,7 @@ package repository.data;
 import database.model.*;
 import java.util.ArrayList;
 import java.util.Map;
-import trabalho2.IODataClass;
+//import trabalho2.IODataClass;
 /**
  *
  * @author bernardos

@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package aquitetura.janela;
+package mvc.view;
 
+import mvc.controller.Controlador;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -60,6 +61,7 @@ class MembroAddicionar extends JPanel{
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e){
+                
                     if(getParent() instanceof GrupoListaPanel){
                         getParent().add(new Responsavel("Responsavel"), 1);
                         getParent().add(Box.createRigidArea(new Dimension(0, 10)), 2);

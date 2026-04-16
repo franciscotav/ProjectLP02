@@ -30,11 +30,11 @@
             <version>1.3.0</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
+<!--        <dependency>
             <groupId>iodata</groupId>
             <artifactId>iodata</artifactId>
             <version>1</version>
-        </dependency>
+        </dependency>-->
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
