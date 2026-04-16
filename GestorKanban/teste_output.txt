@@ -1,0 +1,4 @@
+Linha 1: Olá! Este é um teste da biblioteca.
+Linha 2: A testar o método writeData.
+Linha 3: 123456789
+Linha 4: Fim do teste.

@@ -5,231 +5,95 @@
 package repository.data;
 import database.model.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-//import trabalho2.IODataClass;
+import java.util.HashMap;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import trabalho2.IODataClass;
 /**
- *
- * @author bernardos
+ * Data Layer / Repository
+ * Faz a ponte entre os objetos em memória (árvore do 'Projeto') e o formato JSON.
+ * Usa a lib Gson para o parsing e o IODataClass para I/O no file system.
+ * * @author bernardos
+ * * Breakdown técnico:
+ * - saveToFile(): Faz o dump do Model para uma string JSON escreve no ficherio atraves de IODataClass.
+ * - loadFromFile(): Faz o fetch do data array, o parse via Gson e arranca o post-processing.
+ * - removerClone() [Internal]: Garante a referential integrity. 
+ * Como o Gson por default cria clones para o mesmo ID, este método usa o 'Grupo' 
+ * como Single Source of Truth. Faz um loop pelas 'Tarefas' e dá replace aos clones 
+ * pelas Pessoas reais.
+ * Exemplo de uso:
  * 
- * class Repository
- * Classe encarregue de Escrever/Ler Ficheiros e Criar o model 
- * 
- * Atributos
- * String file_path do csv
- * 
- * Construtor(file path)
- * 
- *metodos
- * 
- * load
- * - lê os dados
- * - cria o model
- * - da load dos dados para o model
- * - return model
- * 
- * save (model)
- *  - pega no model e escreve no file
-
- *  
- * 
-      
-        
+ * repo.saveToFile("projeto_1.json", Projeto projeto1)
+ * Projeto projeto1 = repo.loadFromFile("projeto_1.json")
  * 
  */
 
 public class Repository {
     
-    Map<String,Pessoa> pessoasObj;
-
-    public Repository() {
-    }
-    
-    public Projeto extrairProjeto(String string){ 
-
-        return null;
-    }
-    public Estado extrairEstado(String string){ //"id": "EST-02","nome": "Em Progresso", "tarefas": [
-        /*TO-DO 
-        
-        - adicionar start e end o numero de car da string identificada
-        - refazer o extrair estado usando um cursor de incio ao fim 
-        - 
-        
-        
-        */ 
-        int start = string.indexOf("\"id\": \"");
-        int end = string.indexOf("\"", start);
-        String id = string.substring(start, end);
-        
-        start = string.indexOf("\"nome\": ");
-        end = string.indexOf("\"", start);
-        String nome = string.substring(start, end);
-        
-        Estado estado = new Estado(id,nome);
-        
-        start = string.indexOf("\"tarefas\": [");
-        String resto = string.substring(start);
-        
-        int chavetas = 0;
-        int inicioResto = resto.indexOf("{");
-        int posicaoAtual = inicioResto;
-        
-        while (posicaoAtual < resto.length()) {
-            char letra = resto.charAt(posicaoAtual);
-                if (letra == '{') chavetas++;
-                if (letra == '}') chavetas--;
-            if (chavetas == 0) {
-                String tarefa = resto.substring(start, posicaoAtual + 1);
-                estado.addTarefa(this.extrairTarefa(tarefa));
-                if (start == -1){
-                break;}
-            }
-        }
-    return null;
-    }
-    public Grupo extrairGrupo(String string){
-        Grupo grupo = new Grupo(); // [ {pessoa1} , {pessoa2} ]]
-        int indicador = 0;
-        while (true) {
-            int start = string.indexOf("{", indicador);
-            if (start == -1){
-                break;
-            }
-            else{
-
-                int end = string.indexOf("}", start);
-                String pessoa = string.substring(start, end);
-
-                indicador += end;
-                grupo.addPessoa(this.extrairPessoa(pessoa));
-            }   
-        }
-        return grupo;
-    }
-    public Tarefa extrairTarefa(String string){
+    private Gson gson;
+    private IODataClass ioData;
    
-        int start = string.indexOf("\"id\": \"");
-        int end = string.indexOf("\"", start);
-        String id = string.substring(start, end);
+    public Repository() {
+        this.gson = new GsonBuilder().create();
+        this.ioData = new IODataClass();
+    }
+    
+    public void saveToFile(String filePath, Projeto projeto) {
         
-        start = string.indexOf("\"nome\": ");
-        end = string.indexOf("\"", start);
-        String nome = string.substring(start, end);
         
+        String output = gson.toJson(projeto);
+        String[] data = new String[]{ output };
+        ioData.writeData(filePath, data);
+    }
+    
+    public Projeto loadFromFile(String filePath) {
         
-        start = string.indexOf("\"descricao\" :");
-        end = string.indexOf("\"", start);
-        String descricao = string.substring(start, end);
+        String[] data;
+        Projeto projetoCarregado = null;
         
-        Tarefa tarefa = new Tarefa(id,nome,descricao);
+        data = ioData.loadData(filePath);
+        String input = data[0];
+        projetoCarregado = gson.fromJson(input, Projeto.class);
         
-        start = string.indexOf(": [");
-        end = string.indexOf("]", start);
-        String pessoas = string.substring(start, end);
-        
-        int indicador = 0;
-        while (true) {
-            start = pessoas.indexOf("{", indicador);
-            if (start == -1){
-                break;
-            }
-            else{
+        //remover objetos clone 
+        if (projetoCarregado != null) {
+            removerClone(projetoCarregado);
+        }
 
-                end = pessoas.indexOf("}", start);
-                String pessoa = string.substring(start, end);
-                
-                start = pessoa.indexOf("\"id\": \"");
-                end = pessoa.indexOf("\"", start);
-                String idPessoa = string.substring(start, end);
-                
-                indicador += end;
-                tarefa.addPessoa(pessoasObj.get(idPessoa));
+        return projetoCarregado;
+    }
+    
+    private void removerClone(Projeto projeto){
+        Map<String, Pessoa> dicionarioPessoas = new HashMap<>();
+            
+        
+        if (projeto.getGrupo() != null) {
+            for (Pessoa pessoaVerdadeira : projeto.getGrupo().getPessoas()) {
+                dicionarioPessoas.put(pessoaVerdadeira.getId(), pessoaVerdadeira);
             }
         }
-        return tarefa;
-    }   
-        
 
-    public Pessoa extrairPessoa(String string){ //{"id": "PES-01","nome": "Bernardo Silva"}
-        int start = string.indexOf("\"id\": \"");
-        int end = string.indexOf("\"", start);
-        String id = string.substring(start, end);
-        
-        start = string.indexOf("\"nome\": ");
-        end = string.indexOf("\"", start);
-        String nome = string.substring(start, end);
-        
-        Pessoa pessoa = new Pessoa(id,nome);
-        this.pessoasObj.put(id, pessoa);
-        return pessoa;
-        
+        // 2. Navegar pelas Tarefas e trocar os clones pelas pessoas verdadeiras
+        if (projeto.getEstados() != null) {
+            for (Estado estado : projeto.getEstados()) {
+                
+                if (estado.getTarefas() != null) {
+                    for (Tarefa tarefa : estado.getTarefas()) {
+                        
+                        List<Pessoa> clonesParaLer= new ArrayList<>(tarefa.getPessoas());
+                        
+                        for (Pessoa clone : clonesParaLer) {
+                            Pessoa real = dicionarioPessoas.get(clone.getId());
+                            if (real != null) {
+                                tarefa.removePessoa(clone.getId());
+                                tarefa.addPessoa(real);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
-    
-    
-    private String formatarPessoa(Pessoa p) {
-        return "{\"id\":\"" + p.getId() + "\", \"nome\":\"" + p.getNome() + "\"}";
-    }
-
-    private String formatarGrupo(Grupo g) {
-        
-        StringBuilder sb = new StringBuilder();
-        ArrayList<Pessoa> pessoas = (ArrayList<Pessoa>) g.getPessoas();
-    
-         for (Pessoa p : pessoas){
-            sb.append(formatarPessoa(p)).append(",");
-        } 
-        
-        if (sb.length() > 0) {sb.deleteCharAt(sb.length() - 1);}
-        
-        return "[" + sb.toString() + "]";
-        
-    }
-
-    private String formatarTarefa(Tarefa t) {
-        
-        StringBuilder sb = new StringBuilder();
-        ArrayList<Pessoa> pessoas = (ArrayList<Pessoa>) t.getPessoas();
-        
-        for (Pessoa p : pessoas){
-            sb.append(formatarPessoa(p)).append(",");
-        } 
-        
-        if (sb.length() > 0) {sb.deleteCharAt(sb.length() - 1);}
-        
-        return "{\"id\":\"" + t.getId() + "\", \"nome\": \"" + t.getNome() + "\", \"descricao\": \"" + t.getDescricao() + "\"pessoas\":[" + sb.toString() + "]}";
-    }
-
-    private String formatarEstado(Estado e) {
-        
-        StringBuilder sb = new StringBuilder();
-        ArrayList<Tarefa> tarefas = (ArrayList<Tarefa>) e.getTarefas();
-    
-         for (Tarefa t : tarefas){
-            sb.append(formatarTarefa(t)).append(",");
-        } 
-        
-        if (sb.length() > 0) {sb.deleteCharAt(sb.length() - 1);}
-        
-        return "{\"id\":\"" + e.getId() + "\", \"nome\": \"" + e.getNome() + "\" , \"tarefas\":[" + sb.toString() + "]}";
-    }
-
-    public String formatarProjeto(Projeto p) {
-        
-        StringBuilder sbEstado = new StringBuilder();
-        StringBuilder sbGrupo = new StringBuilder();
-        
-        sbGrupo.append(formatarGrupo(p.getGrupo())).append(",");
-        
-        ArrayList<Estado> estados = (ArrayList<Estado>) p.getEstados();
-    
-         for (Estado e : estados){
-            sbEstado.append(formatarEstado(e)).append(",");
-        } 
-        
-        if (sbEstado.length() > 0) {sbEstado.deleteCharAt(sbEstado.length() - 1);}
-        if (sbGrupo.length() > 0) {sbGrupo.deleteCharAt(sbGrupo.length() - 1);}
-        
-        return "{\"id\":\"" + p.getId() + "\", \"nome\": \"" + p.getNome()+ "\", \"grupo\":" + sbGrupo.toString() + ", \"estados\":[" + sbEstado.toString() + "]}";
-    }
-
 }

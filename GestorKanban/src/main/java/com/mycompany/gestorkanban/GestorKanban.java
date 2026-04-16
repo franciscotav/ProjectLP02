@@ -5,8 +5,8 @@
 package com.mycompany.gestorkanban;
 
 import java.util.ArrayList;
-
-import database.model.Projeto;
+import repository.data.Repository;
+import database.model.*;
 import mvc.controller.Controlador;
 import mvc.view.MainWindow;
 
@@ -20,7 +20,5 @@ public class GestorKanban {
         MainWindow view = new MainWindow();
         ArrayList<Projeto> model = new ArrayList<>();
         Controlador controlador = new Controlador(view, model);
-        
-        
-    }
+    }    
 }
