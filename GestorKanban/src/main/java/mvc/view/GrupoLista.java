@@ -4,7 +4,7 @@
  */
 package mvc.view;
 
-import mvc.controller.Controlador;
+//import mvc.controller.Controlador;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -16,15 +16,51 @@ import javax.swing.border.*;
  *
  * @author CasaSFT
  */
-public class GrupoLista extends JScrollPane {
 
+public class GrupoLista extends JScrollPane {
+    private GrupoListaPanel grupoListaPanel;
+    
     public GrupoLista(){
-        setViewportView(new GrupoListaPanel());
+        grupoListaPanel = new GrupoListaPanel();
+        setViewportView(grupoListaPanel);
     }
+    
+    public void setMembroAddicionarMouseAdapter(MouseListener e){
+        grupoListaPanel.addMouseListener(e);
+    }
+    
+    public void setEditarMembroMouseAdapter(MouseListener e){
+        Responsavel lastResponsavel = null;
+        for(int i = 0; i < grupoListaPanel.getComponentCount(); i++){
+            if(grupoListaPanel.getComponent(i) instanceof Responsavel)
+                lastResponsavel = (Responsavel) grupoListaPanel.getComponent(i);
+        }
+        
+        if(lastResponsavel != null)
+            lastResponsavel.setEditarMembroMouseAdapter(e);
+    }
+    
+    public void criarNovoResponsavel(int id, String nome){
+        System.out.println(grupoListaPanel.getComponentCount());
+        grupoListaPanel.add(new Responsavel(id,nome),(grupoListaPanel.getComponentCount() - 1));
+        grupoListaPanel.add(Box.createRigidArea(new Dimension(0, 10)),(grupoListaPanel.getComponentCount() - 1));
+        refresh();
+    }
+    
+    public void editarResponsavel(Responsavel responsavel){
+        responsavel.editar();
+    }
+    
+    public void refresh(){
+        revalidate();
+        repaint();
+    }
+    
 }
 
 class GrupoListaPanel extends JPanel{
-
+    private MembroAddicionar membroAddiconar;
+            
     public GrupoListaPanel(){
   
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -34,10 +70,17 @@ class GrupoListaPanel extends JPanel{
         Border line = BorderFactory.createLineBorder(Color.GRAY,1);
         Border combined = BorderFactory.createCompoundBorder(line, margin);
         setBorder(combined);
-
+        
+        membroAddiconar = new MembroAddicionar();
+        
         add(new GrupoName());
-        add(new MembroAddicionar());
+        add(membroAddiconar);
     }
+    
+    public void setMembroAddicionarMouseAdapter(MouseListener e){
+        membroAddiconar.addMouseListener(e);
+    }
+    
 }
 
 class MembroAddicionar extends JPanel{
@@ -57,39 +100,26 @@ class MembroAddicionar extends JPanel{
         plusLabel.setForeground(Color.GRAY);
         plusLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         add(plusLabel);
-    
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e){
-                
-                    if(getParent() instanceof GrupoListaPanel){
-                        getParent().add(new Responsavel("Responsavel"), 1);
-                        getParent().add(Box.createRigidArea(new Dimension(0, 10)), 2);
-                        getParent().revalidate();
-                        getParent().repaint();
-                        
-                    }
-                }
-            });
-
+        
         }
+
 }
 
 class Responsavel extends JPanel{
-
-    private String name;
+    private int id;
+    private String nome;
     private JLabel labelname;
     
-    private static int indexGlobal = 0;
-    private int index;
     private ArrayList<StikerTarefa> stickersAtribuidos;
     
     private JPanel panelTarefas;
-    
     private JLabel dragLabel;
     
-    public Responsavel(String nomeResponsavel) {
-        iniResponsavel(nomeResponsavel);
+    JButton buttonEditar;
+    JButton buttonRemover;
+    
+    public Responsavel(int id, String nome) {
+        iniResponsavel(id,nome);
         setupVariavels();
        
         addMouseListener(new MouseAdapter(){
@@ -164,7 +194,7 @@ class Responsavel extends JPanel{
         
     }
     
-    private void iniResponsavel(String nomeResponsavel){
+    private void iniResponsavel(int id, String nome){
         Dimension tamanho = new Dimension(250, 250);
         setPreferredSize(tamanho);
         setMaximumSize(tamanho);
@@ -174,9 +204,8 @@ class Responsavel extends JPanel{
         setLayout(new BorderLayout());
         setAlignmentX(Component.CENTER_ALIGNMENT);
         
-        name = nomeResponsavel;
-        indexGlobal++;
-        index = indexGlobal;
+        this.id = id;
+        this.nome = nome;
         stickersAtribuidos = new ArrayList<>();
     }
     
@@ -185,7 +214,7 @@ class Responsavel extends JPanel{
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setOpaque(false);
         
-        labelname = new JLabel("<html><body style='width: 180px;'>" + "👤 " + name + "</body></html>");
+        labelname = new JLabel("<html><body style='width: 180px;'>" + "👤 " + nome + "</body></html>");
         labelname.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 16));
         labelname.setForeground(Color.BLACK);
         labelname.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -201,8 +230,8 @@ class Responsavel extends JPanel{
         JPanel panelButtons = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         panelButtons.setOpaque(false);
         
-        JButton buttonEditar = new JButton("📝");
-        JButton buttonRemover = new JButton("🗑️");
+        buttonEditar = new JButton("📝");
+        buttonRemover = new JButton("🗑️");
         buttonStyle(buttonEditar);
         buttonStyle(buttonRemover);
         
@@ -218,47 +247,6 @@ class Responsavel extends JPanel{
             }
         });
         
-        buttonEditar.addActionListener(e -> {
-            JPanel panelEdicao = new JPanel();
-            panelEdicao.setLayout(new BoxLayout(panelEdicao, BoxLayout.Y_AXIS));
-            
-            JTextField fieldTitulo = new JTextField(name);
-            
-            JPanel selectSticker = new JPanel();
-            selectSticker.setLayout(new BoxLayout(selectSticker, BoxLayout.Y_AXIS));
-            for(StikerTarefa sticker : stickersAtribuidos){
-                JCheckBox checkBox = new JCheckBox(sticker.getLabelTitulo().getText() + " #" + sticker.getStickerindex());
-                checkBox.setSelected(true);
-                selectSticker.add(checkBox);
-            }
-            
-            panelEdicao.add(new JLabel("Nome:"));
-            panelEdicao.add(fieldTitulo);
-            panelEdicao.add(selectSticker);
-            
-            int result = JOptionPane.showConfirmDialog(this, panelEdicao, 
-                       "Editar Membro #" + index , JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-
-            if (result == JOptionPane.OK_OPTION) {
-                name = fieldTitulo.getText();
-                labelname.setText("<html><body style='width: 180px;'>" + "👤 " + name + "</body></html>");
-                
-                for(int i = 0; i < selectSticker.getComponentCount(); i++){
-                    if(selectSticker.getComponent(i) instanceof JCheckBox){
-                        JCheckBox checkBox = (JCheckBox) selectSticker.getComponent(i);
-                        if(!checkBox.isSelected()){
-                            stickersAtribuidos.get(i).removeResponsavel(this);
-                            removeStickers(stickersAtribuidos.get(i));
-                        }
-                    }
-                }
-                
-                updateStickers();
-                revalidate();
-                repaint();
-            }
-        });
-        
         panelButtons.add(buttonEditar);
         panelButtons.add(buttonRemover);
         
@@ -266,6 +254,47 @@ class Responsavel extends JPanel{
         add(panelButtons, BorderLayout.SOUTH);
         
         panelButtons.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
+    }
+    
+    public void editar(){
+        JPanel panelEdicao = new JPanel();
+        panelEdicao.setLayout(new BoxLayout(panelEdicao, BoxLayout.Y_AXIS));
+
+        JTextField fieldTitulo = new JTextField(nome);
+
+        JPanel selectSticker = new JPanel();
+        selectSticker.setLayout(new BoxLayout(selectSticker, BoxLayout.Y_AXIS));
+        for(StikerTarefa sticker : stickersAtribuidos){
+            JCheckBox checkBox = new JCheckBox(sticker.getLabelTitulo().getText() + " #" + sticker.getStickerindex());
+            checkBox.setSelected(true);
+            selectSticker.add(checkBox);
+        }
+
+        panelEdicao.add(new JLabel("Nome:"));
+        panelEdicao.add(fieldTitulo);
+        panelEdicao.add(selectSticker);
+
+        int result = JOptionPane.showConfirmDialog(this, panelEdicao, 
+                   "Editar Membro #" + id , JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+        if (result == JOptionPane.OK_OPTION) {
+            nome = fieldTitulo.getText();
+            labelname.setText("<html><body style='width: 180px;'>" + "👤 " + nome + "</body></html>");
+
+            for(int i = 0; i < selectSticker.getComponentCount(); i++){
+                if(selectSticker.getComponent(i) instanceof JCheckBox){
+                    JCheckBox checkBox = (JCheckBox) selectSticker.getComponent(i);
+                    if(!checkBox.isSelected()){
+                        stickersAtribuidos.get(i).removeResponsavel(this);
+                        removeStickers(stickersAtribuidos.get(i));
+                    }
+                }
+            }
+
+            updateStickers();
+            revalidate();
+            repaint();
+        }
     }
     
     private void removeInStickers(){
@@ -302,12 +331,12 @@ class Responsavel extends JPanel{
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 
-    public String getName() {
-        return name;
+    public String getNome() {
+        return nome;
     }
 
-    public int getIndex() {
-        return index;
+    public int getId() {
+        return id;
     }
 
     
@@ -337,6 +366,11 @@ class Responsavel extends JPanel{
         panelTarefas.revalidate();
         panelTarefas.repaint();
     }
+    
+    public void setEditarMembroMouseAdapter(MouseListener e){
+        buttonEditar.addMouseListener(e);
+    }
+    
     
 }
 

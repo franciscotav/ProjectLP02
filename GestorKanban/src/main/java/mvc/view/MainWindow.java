@@ -6,6 +6,8 @@ package mvc.view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 /**
  *
@@ -31,10 +33,25 @@ public class MainWindow extends JFrame {
         
         setVisible(true);
     }
-
-    public Quadro getQuadro() {
-        return quadro;
+    
+    public void setMembroAddicionarMouseAdapter(MouseListener e){
+        grupoLista.setMembroAddicionarMouseAdapter(e);
     }
     
+    public void setEditarMembroMouseAdapter(MouseListener e){
+        grupoLista.setEditarMembroMouseAdapter(e);
+    }
+    
+    public void criarNovoResponsavel(int id, String nome){
+        grupoLista.criarNovoResponsavel(id,nome);
+    }
+    
+    public void editarResponsavel(MouseEvent e){
+        JButton buttonEditar = (JButton) e.getSource();
+        JPanel panelButtons = (JPanel) buttonEditar.getParent();
+        Responsavel responsavel = (Responsavel) panelButtons.getParent();
+        grupoLista.editarResponsavel(responsavel);
+        
+    }
     
 }

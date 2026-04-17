@@ -5,7 +5,9 @@
 package mvc.controller;
 import mvc.view.*;
 import database.model.*;
-import java.util.ArrayList;
+import java.awt.event.MouseEvent;
+
+import java.awt.event.MouseListener;
 
 /**
  *
@@ -13,30 +15,74 @@ import java.util.ArrayList;
  */
 public class Controlador {
     MainWindow view;
-    ArrayList<Projeto> model;
+    Projeto model;
     
-    public Controlador(MainWindow view, ArrayList<Projeto> model){
+    static int id = 0;
+    
+    public Controlador(MainWindow view, Projeto model){
         this.view = view;
         this.model = model;
-    }
-    
-    //---Projetos---
-    public void novoProjeto(){
         
-    }
-    public void carregarProjeto(){
-        
-    }
-    public void gravarProjeto(){
-        
+        this.view.setMembroAddicionarMouseAdapter(new AddicionarMembroMouseAdapter());
     }
             
-    
-    //----Gestao da Equipa----
-    //Adicionar membros a equipa do projeto no index 0
-    public void addicionarMembro(int projetoID, String Nome){
-        
+    class AddicionarMembroMouseAdapter implements MouseListener{
+        @Override
+        public void mouseClicked(MouseEvent e){
+            id++;
+            //addicionar metodos para fazer update do model;
+            view.criarNovoResponsavel(id,"Responsavel " + id);
+            view.setEditarMembroMouseAdapter(new EditarMembroMouseAdapter());
+            //System.out.println("AddicionarMembroMouseAdapter");
+            
+        }
+        @Override
+        public void mousePressed(java.awt.event.MouseEvent e) {
+            // TODO Auto-generated method stub
+        }
+
+        @Override
+        public void mouseReleased(java.awt.event.MouseEvent e) {
+            // TODO Auto-generated method stub
+        }
+
+        @Override
+        public void mouseEntered(java.awt.event.MouseEvent e) {
+            // TODO Auto-generated method stub
+        }
+
+        @Override
+        public void mouseExited(java.awt.event.MouseEvent e) {
+            // TODO Auto-generated method stub
+        }
     }
     
+    class EditarMembroMouseAdapter implements MouseListener{
+        @Override
+        public void mouseClicked(MouseEvent e){
+            
+            view.editarResponsavel(e);
+            //addicionar metodos para fazer update do model;
+        }
+        @Override
+        public void mousePressed(java.awt.event.MouseEvent e) {
+            // TODO Auto-generated method stub
+        }
+
+        @Override
+        public void mouseReleased(java.awt.event.MouseEvent e) {
+            // TODO Auto-generated method stub
+        }
+
+        @Override
+        public void mouseEntered(java.awt.event.MouseEvent e) {
+            // TODO Auto-generated method stub
+        }
+
+        @Override
+        public void mouseExited(java.awt.event.MouseEvent e) {
+            // TODO Auto-generated method stub
+        }
+    }
     
 }
