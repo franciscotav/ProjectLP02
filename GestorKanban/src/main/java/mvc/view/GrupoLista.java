@@ -29,6 +29,17 @@ public class GrupoLista extends JScrollPane {
         grupoListaPanel.addMouseListener(e);
     }
     
+    public void setRemoverMembroMouseAdapter(MouseListener e){
+        Responsavel lastResponsavel = null;
+        for(int i = 0; i < grupoListaPanel.getComponentCount(); i++){
+            if(grupoListaPanel.getComponent(i) instanceof Responsavel)
+                lastResponsavel = (Responsavel) grupoListaPanel.getComponent(i);
+        }
+        
+        if(lastResponsavel != null)
+            lastResponsavel.setRemoverMembroMouseAdapter(e);
+    }
+    
     public void setEditarMembroMouseAdapter(MouseListener e){
         Responsavel lastResponsavel = null;
         for(int i = 0; i < grupoListaPanel.getComponentCount(); i++){
@@ -41,14 +52,24 @@ public class GrupoLista extends JScrollPane {
     }
     
     public void criarNovoResponsavel(int id, String nome){
-        System.out.println(grupoListaPanel.getComponentCount());
+        //System.out.println(grupoListaPanel.getComponentCount());
         grupoListaPanel.add(new Responsavel(id,nome),(grupoListaPanel.getComponentCount() - 1));
         grupoListaPanel.add(Box.createRigidArea(new Dimension(0, 10)),(grupoListaPanel.getComponentCount() - 1));
         refresh();
     }
     
-    public void editarResponsavel(Responsavel responsavel){
-        responsavel.editar();
+    public void setMembroMouseAdapter(MouseListener e){
+        Responsavel lastResponsavel = null;
+        for(int i = 0; i < grupoListaPanel.getComponentCount(); i++){
+            if(grupoListaPanel.getComponent(i) instanceof Responsavel)
+                lastResponsavel = (Responsavel) grupoListaPanel.getComponent(i);
+        }
+        
+        if(lastResponsavel != null){
+            lastResponsavel.addMouseListener(e);
+            lastResponsavel.addMouseMotionListener((MouseMotionListener) e);
+        }
+            
     }
     
     public void refresh(){
@@ -80,6 +101,8 @@ class GrupoListaPanel extends JPanel{
     public void setMembroAddicionarMouseAdapter(MouseListener e){
         membroAddiconar.addMouseListener(e);
     }
+    
+    
     
 }
 
@@ -118,79 +141,133 @@ class Responsavel extends JPanel{
     JButton buttonEditar;
     JButton buttonRemover;
     
+    public void mousePressed(MouseEvent e){
+        dragLabel = null;
+    }
+    
+    public void mouseReleased(MouseEvent e){
+        if(dragLabel == null) return;
+                
+        JLayeredPane lp = getRootPane().getLayeredPane();
+
+        Point dropPoint = SwingUtilities.convertPoint(local(), e.getPoint(), lp);
+        dragLabel.setVisible(false);
+        Component target = SwingUtilities.getDeepestComponentAt(lp, dropPoint.x, dropPoint.y);
+        dragLabel.setVisible(true);
+
+        StikerTarefa sticker = null;
+        Component check = target;
+        while(check != null){
+            if(check instanceof StikerTarefa){
+                sticker = (StikerTarefa) check;
+                break;
+            }
+            check = check.getParent();
+        }
+
+        if(sticker != null){
+            if(! stickersAtribuidos.contains(sticker)){
+                sticker.addResponsavel(local());
+                addTarefa(sticker);
+            }
+        }
+
+        lp.remove(dragLabel);
+        dragLabel = null;
+        lp.revalidate();
+        lp.repaint();
+    }
+    
+    public void mouseDragged(MouseEvent e){
+        JLayeredPane lp = getRootPane().getLayeredPane();
+                
+        if(dragLabel == null){
+            dragLabel = new JLabel("👤+");
+            dragLabel.setFont(new Font("Segoe UI Symbol", Font.BOLD, 40));
+            dragLabel.setForeground(new Color(138,221,133));
+            dragLabel.setSize(dragLabel.getPreferredSize());
+
+            lp.add(dragLabel, JLayeredPane.DRAG_LAYER);                    
+        }
+
+        Point p = SwingUtilities.convertPoint(local(), e.getPoint(), lp);
+        dragLabel.setLocation(p.x,p.y);
+        lp.repaint();
+    }
+    
     public Responsavel(int id, String nome) {
         iniResponsavel(id,nome);
         setupVariavels();
        
-        addMouseListener(new MouseAdapter(){
-            @Override
-            public void mousePressed(MouseEvent e){
-                dragLabel = null;
-            }
-            
-            @Override
-            public void mouseReleased(MouseEvent e){
-                
-                if(dragLabel == null) return;
-                
-                JLayeredPane lp = getRootPane().getLayeredPane();
-                
-                Point dropPoint = SwingUtilities.convertPoint(local(), e.getPoint(), lp);
-                dragLabel.setVisible(false);
-                Component target = SwingUtilities.getDeepestComponentAt(lp, dropPoint.x, dropPoint.y);
-                dragLabel.setVisible(true);
-                
-                StikerTarefa sticker = null;
-                Component check = target;
-                while(check != null){
-                    if(check instanceof StikerTarefa){
-                        sticker = (StikerTarefa) check;
-                        break;
-                    }
-                    check = check.getParent();
-                }
-                
-                if(sticker != null){
-                    if(! stickersAtribuidos.contains(sticker)){
-                        sticker.addResponsavel(local());
-                        addTarefa(sticker);
-                    }
-                }
-                
-                lp.remove(dragLabel);
-                dragLabel = null;
-                lp.revalidate();
-                lp.repaint();
-                
-            }
-            
-        });
-        
-        addMouseMotionListener(new MouseMotionListener() {
-            @Override
-            public void mouseDragged(MouseEvent e){
-                JLayeredPane lp = getRootPane().getLayeredPane();
-                
-                if(dragLabel == null){
-                    dragLabel = new JLabel("👤+");
-                    dragLabel.setFont(new Font("Segoe UI Symbol", Font.BOLD, 40));
-                    dragLabel.setForeground(new Color(138,221,133));
-                    dragLabel.setSize(dragLabel.getPreferredSize());
-                    
-                    lp.add(dragLabel, JLayeredPane.DRAG_LAYER);                    
-                }
-                
-                Point p = SwingUtilities.convertPoint(local(), e.getPoint(), lp);
-                dragLabel.setLocation(p.x,p.y);
-                lp.repaint();
-                
-            }
-            
-            @Override
-            public void mouseMoved(MouseEvent e){
-            
-            }
-        });
+//        addMouseListener(new MouseAdapter(){
+//            @Override
+//            public void mousePressed(MouseEvent e){
+//                dragLabel = null;
+//            }
+//            
+//            @Override
+//            public void mouseReleased(MouseEvent e){
+//                
+//                if(dragLabel == null) return;
+//                
+//                JLayeredPane lp = getRootPane().getLayeredPane();
+//                
+//                Point dropPoint = SwingUtilities.convertPoint(local(), e.getPoint(), lp);
+//                dragLabel.setVisible(false);
+//                Component target = SwingUtilities.getDeepestComponentAt(lp, dropPoint.x, dropPoint.y);
+//                dragLabel.setVisible(true);
+//                
+//                StikerTarefa sticker = null;
+//                Component check = target;
+//                while(check != null){
+//                    if(check instanceof StikerTarefa){
+//                        sticker = (StikerTarefa) check;
+//                        break;
+//                    }
+//                    check = check.getParent();
+//                }
+//                
+//                if(sticker != null){
+//                    if(! stickersAtribuidos.contains(sticker)){
+//                        sticker.addResponsavel(local());
+//                        addTarefa(sticker);
+//                    }
+//                }
+//                
+//                lp.remove(dragLabel);
+//                dragLabel = null;
+//                lp.revalidate();
+//                lp.repaint();
+//                
+//            }
+//            
+//        });
+//        
+//        addMouseMotionListener(new MouseMotionListener() {
+//            @Override
+//            public void mouseDragged(MouseEvent e){
+//                JLayeredPane lp = getRootPane().getLayeredPane();
+//                
+//                if(dragLabel == null){
+//                    dragLabel = new JLabel("👤+");
+//                    dragLabel.setFont(new Font("Segoe UI Symbol", Font.BOLD, 40));
+//                    dragLabel.setForeground(new Color(138,221,133));
+//                    dragLabel.setSize(dragLabel.getPreferredSize());
+//                    
+//                    lp.add(dragLabel, JLayeredPane.DRAG_LAYER);                    
+//                }
+//                
+//                Point p = SwingUtilities.convertPoint(local(), e.getPoint(), lp);
+//                dragLabel.setLocation(p.x,p.y);
+//                lp.repaint();
+//                
+//            }
+//            
+//            @Override
+//            public void mouseMoved(MouseEvent e){
+//            
+//            }
+//        });
         
     }
     
@@ -235,18 +312,6 @@ class Responsavel extends JPanel{
         buttonStyle(buttonEditar);
         buttonStyle(buttonRemover);
         
-        buttonRemover.addActionListener(e -> {
-            if (getParent() instanceof GrupoListaPanel) {
-                GrupoListaPanel coluna = (GrupoListaPanel) getParent();
-                int index = coluna.getComponentZOrder(this);
-                coluna.remove(index + 1);
-                removeInStickers();
-                coluna.remove(this);
-                coluna.revalidate();
-                coluna.repaint();
-            }
-        });
-        
         panelButtons.add(buttonEditar);
         panelButtons.add(buttonRemover);
         
@@ -254,6 +319,16 @@ class Responsavel extends JPanel{
         add(panelButtons, BorderLayout.SOUTH);
         
         panelButtons.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
+    }
+    
+    public void remover(){
+        GrupoListaPanel coluna = (GrupoListaPanel) getParent();
+        int index = coluna.getComponentZOrder(this);
+        coluna.remove(index + 1);
+        removeInStickers();
+        coluna.remove(this);
+        coluna.revalidate();
+        coluna.repaint();
     }
     
     public void editar(){
@@ -371,6 +446,9 @@ class Responsavel extends JPanel{
         buttonEditar.addMouseListener(e);
     }
     
+    public void setRemoverMembroMouseAdapter(MouseListener e){
+        buttonRemover.addMouseListener(e);
+    }
     
 }
 

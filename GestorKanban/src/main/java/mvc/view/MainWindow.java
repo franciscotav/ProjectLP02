@@ -42,6 +42,14 @@ public class MainWindow extends JFrame {
         grupoLista.setEditarMembroMouseAdapter(e);
     }
     
+    public void setRemoverMembroMouseAdapter(MouseListener e){
+        grupoLista.setRemoverMembroMouseAdapter(e);
+    }
+    
+    public void setMembroMouseAdapter(MouseListener e){
+        grupoLista.setMembroMouseAdapter(e);
+    }
+    
     public void criarNovoResponsavel(int id, String nome){
         grupoLista.criarNovoResponsavel(id,nome);
     }
@@ -50,8 +58,53 @@ public class MainWindow extends JFrame {
         JButton buttonEditar = (JButton) e.getSource();
         JPanel panelButtons = (JPanel) buttonEditar.getParent();
         Responsavel responsavel = (Responsavel) panelButtons.getParent();
-        grupoLista.editarResponsavel(responsavel);
-        
+        responsavel.editar();
     }
+    
+    public void removerResponsavel(MouseEvent e){
+        JButton buttonEditar = (JButton) e.getSource();
+        JPanel panelButtons = (JPanel) buttonEditar.getParent();
+        Responsavel responsavel = (Responsavel) panelButtons.getParent();
+        responsavel.remover();
+    }
+    
+    private Responsavel getResponsavelFromEvent(MouseEvent e) {
+        Component source = (Component) e.getSource();
+        
+        if(source instanceof Responsavel) {
+            return (Responsavel) source;
+        }
+
+        Component parent = source.getParent();
+        while (parent != null) {
+            if(parent instanceof Responsavel) {
+                return (Responsavel) parent;
+            }
+            parent = parent.getParent();
+        }
+
+        return null;
+    }
+    
+    public void membroMousePressed(MouseEvent e){
+        Responsavel responsavel = getResponsavelFromEvent(e);
+        if(responsavel != null)
+            responsavel.mousePressed(e);
+    }
+    
+    public void membroMouseReleased(MouseEvent e){
+        //System.out.println(e.getSource().getClass().getName());
+        Responsavel responsavel = getResponsavelFromEvent(e);
+        if(responsavel != null)
+            responsavel.mouseReleased(e);
+    }
+    
+    public void membroMouseDragged(MouseEvent e){
+        Responsavel responsavel = getResponsavelFromEvent(e);
+        if(responsavel != null)
+            responsavel.mouseDragged(e);
+    }
+    
+    
     
 }

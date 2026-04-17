@@ -6,8 +6,8 @@ package mvc.controller;
 import mvc.view.*;
 import database.model.*;
 import java.awt.event.MouseEvent;
-
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
 /**
  *
@@ -25,64 +25,88 @@ public class Controlador {
         
         this.view.setMembroAddicionarMouseAdapter(new AddicionarMembroMouseAdapter());
     }
-            
+    
+    //-------GRUPOLISTA
+    //---------------------------
     class AddicionarMembroMouseAdapter implements MouseListener{
         @Override
         public void mouseClicked(MouseEvent e){
-            id++;
             //addicionar metodos para fazer update do model;
-            view.criarNovoResponsavel(id,"Responsavel " + id);
-            view.setEditarMembroMouseAdapter(new EditarMembroMouseAdapter());
-            //System.out.println("AddicionarMembroMouseAdapter");
+            //
+            //
+            id++;
             
+            view.criarNovoResponsavel(id,"Responsavel " + id);
+            view.setMembroMouseAdapter(new MembroMouseAdapter());
+            view.setEditarMembroMouseAdapter(new EditarMembroMouseAdapter());
+            view.setRemoverMembroMouseAdapter(new RemoverMembroMouseAdapter());
         }
         @Override
-        public void mousePressed(java.awt.event.MouseEvent e) {
-            // TODO Auto-generated method stub
-        }
-
+        public void mousePressed(java.awt.event.MouseEvent e) {}
         @Override
-        public void mouseReleased(java.awt.event.MouseEvent e) {
-            // TODO Auto-generated method stub
-        }
-
+        public void mouseReleased(java.awt.event.MouseEvent e) {}
         @Override
-        public void mouseEntered(java.awt.event.MouseEvent e) {
-            // TODO Auto-generated method stub
-        }
-
+        public void mouseEntered(java.awt.event.MouseEvent e) {}
         @Override
-        public void mouseExited(java.awt.event.MouseEvent e) {
-            // TODO Auto-generated method stub
-        }
+        public void mouseExited(java.awt.event.MouseEvent e) {}
     }
     
     class EditarMembroMouseAdapter implements MouseListener{
         @Override
         public void mouseClicked(MouseEvent e){
-            
             view.editarResponsavel(e);
-            //addicionar metodos para fazer update do model;
         }
         @Override
-        public void mousePressed(java.awt.event.MouseEvent e) {
-            // TODO Auto-generated method stub
-        }
-
+        public void mousePressed(java.awt.event.MouseEvent e) {}
         @Override
-        public void mouseReleased(java.awt.event.MouseEvent e) {
-            // TODO Auto-generated method stub
-        }
-
+        public void mouseReleased(java.awt.event.MouseEvent e) {}
         @Override
-        public void mouseEntered(java.awt.event.MouseEvent e) {
-            // TODO Auto-generated method stub
-        }
-
+        public void mouseEntered(java.awt.event.MouseEvent e) {}
         @Override
-        public void mouseExited(java.awt.event.MouseEvent e) {
-            // TODO Auto-generated method stub
-        }
+        public void mouseExited(java.awt.event.MouseEvent e) {}
     }
     
+    class RemoverMembroMouseAdapter implements MouseListener{
+        @Override
+        public void mouseClicked(MouseEvent e){
+            view.removerResponsavel(e);
+        }
+        @Override
+        public void mousePressed(java.awt.event.MouseEvent e) {}
+        @Override
+        public void mouseReleased(java.awt.event.MouseEvent e) {}
+        @Override
+        public void mouseEntered(java.awt.event.MouseEvent e) {}
+        @Override
+        public void mouseExited(java.awt.event.MouseEvent e) {}
+    }
+    
+    class MembroMouseAdapter implements MouseListener, MouseMotionListener{
+        @Override
+        public void mouseClicked(MouseEvent e){}
+        @Override
+        public void mousePressed(java.awt.event.MouseEvent e) {
+            view.membroMousePressed(e);
+        }
+        @Override
+        public void mouseReleased(java.awt.event.MouseEvent e) {
+            view.membroMouseReleased(e);
+        }
+        @Override
+        public void mouseEntered(java.awt.event.MouseEvent e) {}
+
+        @Override
+        public void mouseExited(java.awt.event.MouseEvent e) {}
+        
+        //MouseMotionListener
+        @Override
+        public void mouseDragged(java.awt.event.MouseEvent e) {
+            view.membroMouseDragged(e);
+        }
+        @Override
+        public void mouseMoved(java.awt.event.MouseEvent e) {}
+    }
+    
+    
+    //
 }
