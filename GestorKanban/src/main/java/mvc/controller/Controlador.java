@@ -23,7 +23,23 @@ public class Controlador {
         this.view = view;
         this.model = model;
         
-        this.view.setMembroAddicionarMouseAdapter(new AddicionarMembroMouseAdapter());
+        this.view.adicionarNovoProjetoListener(new NovoProjetoMouseAdapter());
+    }
+    
+    class NovoProjetoMouseAdapter implements MouseListener{
+        @Override
+        public void mouseClicked(MouseEvent e){
+            view.adicionarComponentesProjeto();
+            view.setMembroAddicionarMouseAdapter(new AddicionarMembroMouseAdapter());
+        }
+        @Override
+        public void mousePressed(MouseEvent e) {}
+        @Override
+        public void mouseReleased(MouseEvent e) {}
+        @Override
+        public void mouseEntered(MouseEvent e) {}
+        @Override
+        public void mouseExited(MouseEvent e) {}
     }
     
     //-------GRUPOLISTA
@@ -32,7 +48,6 @@ public class Controlador {
         @Override
         public void mouseClicked(MouseEvent e){
             //addicionar metodos para fazer update do model;
-            //
             //
             id++;
             

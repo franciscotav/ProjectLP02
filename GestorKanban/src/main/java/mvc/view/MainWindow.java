@@ -24,12 +24,8 @@ public class MainWindow extends JFrame {
         setSize(1920, 1080);
         
         menus = new Menus();
-        grupoLista = new GrupoLista();
-        quadro = new Quadro();
         
-        add(menus,BorderLayout.NORTH);
-        add(grupoLista,BorderLayout.WEST);
-        add(quadro,BorderLayout.CENTER);
+        add(menus, BorderLayout.NORTH);
         
         setVisible(true);
     }
@@ -48,6 +44,39 @@ public class MainWindow extends JFrame {
     
     public void setMembroMouseAdapter(MouseListener e){
         grupoLista.setMembroMouseAdapter(e);
+    }
+    
+    public Menus getMenus() {
+        return menus;
+    }
+    
+    public void adicionarNovoProjetoListener(java.awt.event.MouseListener listener) {
+        menus.adicionarNovoProjetoListener(listener);
+    }
+    
+    public void adicionarComponentesProjeto() {
+        limparAreaProjeto();
+        
+        menus.addProjeto("Projeto");
+        grupoLista = new GrupoLista();
+        quadro = new Quadro();
+
+        add(grupoLista, BorderLayout.WEST);
+        add(quadro, BorderLayout.CENTER);
+        
+        revalidate();
+        repaint();
+    }
+ 
+    
+    private void limparAreaProjeto(){
+        if(grupoLista != null)
+            remove(grupoLista);
+        if(quadro != null)
+            remove(quadro);
+        
+        revalidate();
+        repaint();
     }
     
     public void criarNovoResponsavel(int id, String nome){
