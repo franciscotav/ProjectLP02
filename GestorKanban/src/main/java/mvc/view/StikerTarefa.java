@@ -122,7 +122,7 @@ public class StikerTarefa extends JPanel {
         JPanel selectResponsavel = new JPanel();
         selectResponsavel.setLayout(new BoxLayout(selectResponsavel, BoxLayout.Y_AXIS));
         for(Responsavel resp : membrosAtribuidos){
-            JCheckBox checkBox = new JCheckBox(resp.getName() + " #" + resp.getId());
+            JCheckBox checkBox = new JCheckBox(resp.getNome() + " #" + resp.getId());
             checkBox.setSelected(true);
             selectResponsavel.add(checkBox);
         }
@@ -288,7 +288,7 @@ public class StikerTarefa extends JPanel {
         panelResponsaveis.removeAll();
         
         for(Responsavel membro : membrosAtribuidos){
-            JLabel labelResponsavel = new JLabel("👤 " + membro.getName());
+            JLabel labelResponsavel = new JLabel("👤 " + membro.getNome());
             labelResponsavel.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 15));
             labelResponsavel.setForeground(new Color(60, 60, 60));
             labelResponsavel.setBorder(BorderFactory.createEmptyBorder(10, 15, 0, 15));
