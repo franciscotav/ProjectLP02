@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.*;
 
-
 /**
  *
  * @author CasaSFT
@@ -325,11 +324,8 @@ public class StikerTarefa extends JPanel {
     public int getStickerindex() {
         return stickerindex;
     }
-    
-    
 
 }
-
 
 class StickerAddicionar extends JPanel{
     
@@ -347,20 +343,14 @@ class StickerAddicionar extends JPanel{
         plusLabel.setFont(new Font("Arial", Font.BOLD, 30));
         plusLabel.setForeground(Color.GRAY);
         add(plusLabel);
+    }
     
-    
-    addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e){
-                if(getParent() instanceof TarefaColuna){
-                    getParent().add(new StikerTarefa("Tarefa","Descrição da Tarefa"), 1);
-                    getParent().add(Box.createRigidArea(new Dimension(0, 10)), 2);
-                    getParent().revalidate();
-                    getParent().repaint();
-                   
-                }
-            }
-        });
-
+    public void mouseClicked(){
+        if(getParent() instanceof TarefaColuna){
+            getParent().add(new StikerTarefa("Tarefa","Descrição da Tarefa"), 1);
+            getParent().add(Box.createRigidArea(new Dimension(0, 10)), 2);
+            getParent().revalidate();
+            getParent().repaint();
+        }
     }
 }

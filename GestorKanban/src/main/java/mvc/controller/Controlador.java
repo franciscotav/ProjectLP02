@@ -31,6 +31,7 @@ public class Controlador {
         public void mouseClicked(MouseEvent e){
             view.adicionarComponentesProjeto();
             view.setMembroAddicionarMouseAdapter(new AddicionarMembroMouseAdapter());
+            view.setAddicionarColunaButtonMouseAdapter(new AddicionarColunaButtonMouseAdapter());
         }
         @Override
         public void mousePressed(MouseEvent e) {}
@@ -123,5 +124,72 @@ public class Controlador {
     }
     
     
-    //
+    //-----Quadro
+    //---
+    class AddicionarColunaButtonMouseAdapter implements MouseListener{
+        @Override
+        public void mouseClicked(MouseEvent e){
+            view.addicionarColunaTarefa(e);
+            view.setAddicionarTarefaButtonMouseAdapter(new AddicionarTarefaButtonMouseAdapter());
+            view.setEditarColunaButtonMouseAdapter(new EditarColunaButtonMouseAdapter());
+            view.setRemoverColunaButtonMouseAdapter(new RemoverColunaButtonMouseAdapter());
+        }
+        @Override
+        public void mousePressed(java.awt.event.MouseEvent e) {}
+        @Override
+        public void mouseReleased(java.awt.event.MouseEvent e) {}
+        @Override
+        public void mouseEntered(java.awt.event.MouseEvent e) {}
+        @Override
+        public void mouseExited(java.awt.event.MouseEvent e) {}
+    }
+    class EditarColunaButtonMouseAdapter implements MouseListener{
+        @Override
+        public void mouseClicked(MouseEvent e){
+            view.editarColuna(e);
+        }
+        @Override
+        public void mousePressed(java.awt.event.MouseEvent e) {}
+        @Override
+        public void mouseReleased(java.awt.event.MouseEvent e) {}
+        @Override
+        public void mouseEntered(java.awt.event.MouseEvent e) {}
+        @Override
+        public void mouseExited(java.awt.event.MouseEvent e) {}
+    }
+    class RemoverColunaButtonMouseAdapter implements MouseListener{
+        @Override
+        public void mouseClicked(MouseEvent e){
+            view.removerColuna(e);
+        }
+        @Override
+        public void mousePressed(java.awt.event.MouseEvent e) {}
+        @Override
+        public void mouseReleased(java.awt.event.MouseEvent e) {}
+        @Override
+        public void mouseEntered(java.awt.event.MouseEvent e) {}
+        @Override
+        public void mouseExited(java.awt.event.MouseEvent e) {}
+    }
+    
+    
+    //----StikerTarefa
+    //---
+    class AddicionarTarefaButtonMouseAdapter implements MouseListener{
+        @Override
+        public void mouseClicked(MouseEvent e){
+            view.addicionarTarefa(e);
+        }
+        @Override
+        public void mousePressed(java.awt.event.MouseEvent e) {}
+        @Override
+        public void mouseReleased(java.awt.event.MouseEvent e) {}
+        @Override
+        public void mouseEntered(java.awt.event.MouseEvent e) {}
+        @Override
+        public void mouseExited(java.awt.event.MouseEvent e) {}
+    }
+    
+    //---EditarEstado
+    
 }

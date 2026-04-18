@@ -46,12 +46,28 @@ public class MainWindow extends JFrame {
         grupoLista.setMembroMouseAdapter(e);
     }
     
+    public void setAddicionarColunaButtonMouseAdapter(MouseListener e){
+        quadro.setAddicionarColunaButtonMouseAdapter(e);
+    }
+    
+    public void setEditarColunaButtonMouseAdapter(MouseListener e){
+        quadro.setEditarColunaButtonMouseAdapter(e);
+    }
+    
+    public void setAddicionarTarefaButtonMouseAdapter(MouseListener e){
+        quadro.setAddicionarTarefaButtonMouseAdapter(e);
+    }
+    
+    public void setRemoverColunaButtonMouseAdapter(MouseListener e){
+        quadro.setRemoverColunaButtonMouseAdapter(e);
+    }
+    
     public Menus getMenus() {
         return menus;
     }
     
-    public void adicionarNovoProjetoListener(java.awt.event.MouseListener listener) {
-        menus.adicionarNovoProjetoListener(listener);
+    public void adicionarNovoProjetoListener(MouseListener e) {
+        menus.adicionarNovoProjetoListener(e);
     }
     
     public void adicionarComponentesProjeto() {
@@ -134,6 +150,25 @@ public class MainWindow extends JFrame {
             responsavel.mouseDragged(e);
     }
     
+    public void addicionarColunaTarefa(MouseEvent e){
+        ColunaAddicionar colunaAdd = (ColunaAddicionar) e.getSource();
+        colunaAdd.mouseClicked();
+    }
     
+    public void addicionarTarefa(MouseEvent e){
+        StickerAddicionar stickerAddicionar = (StickerAddicionar) e.getSource();
+        stickerAddicionar.mouseClicked();
+    }
     
+    public void editarColuna(MouseEvent e){
+        Component source = (Component) e.getSource();
+        ColunaMenu colunaMenu = (ColunaMenu) source.getParent();
+        colunaMenu.buttonEditarClicked();
+    }
+    
+    public void removerColuna(MouseEvent e){
+        Component source = (Component) e.getSource();
+        ColunaMenu colunaMenu = (ColunaMenu) source.getParent();
+        colunaMenu.buttonRemoverClicked();
+    }
 }
