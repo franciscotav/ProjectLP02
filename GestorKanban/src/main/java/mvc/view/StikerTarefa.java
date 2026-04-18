@@ -8,7 +8,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import javax.swing.*;
-import javax.swing.border.*;
 
 /**
  *
@@ -83,69 +82,80 @@ public class StikerTarefa extends JPanel {
         panelButtons.add(buttonEditar);
         panelButtons.add(buttonRemover);
         
-        buttonRemover.addActionListener(e -> {
-            if (getParent() instanceof TarefaColuna) {
-                TarefaColuna coluna = (TarefaColuna) getParent();
-                int index = coluna.getComponentZOrder(this);
-                coluna.remove(index + 1);
-                removeInGrupos();
-                coluna.remove(this);
-                coluna.revalidate();
-                coluna.repaint();
-            }
-        });
-        
-              
-        buttonEditar.addActionListener(e -> {
-            JPanel panelEdicao = new JPanel();
-            panelEdicao.setLayout(new BoxLayout(panelEdicao, BoxLayout.Y_AXIS));
-            
-            JTextField fieldTitulo = new JTextField(labelTitulo.getText());
-            JTextArea areaDesc = new JTextArea(stringDescricao, 5, 20);
-            
-            JPanel selectResponsavel = new JPanel();
-            selectResponsavel.setLayout(new BoxLayout(selectResponsavel, BoxLayout.Y_AXIS));
-            for(Responsavel resp : membrosAtribuidos){
-                JCheckBox checkBox = new JCheckBox(resp.getName() + " #" + resp.getId());
-                checkBox.setSelected(true);
-                selectResponsavel.add(checkBox);
-            }
-            
-            panelEdicao.add(new JLabel("Titulo:"));
-            panelEdicao.add(fieldTitulo);
-            panelEdicao.add(new JLabel("Descrição:"));
-            panelEdicao.add(new JScrollPane(areaDesc));
-            panelEdicao.add(selectResponsavel);
-
-            int result = JOptionPane.showConfirmDialog(this, panelEdicao, 
-                       "Editar Tarefa #" + stickerindex, JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-
-            if (result == JOptionPane.OK_OPTION) {
-                labelTitulo.setText(fieldTitulo.getText());
-                stringDescricao = areaDesc.getText();
-                labelDescricao.setText("<html><body style='width: 180px;'>" + stringDescricao + "</body></html>");
-                
-                for(int i = 0; i < selectResponsavel.getComponentCount(); i++){
-                    if(selectResponsavel.getComponent(i) instanceof JCheckBox){
-                        JCheckBox checkBox = (JCheckBox) selectResponsavel.getComponent(i);
-                        if(!checkBox.isSelected()){
-                            membrosAtribuidos.get(i).removeStickers(this);
-                            removeResponsavel(membrosAtribuidos.get(i));
-                        }
-                    }
-                }
-                
-                updateStickers();
-                this.revalidate();
-                this.repaint();
-            }
-        });
-        
         add(contentPanel, BorderLayout.CENTER); 
         add(panelButtons, BorderLayout.SOUTH);
         
         panelButtons.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
      }
+    
+    public void setEditarTarefaButtonMouseAdapter(MouseListener e){
+        buttonEditar.addMouseListener(e);
+    }
+    
+    public void setsetRemoverTarefaButtonMouseAdapter(MouseListener e){
+        buttonEditar.addMouseListener(e);
+    }
+    
+    public void setRemoverTarefaButtonMouseAdapter(MouseListener e){
+        buttonRemover.addMouseListener(e);
+    }
+    
+    public void removerMousePressed(){
+        if (getParent() instanceof TarefaColuna) {
+            TarefaColuna coluna = (TarefaColuna) getParent();
+            int index = coluna.getComponentZOrder(this);
+            coluna.remove(index + 1);
+            removeInGrupos();
+            coluna.remove(this);
+            coluna.revalidate();
+            coluna.repaint();
+        }
+    }
+    
+    public void editarMousePressed(){
+        JPanel panelEdicao = new JPanel();
+        panelEdicao.setLayout(new BoxLayout(panelEdicao, BoxLayout.Y_AXIS));
+
+        JTextField fieldTitulo = new JTextField(labelTitulo.getText());
+        JTextArea areaDesc = new JTextArea(stringDescricao, 5, 20);
+
+        JPanel selectResponsavel = new JPanel();
+        selectResponsavel.setLayout(new BoxLayout(selectResponsavel, BoxLayout.Y_AXIS));
+        for(Responsavel resp : membrosAtribuidos){
+            JCheckBox checkBox = new JCheckBox(resp.getName() + " #" + resp.getId());
+            checkBox.setSelected(true);
+            selectResponsavel.add(checkBox);
+        }
+
+        panelEdicao.add(new JLabel("Titulo:"));
+        panelEdicao.add(fieldTitulo);
+        panelEdicao.add(new JLabel("Descrição:"));
+        panelEdicao.add(new JScrollPane(areaDesc));
+        panelEdicao.add(selectResponsavel);
+
+        int result = JOptionPane.showConfirmDialog(this, panelEdicao, 
+                   "Editar Tarefa #" + stickerindex, JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+        if (result == JOptionPane.OK_OPTION) {
+            labelTitulo.setText(fieldTitulo.getText());
+            stringDescricao = areaDesc.getText();
+            labelDescricao.setText("<html><body style='width: 180px;'>" + stringDescricao + "</body></html>");
+
+            for(int i = 0; i < selectResponsavel.getComponentCount(); i++){
+                if(selectResponsavel.getComponent(i) instanceof JCheckBox){
+                    JCheckBox checkBox = (JCheckBox) selectResponsavel.getComponent(i);
+                    if(!checkBox.isSelected()){
+                        membrosAtribuidos.get(i).removeStickers(this);
+                        removeResponsavel(membrosAtribuidos.get(i));
+                    }
+                }
+            }
+
+            updateStickers();
+            this.revalidate();
+            this.repaint();
+        }
+    }
     
     public void addResponsavel(Responsavel membro){
         membrosAtribuidos.add(membro);
@@ -177,114 +187,96 @@ public class StikerTarefa extends JPanel {
         return labelTitulo;
     }
     
+    public void mousePressed(MouseEvent e){
+        mouseDragged = false;
+
+        startX = e.getX();
+        startY = e.getY();
+
+        if(getParent() instanceof TarefaColuna){
+            originalParent = (TarefaColuna) getParent();
+            originalIndex = originalParent.getComponentZOrder(local());
+        }
+    }
+    
+    public void mouseReleased(MouseEvent e){  
+        if(mouseDragged == false) return;
+
+        mouseDragged = false;
+
+        if(originalParent == null) return;
+
+        JLayeredPane lp = getRootPane().getLayeredPane();
+
+        Point dropPoint = SwingUtilities.convertPoint(local(), e.getPoint(), lp);
+
+        setVisible(false);
+        Component target = SwingUtilities.getDeepestComponentAt(lp, dropPoint.x, dropPoint.y);
+        setVisible(true);
+
+        TarefaColuna newColumn = null;
+        Component check = target;
+        while (check != null) {
+            if (check instanceof TarefaColuna) {
+                newColumn = (TarefaColuna) check;
+                break;
+            }
+
+            check = check.getParent();
+        }
+
+        lp.remove(local());
+
+        if(newColumn != null) {
+            if (newColumn == originalParent) {
+                newColumn.add(local(), originalIndex);
+                newColumn.add(Box.createRigidArea(new Dimension(0, 10)), originalIndex + 1);
+            } else {
+                int pos = Math.max(0, newColumn.getComponentCount() - 1);
+                newColumn.add(local(), pos);
+                newColumn.add(Box.createRigidArea(new Dimension(0, 10)), pos + 1);
+            }
+        } else {
+            originalParent.add(local(), originalIndex);
+            originalParent.add(Box.createRigidArea(new Dimension(0, 10)), originalIndex + 1);
+        }
+
+        if (newColumn != null) {
+            newColumn.revalidate();
+            newColumn.repaint();
+        }
+
+        originalParent.revalidate();
+        originalParent.repaint();
+
+        originalParent = null;
+    }
+    
+    public void mouseDragged(MouseEvent e){ 
+        mouseDragged = true;
+
+        if (getParent() instanceof TarefaColuna) {
+            JLayeredPane lp = getRootPane().getLayeredPane();
+            Point p = SwingUtilities.convertPoint(originalParent, getLocation(), lp);
+
+            originalParent.remove(originalIndex + 1);
+            originalParent.remove(local());
+            lp.add(local(), JLayeredPane.DRAG_LAYER);
+
+            setLocation(p);
+
+            originalParent.revalidate();
+            originalParent.repaint();
+
+        }
+
+        Point mousePos = SwingUtilities.convertPoint(local(), e.getPoint(), getParent());
+        setLocation(mousePos.x - startX, mousePos.y - startY);
+    }
+    
     public StikerTarefa(String titulo, String descricao){
-        
         iniStikerTarefa();
         setupVariavels(titulo, descricao);
-       
-        addMouseListener(new MouseAdapter(){
-            @Override
-            public void mousePressed(MouseEvent e){
-                mouseDragged = false;
-                
-                startX = e.getX();
-                startY = e.getY();
-
-                if(getParent() instanceof TarefaColuna){
-                    originalParent = (TarefaColuna) getParent();
-                    originalIndex = originalParent.getComponentZOrder(local());
-                }
-            }
-            
-            @Override
-            public void mouseReleased(MouseEvent e){
-                
-                if(mouseDragged == false) return;
-                
-                mouseDragged = false;
-                 
-                if(originalParent == null) return;
-                
-                JLayeredPane lp = getRootPane().getLayeredPane();
-        
-                Point dropPoint = SwingUtilities.convertPoint(local(), e.getPoint(), lp);
-
-                setVisible(false);
-                Component target = SwingUtilities.getDeepestComponentAt(lp, dropPoint.x, dropPoint.y);
-                setVisible(true);
-
-                TarefaColuna newColumn = null;
-                Component check = target;
-                while (check != null) {
-                    if (check instanceof TarefaColuna) {
-                        newColumn = (TarefaColuna) check;
-                        break;
-                    }
-                    
-                    check = check.getParent();
-                }
-
-                lp.remove(local());
-
-                if(newColumn != null) {
-                    if (newColumn == originalParent) {
-                        newColumn.add(local(), originalIndex);
-                        newColumn.add(Box.createRigidArea(new Dimension(0, 10)), originalIndex + 1);
-                    } else {
-                        int pos = Math.max(0, newColumn.getComponentCount() - 1);
-                        newColumn.add(local(), pos);
-                        newColumn.add(Box.createRigidArea(new Dimension(0, 10)), pos + 1);
-                    }
-                } else {
-                    originalParent.add(local(), originalIndex);
-                    originalParent.add(Box.createRigidArea(new Dimension(0, 10)), originalIndex + 1);
-                }
-
-                if (newColumn != null) {
-                    newColumn.revalidate();
-                    newColumn.repaint();
-                }
-                
-                originalParent.revalidate();
-                originalParent.repaint();
-                
-                originalParent = null;
-            }
-            
-        });
-     
-        addMouseMotionListener(new MouseMotionListener() {
-            @Override
-            public void mouseDragged(MouseEvent e){
-                
-                mouseDragged = true;
-                
-                if (getParent() instanceof TarefaColuna) {
-                    JLayeredPane lp = getRootPane().getLayeredPane();
-                    Point p = SwingUtilities.convertPoint(originalParent, getLocation(), lp);
-                    
-                    originalParent.remove(originalIndex + 1);
-                    originalParent.remove(local());
-                    lp.add(local(), JLayeredPane.DRAG_LAYER);
-                    
-                    setLocation(p);
-                    
-                    originalParent.revalidate();
-                    originalParent.repaint();
-                    
-                }
-                
-                Point mousePos = SwingUtilities.convertPoint(local(), e.getPoint(), getParent());
-                setLocation(mousePos.x - startX, mousePos.y - startY);
-                    
-                
-            }
-            
-            @Override
-            public void mouseMoved(MouseEvent e){
-            
-            }
-        });
     }
     
     public void removeResponsavel(Responsavel membro){

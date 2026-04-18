@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
 /**
  *
@@ -60,6 +61,93 @@ public class MainWindow extends JFrame {
     
     public void setRemoverColunaButtonMouseAdapter(MouseListener e){
         quadro.setRemoverColunaButtonMouseAdapter(e);
+    }
+    
+//    public void setTarefaMouseAdapter(MouseEvent sourceEvent, MouseListener e){
+//        StickerAddicionar sticker = (StickerAddicionar) sourceEvent.getSource();
+//        TarefaColuna coluna = (TarefaColuna) sticker.getParent();
+//        
+//        StikerTarefa lastStickerCreated = null;
+//        for(int i = 0; i < coluna.getComponentCount(); i++){
+//            if(coluna.getComponent(i) instanceof StikerTarefa){
+//                lastStickerCreated = (StikerTarefa) coluna.getComponent(i);
+//                break;
+//            }
+//        }
+//        
+//        if(lastStickerCreated != null){
+//            lastStickerCreated.addMouseListener(e);
+//            lastStickerCreated.addMouseMotionListener((MouseMotionListener) e);
+//        }
+//        
+//    }
+    
+    public void setTarefaMouseAdapter(MouseEvent sourceEvent, MouseListener e) {
+        Component source = (Component) sourceEvent.getSource();
+        StikerTarefa targetSticker = null;
+
+        if(source instanceof StikerTarefa) {
+            targetSticker = (StikerTarefa) source;
+        }else if(source instanceof StickerAddicionar){
+            StickerAddicionar stickerAdd = (StickerAddicionar) source;
+            TarefaColuna coluna = (TarefaColuna) stickerAdd.getParent();
+
+            for(int i = 0; i < coluna.getComponentCount(); i++){
+                if(coluna.getComponent(i) instanceof StikerTarefa){
+                    targetSticker = (StikerTarefa) coluna.getComponent(i);
+                    break;
+                }
+            }
+        }
+
+        if(targetSticker != null){
+            targetSticker.addMouseListener(e);
+            targetSticker.addMouseMotionListener((MouseMotionListener) e);
+        }
+    }
+    
+    public void setEditarTarefaButtonMouseAdapter(MouseEvent sourceEvent, MouseListener e) {
+        Component source = (Component) sourceEvent.getSource();
+        StikerTarefa targetSticker = null;
+
+        if(source instanceof StikerTarefa){
+            targetSticker = (StikerTarefa) source;
+        }else if(source instanceof StickerAddicionar) {
+            StickerAddicionar stickerAdd = (StickerAddicionar) source;
+            TarefaColuna coluna = (TarefaColuna) stickerAdd.getParent();
+            for(int i = 0; i < coluna.getComponentCount(); i++){
+                if(coluna.getComponent(i) instanceof StikerTarefa){
+                    targetSticker = (StikerTarefa) coluna.getComponent(i);
+                    break;
+                }
+            }
+        }
+
+        if(targetSticker != null){
+            targetSticker.setEditarTarefaButtonMouseAdapter(e);
+        }
+    }
+    
+    public void setRemoverTarefaButtonMouseAdapter(MouseEvent sourceEvent, MouseListener e) {
+        Component source = (Component) sourceEvent.getSource();
+        StikerTarefa targetSticker = null;
+
+        if(source instanceof StikerTarefa){
+            targetSticker = (StikerTarefa) source;
+        }else if(source instanceof StickerAddicionar) {
+            StickerAddicionar stickerAdd = (StickerAddicionar) source;
+            TarefaColuna coluna = (TarefaColuna) stickerAdd.getParent();
+            for(int i = 0; i < coluna.getComponentCount(); i++){
+                if(coluna.getComponent(i) instanceof StikerTarefa){
+                    targetSticker = (StikerTarefa) coluna.getComponent(i);
+                    break;
+                }
+            }
+        }
+
+        if(targetSticker != null){
+            targetSticker.setRemoverTarefaButtonMouseAdapter(e);
+        }
     }
     
     public Menus getMenus() {
@@ -138,7 +226,6 @@ public class MainWindow extends JFrame {
     }
     
     public void membroMouseReleased(MouseEvent e){
-        //System.out.println(e.getSource().getClass().getName());
         Responsavel responsavel = getResponsavelFromEvent(e);
         if(responsavel != null)
             responsavel.mouseReleased(e);
@@ -171,4 +258,61 @@ public class MainWindow extends JFrame {
         ColunaMenu colunaMenu = (ColunaMenu) source.getParent();
         colunaMenu.buttonRemoverClicked();
     }
+    
+    public void tarefaMousePressed(MouseEvent e){
+        Component source = (Component) e.getSource();
+        StikerTarefa colunaMenu = (StikerTarefa) source;
+        
+        colunaMenu.mousePressed(e);
+    }
+    
+    public void tarefaMouseReleased(MouseEvent e){
+        Component source = (Component) e.getSource();
+        StikerTarefa colunaMenu = (StikerTarefa) source;
+        
+        colunaMenu.mouseReleased(e);
+    }
+    
+    public void tarefaMouseDragged(MouseEvent e){
+        Component source = (Component) e.getSource();
+        StikerTarefa colunaMenu = (StikerTarefa) source;
+        
+        colunaMenu.mouseDragged(e);
+    } 
+     
+    public void editarTarefa(MouseEvent e){
+        Component source = (Component) e.getSource();
+        StikerTarefa stickerTarefa = null;
+        while(source != null){
+            if(source instanceof StikerTarefa){
+                stickerTarefa = (StikerTarefa) source;
+                break;
+            }
+            source = source.getParent();
+        }
+
+        if(stickerTarefa != null) {
+            stickerTarefa.editarMousePressed();
+        }
+       
+    }
+    
+    public void removerTarefa(MouseEvent e){
+        Component source = (Component) e.getSource();
+        StikerTarefa stickerTarefa = null;
+        while(source != null){
+            if(source instanceof StikerTarefa){
+                stickerTarefa = (StikerTarefa) source;
+                break;
+            }
+            source = source.getParent();
+        }
+
+        if(stickerTarefa != null) {
+            stickerTarefa.removerMousePressed();
+        }
+       
+    }
+    
+    
 }

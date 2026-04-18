@@ -22,10 +22,6 @@ public class Quadro extends JScrollPane {
         this.setViewportView(estados);
         
     }
-
-    public Estados getEstados() {
-        return estados;
-    }
     
     public void setAddicionarColunaButtonMouseAdapter(MouseListener e){
         estados.setAddicionarColunaButtonMouseAdapter(e);
