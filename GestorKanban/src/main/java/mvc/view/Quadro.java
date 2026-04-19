@@ -103,8 +103,18 @@ class TarefaColuna extends JPanel{
     
     private ColunaMenu colunaMenu;
     private StickerAddicionar stickerAddicionar;
+    
+    private String id;
+
+    public String getId() {
+        return id;
+    }
+    
+    public String getName(){
+        return colunaMenu.getName();
+    }
             
-    public TarefaColuna(String nomeColuna){
+    public TarefaColuna(String id, String nome){
         tarefasLayout = new BoxLayout(this,BoxLayout.Y_AXIS);
         setAlignmentY(Component.TOP_ALIGNMENT);
         setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -116,8 +126,9 @@ class TarefaColuna extends JPanel{
         
         setLayout(tarefasLayout);
         
+        this.id = id;
         
-        colunaMenu = new ColunaMenu(nomeColuna);
+        colunaMenu = new ColunaMenu(nome);
         stickerAddicionar = new StickerAddicionar();
         
         add(colunaMenu);
@@ -143,7 +154,11 @@ class ColunaMenu extends JPanel{
     private JLabel labelName;
     private JButton buttonEditar;
     private JButton buttonRemover;
-    
+
+    public String getName() {
+        return labelName.toString();
+    }
+
     public ColunaMenu(String nomeColuna){
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         
@@ -203,7 +218,7 @@ class ColunaMenu extends JPanel{
         panelEdicao.add(fieldTitulo);
 
         int result = JOptionPane.showConfirmDialog(this, panelEdicao, 
-                   "Editar Estado", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+                   "Editar Estado #" + ((TarefaColuna)getParent()).getId(), JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
         if (result == JOptionPane.OK_OPTION) {
             labelName.setText(fieldTitulo.getText());
@@ -237,12 +252,12 @@ class ColunaAddicionar extends JPanel{
         
     }
     
-    public void mouseClicked(){
+    public void mouseClicked(String id, String nome){
         if(getParent() instanceof Estados){
             Estados estados = (Estados) getParent();
 
             int pos = Math.max(0, estados.getComponentCount() - 1);
-            estados.add(new TarefaColuna("Estado"),pos);
+            estados.add(new TarefaColuna(id, nome),pos);
 
             estados.revalidate();
             estados.repaint();

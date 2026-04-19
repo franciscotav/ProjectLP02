@@ -15,16 +15,16 @@ import java.awt.event.MouseMotionListener;
  * @author FTCASA
  */
 public class Controlador {
-
-    MainWindow view;
-    Projeto model;
-
-    static int id = 0;
+    private MainWindow view;
+    private Projeto model;
+    
+    private static int idPessoa = 0;
+    private static int idEstado = 0;
+    private static int idTarefa = 0;
 
     public Controlador(MainWindow view, Projeto model) {
         this.view = view;
         this.model = model;
-
         this.view.adicionarNovoProjetoListener(new NovoProjetoMouseAdapter());
     }
 
@@ -50,11 +50,13 @@ public class Controlador {
     class AddicionarMembroMouseAdapter implements MouseListener {
         @Override
         public void mouseClicked(MouseEvent e) {
-            //addicionar metodos para fazer update do model;
-            //
-            id++;
-
-            view.criarNovoResponsavel(id, "Responsavel " + id);
+            idPessoa++;
+            String nomeDefault = "Responsavel";
+            String idPessoaString = "PES-" + idPessoa;
+            
+            model.addPessoa(idPessoaString, nomeDefault);
+            
+            view.criarNovoResponsavel(idPessoaString, nomeDefault);
             view.setMembroMouseAdapter(new MembroMouseAdapter());
             view.setEditarMembroMouseAdapter(new EditarMembroMouseAdapter());
             view.setRemoverMembroMouseAdapter(new RemoverMembroMouseAdapter());
@@ -73,6 +75,10 @@ public class Controlador {
         @Override
         public void mouseClicked(MouseEvent e) {
             view.editarResponsavel(e);
+            String id = view.getResponsavelID(e);
+            String novoNome = view.getResponsavelNome(e);
+            model.editarPessoa(id, novoNome);
+            //falta procurar se existe em tarefas para corregir o nome tambem?
         }
         @Override
         public void mousePressed(java.awt.event.MouseEvent e) {}
@@ -88,6 +94,11 @@ public class Controlador {
         @Override
         public void mouseClicked(MouseEvent e) {
             view.removerResponsavel(e);
+            
+            String id = view.getResponsavelID(e);
+            model.removerPessoa(id);
+            
+            //falta procurar para remover das tarefas tambem?
         }
         @Override
         public void mousePressed(java.awt.event.MouseEvent e) {}
@@ -128,7 +139,13 @@ public class Controlador {
     class AddicionarColunaButtonMouseAdapter implements MouseListener {
         @Override
         public void mouseClicked(MouseEvent e) {
-            view.addicionarColunaTarefa(e);
+            idEstado++;
+            String nomeDefault = "Estado";
+            String idEstadoString = "EST-" + idEstado; 
+            
+            model.addEstado(idEstadoString, nomeDefault);
+            
+            view.addicionarColunaTarefa(e, idEstadoString, nomeDefault);
             view.setAddicionarTarefaButtonMouseAdapter(new AddicionarTarefaButtonMouseAdapter());
             view.setEditarColunaButtonMouseAdapter(new EditarColunaButtonMouseAdapter());
             view.setRemoverColunaButtonMouseAdapter(new RemoverColunaButtonMouseAdapter());
@@ -147,6 +164,10 @@ public class Controlador {
         @Override
         public void mouseClicked(MouseEvent e) {
             view.editarColuna(e);
+            
+            String id = view.getColunaID(e);
+            String novoNome = view.getColunaNome(e);
+            model.editarEstado(id, novoNome);
         }
         @Override
         public void mousePressed(java.awt.event.MouseEvent e) {}
@@ -162,6 +183,11 @@ public class Controlador {
         @Override
         public void mouseClicked(MouseEvent e) {
             view.removerColuna(e);
+            
+            String id = view.getColunaID(e);
+            String novoNome = view.getColunaNome(e);
+            model.removeEstado(id);
+            //procurar nos membros as tarefas associadas a este estado para remover as tarefas associadas
         }
         @Override
         public void mousePressed(java.awt.event.MouseEvent e) {}
@@ -176,7 +202,15 @@ public class Controlador {
     class AddicionarTarefaButtonMouseAdapter implements MouseListener {
         @Override
         public void mouseClicked(MouseEvent e) {
-            view.addicionarTarefa(e);
+            idTarefa++;
+            String tituloDefault = "Tarefa";
+            String descricaoDefault = "Descrição da Tarefa";
+            String idTarefaString = "TAR-" + idTarefa; 
+            String idColunaString = view.getColunaID(e); 
+            
+            model.addTarefa(idColunaString, idTarefaString, tituloDefault, descricaoDefault);
+            
+            view.addicionarTarefa(e, idTarefaString, tituloDefault, descricaoDefault);
             view.setTarefaMouseAdapter(e, new TarefaMouseAdapter());
             view.setEditarTarefaButtonMouseAdapter(e, new EditarTarefaButtonMouseAdapter());
             view.setRemoverTarefaButtonMouseAdapter(e, new RemoverTarefaButtonMouseAdapter());
@@ -203,6 +237,10 @@ public class Controlador {
         @Override
         public void mouseReleased(java.awt.event.MouseEvent e) {
             view.tarefaMouseReleased(e);
+            //
+            ///
+            ///
+            ///continuar aqui!!!
         }
         @Override
         public void mouseEntered(java.awt.event.MouseEvent e) {}

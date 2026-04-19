@@ -12,7 +12,6 @@ import java.util.List;
  * @author bernardos
  */
 public class Estado {
-  
     private String nome;
     private List<Tarefa> tarefas;
     private String id;
@@ -23,16 +22,19 @@ public class Estado {
         this.id = id;
     }
     
-    
     public void addTarefa(Tarefa tarefa){
         this.tarefas.add(tarefa);
+    }
+    
+    public void addTarefa(String idTarefa, String titulo, String descricao){
+        this.tarefas.add(new Tarefa(idTarefa, titulo, descricao));
     }
     
     public void removeTarefa(String id){
         for(Tarefa t : tarefas){
             if (t.getId().equals(id)) {
-            this.tarefas.remove(t);
-            break;
+                this.tarefas.remove(t);
+                break;
             }
         }
     }

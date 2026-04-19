@@ -51,8 +51,7 @@ public class GrupoLista extends JScrollPane {
             lastResponsavel.setEditarMembroMouseAdapter(e);
     }
     
-    public void criarNovoResponsavel(int id, String nome){
-        //System.out.println(grupoListaPanel.getComponentCount());
+    public void criarNovoResponsavel(String id, String nome){
         grupoListaPanel.add(new Responsavel(id,nome),(grupoListaPanel.getComponentCount() - 1));
         grupoListaPanel.add(Box.createRigidArea(new Dimension(0, 10)),(grupoListaPanel.getComponentCount() - 1));
         refresh();
@@ -129,7 +128,7 @@ class MembroAddicionar extends JPanel{
 }
 
 class Responsavel extends JPanel{
-    private int id;
+    private String id;
     private String nome;
     private JLabel labelname;
     
@@ -195,12 +194,12 @@ class Responsavel extends JPanel{
         lp.repaint();
     }
     
-    public Responsavel(int id, String nome) {
+    public Responsavel(String id, String nome) {
         iniResponsavel(id,nome);
         setupVariavels();        
     }
     
-    private void iniResponsavel(int id, String nome){
+    private void iniResponsavel(String id, String nome){
         Dimension tamanho = new Dimension(250, 250);
         setPreferredSize(tamanho);
         setMaximumSize(tamanho);
@@ -269,7 +268,7 @@ class Responsavel extends JPanel{
         JPanel selectSticker = new JPanel();
         selectSticker.setLayout(new BoxLayout(selectSticker, BoxLayout.Y_AXIS));
         for(StikerTarefa sticker : stickersAtribuidos){
-            JCheckBox checkBox = new JCheckBox(sticker.getLabelTitulo().getText() + " #" + sticker.getStickerindex());
+            JCheckBox checkBox = new JCheckBox(sticker.getLabelTitulo().getText() + " #" + sticker.getID());
             checkBox.setSelected(true);
             selectSticker.add(checkBox);
         }
@@ -339,7 +338,7 @@ class Responsavel extends JPanel{
         return nome;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 

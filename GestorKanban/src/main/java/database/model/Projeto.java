@@ -27,15 +27,46 @@ public class Projeto {
         this.estados = new ArrayList<>();
     }
     
-    public void addEstado(Estado estado){
-        this.estados.add(estado);
+    public void addEstado(String id, String nome){
+        this.estados.add(new Estado(id, nome));
+    }
+    
+    public void addPessoa(String id, String nome){
+        Pessoa pessoa = new Pessoa(id, nome);
+        grupo.addPessoa(pessoa);
+    }
+    
+    public void addTarefa(String idEstado, String idTarefa, String titulo, String descricao){
+        for(Estado estado : estados){
+            if(estado.getId().equals(idEstado)){
+                estado.addTarefa(idTarefa,titulo,descricao);
+                break;
+            }
+        }
+    }
+    
+    public void editarPessoa(String id, String novoNome){
+        grupo.editarPessoa(id, novoNome);
+    }
+    
+    public void editarEstado(String id, String novoNome){
+        for(Estado estado: estados){
+            if (estado.getId().equals(id)) {
+                estado.setNome(novoNome);
+                break;
+            }
+        }
+    }
+    
+    public void removerPessoa(String id){
+        grupo.removerPessoa(id);
     }
     
     public void removeEstado(String id){
-        for(Estado e : estados){
-            if (e.getId().equals(id)) {
-            this.estados.remove(e);
-            break;
+        for(Estado estado : estados){
+            if(estado.getId().equals(id)){
+                estados.remove(estado);
+                break;
             }
         }
     }

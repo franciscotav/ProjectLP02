@@ -16,18 +16,35 @@ public class Grupo{
 
     public Grupo() {
         this.pessoas = new ArrayList<>();
-        
     }
 
     public void addPessoa(Pessoa pessoa){
-     pessoas.add(pessoa);
+        pessoas.add(pessoa);
+    }
+    
+    public void editarPessoa(String id, String novoNome){
+        for(Pessoa pessoa : pessoas){
+            if(pessoa.getId().equals(id)){
+                pessoa.setNome(novoNome);
+                break;
+            }
+        }
+    }
+    
+    public void removerPessoa(String id){
+        for(Pessoa pessoa : pessoas){
+            if(pessoa.getId().equals(id)){
+                pessoas.remove(pessoa);
+                break;
+            }
+        }
     }
     
     public void removePessoa(String id){
         for(Pessoa p : pessoas){
             if (p.getId().equals(id)) {
-            this.pessoas.remove(p);
-            break;
+                this.pessoas.remove(p);
+                break;
             }
         }
     }

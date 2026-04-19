@@ -12,8 +12,6 @@ import java.util.List;
  * @author bernardos
  */
 public class Tarefa {
-    
-
     private String nome;
     private String descricao;
     private List<Pessoa> pessoas;

@@ -26,8 +26,7 @@ public class StikerTarefa extends JPanel {
     private int originalIndex;
     private boolean mouseDragged;
     
-    private static int indexGlobal = 0;
-    private int stickerindex;
+    private String idTarefa;
     
     private ArrayList<Responsavel> membrosAtribuidos;
     
@@ -43,15 +42,15 @@ public class StikerTarefa extends JPanel {
         setAlignmentX(Component.CENTER_ALIGNMENT);
         
         mouseDragged = false;
-        indexGlobal++;
-        stickerindex = indexGlobal;
         membrosAtribuidos = new ArrayList<>();
     }
     
-    private void setupVariavels(String titulo, String descricao){
+    private void setupVariavels(String idTarefa, String titulo, String descricao){
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setOpaque(false);
+        
+        this.idTarefa = idTarefa;
         
         labelTitulo = new JLabel(titulo);
         labelTitulo.setFont(new Font("Arial", Font.BOLD, 16));
@@ -134,7 +133,7 @@ public class StikerTarefa extends JPanel {
         panelEdicao.add(selectResponsavel);
 
         int result = JOptionPane.showConfirmDialog(this, panelEdicao, 
-                   "Editar Tarefa #" + stickerindex, JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+                   "Editar Tarefa #" + idTarefa, JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
         if (result == JOptionPane.OK_OPTION) {
             labelTitulo.setText(fieldTitulo.getText());
@@ -274,9 +273,9 @@ public class StikerTarefa extends JPanel {
         setLocation(mousePos.x - startX, mousePos.y - startY);
     }
     
-    public StikerTarefa(String titulo, String descricao){
+    public StikerTarefa(String idTarefa, String titulo, String descricao){
         iniStikerTarefa();
-        setupVariavels(titulo, descricao);
+        setupVariavels(idTarefa, titulo, descricao);
     }
     
     public void removeResponsavel(Responsavel membro){
@@ -313,8 +312,8 @@ public class StikerTarefa extends JPanel {
         membrosAtribuidos = null;
     }
 
-    public int getStickerindex() {
-        return stickerindex;
+    public String getID() {
+        return idTarefa;
     }
 
 }
@@ -337,9 +336,9 @@ class StickerAddicionar extends JPanel{
         add(plusLabel);
     }
     
-    public void mouseClicked(){
+    public void mouseClicked(String idTarefa, String titulo, String descricao){
         if(getParent() instanceof TarefaColuna){
-            getParent().add(new StikerTarefa("Tarefa","Descrição da Tarefa"), 1);
+            getParent().add(new StikerTarefa(idTarefa,titulo,descricao), 1);
             getParent().add(Box.createRigidArea(new Dimension(0, 10)), 2);
             getParent().revalidate();
             getParent().repaint();

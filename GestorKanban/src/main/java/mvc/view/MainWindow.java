@@ -183,7 +183,7 @@ public class MainWindow extends JFrame {
         repaint();
     }
     
-    public void criarNovoResponsavel(int id, String nome){
+    public void criarNovoResponsavel(String id, String nome){
         grupoLista.criarNovoResponsavel(id,nome);
     }
     
@@ -193,6 +193,23 @@ public class MainWindow extends JFrame {
         Responsavel responsavel = (Responsavel) panelButtons.getParent();
         responsavel.editar();
     }
+    
+    public String getResponsavelID(MouseEvent e){
+        JButton buttonEditar = (JButton) e.getSource();
+        JPanel panelButtons = (JPanel) buttonEditar.getParent();
+        Responsavel responsavel = (Responsavel) panelButtons.getParent();
+        
+        return responsavel.getId();
+    }
+    
+    public String getResponsavelNome(MouseEvent e){
+        JButton buttonEditar = (JButton) e.getSource();
+        JPanel panelButtons = (JPanel) buttonEditar.getParent();
+        Responsavel responsavel = (Responsavel) panelButtons.getParent();
+        
+        return responsavel.getNome();
+    }
+    
     
     public void removerResponsavel(MouseEvent e){
         JButton buttonEditar = (JButton) e.getSource();
@@ -237,20 +254,45 @@ public class MainWindow extends JFrame {
             responsavel.mouseDragged(e);
     }
     
-    public void addicionarColunaTarefa(MouseEvent e){
+    public void addicionarColunaTarefa(MouseEvent e, String id, String nome){
         ColunaAddicionar colunaAdd = (ColunaAddicionar) e.getSource();
-        colunaAdd.mouseClicked();
+        colunaAdd.mouseClicked(id,nome);
     }
     
-    public void addicionarTarefa(MouseEvent e){
+    public void addicionarTarefa(MouseEvent e, String idTarefa, String titulo, String descricao){
         StickerAddicionar stickerAddicionar = (StickerAddicionar) e.getSource();
-        stickerAddicionar.mouseClicked();
+        stickerAddicionar.mouseClicked(idTarefa, titulo, descricao);
     }
     
     public void editarColuna(MouseEvent e){
         Component source = (Component) e.getSource();
         ColunaMenu colunaMenu = (ColunaMenu) source.getParent();
         colunaMenu.buttonEditarClicked();
+    }
+    
+    public String getColunaID(MouseEvent e){
+        Component source = (Component) e.getSource();
+        
+        TarefaColuna tarefaColuna = null;
+        while(source != null){
+            if(source instanceof TarefaColuna){
+                tarefaColuna = (TarefaColuna) source;
+            }
+            source = source.getParent();
+        }
+        
+        if(tarefaColuna != null)
+            return tarefaColuna.getId();
+        else
+            return "";
+    }
+    
+    public String getColunaNome(MouseEvent e){
+        Component source = (Component) e.getSource();
+        ColunaMenu colunaMenu = (ColunaMenu) source.getParent();
+        TarefaColuna tarefaColuna = (TarefaColuna) colunaMenu.getParent();
+        
+        return tarefaColuna.getName();
     }
     
     public void removerColuna(MouseEvent e){
