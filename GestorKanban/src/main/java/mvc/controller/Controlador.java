@@ -78,7 +78,6 @@ public class Controlador {
             String id = view.getResponsavelID(e);
             String novoNome = view.getResponsavelNome(e);
             model.editarPessoa(id, novoNome);
-            //falta procurar se existe em tarefas para corregir o nome tambem?
         }
         @Override
         public void mousePressed(java.awt.event.MouseEvent e) {}
@@ -97,8 +96,6 @@ public class Controlador {
             
             String id = view.getResponsavelID(e);
             model.removerPessoa(id);
-            
-            //falta procurar para remover das tarefas tambem?
         }
         @Override
         public void mousePressed(java.awt.event.MouseEvent e) {}
@@ -185,9 +182,7 @@ public class Controlador {
             view.removerColuna(e);
             
             String id = view.getColunaID(e);
-            String novoNome = view.getColunaNome(e);
             model.removeEstado(id);
-            //procurar nos membros as tarefas associadas a este estado para remover as tarefas associadas
         }
         @Override
         public void mousePressed(java.awt.event.MouseEvent e) {}
@@ -236,11 +231,14 @@ public class Controlador {
         }
         @Override
         public void mouseReleased(java.awt.event.MouseEvent e) {
+            String idEstadoOrigem = view.getColunaID(e);
             view.tarefaMouseReleased(e);
-            //
-            ///
-            ///
-            ///continuar aqui!!!
+            String idEstadoDestino = view.getColunaID(e);
+            
+            if(!(idEstadoOrigem.equals(idEstadoDestino))){
+                String idTarefaString = view.getTarefaID(e);
+                model.moverTarefa(idEstadoOrigem, idEstadoDestino, idTarefaString);
+            }
         }
         @Override
         public void mouseEntered(java.awt.event.MouseEvent e) {}
@@ -259,6 +257,11 @@ public class Controlador {
         @Override
         public void mouseClicked(MouseEvent e) {
             view.editarTarefa(e);
+            
+            String idTarefaString = view.getTarefaID(e);
+            String novoTitulo = view.getTarefaTitulo(e);
+            String novaDescricao = view.getTarefaDescricao(e);
+            model.editarTarefa(idTarefaString, novoTitulo, novaDescricao);
         }
         @Override
         public void mousePressed(java.awt.event.MouseEvent e) {}
@@ -273,6 +276,9 @@ public class Controlador {
     class RemoverTarefaButtonMouseAdapter implements MouseListener {
         @Override
         public void mouseClicked(MouseEvent e) {
+            String idTarefaString = view.getTarefaID(e);
+            model.removerTarefa(idTarefaString);
+            
             view.removerTarefa(e);
         }
         @Override

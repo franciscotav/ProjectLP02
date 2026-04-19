@@ -304,7 +304,7 @@ public class StikerTarefa extends JPanel {
         }
     }
     
-    private void removeInGrupos(){
+    public void removeInGrupos(){
         for(Responsavel responsavel : membrosAtribuidos){
             responsavel.removeStickers(this);
         }
@@ -314,6 +314,14 @@ public class StikerTarefa extends JPanel {
 
     public String getID() {
         return idTarefa;
+    }
+    
+    public String getTitulo() {
+        return labelTitulo.getText();
+    }
+    
+    public String getDescricao(){
+        return labelDescricao.getText();
     }
 
 }

@@ -31,6 +31,17 @@ public class Grupo{
         }
     }
     
+    public void removeTarefaID(String tarefaRemoverID){
+        for(Pessoa pessoa : pessoas){
+            for(String tarefaID : pessoa.getTarefasID()){
+                if(tarefaID.equals(tarefaRemoverID)){
+                    pessoa.getTarefasID().remove(tarefaID);
+                    break;
+                }
+            }
+        }
+    }
+    
     public void removerPessoa(String id){
         for(Pessoa pessoa : pessoas){
             if(pessoa.getId().equals(id)){

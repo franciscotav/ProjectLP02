@@ -35,7 +35,7 @@ public class Pessoa{
         return id;
     }
 
-    public List<String> getTarefaID() {
+    public List<String> getTarefasID() {
         return idTarefas;
     }
 

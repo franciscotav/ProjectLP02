@@ -15,12 +15,13 @@ import mvc.view.MainWindow;
  * @author FranciscoTavares
  */
 public class GestorKanban {
-    /*
+    
     public static void main(String[] args) {
         MainWindow view = new MainWindow();
         Projeto model = new Projeto(10,"assa");
         Controlador controlador = new Controlador(view, model);
-    }    */
+    }    
+    /*
      public static void main(String[] args) {
 
     // 1. Criar a Base: Pessoas
@@ -108,5 +109,6 @@ public class GestorKanban {
         System.err.println("[RESULTADO] FALHOU. O Gson criou clones na memória. O dicionário de reconexão não funcionou corretamente.");
     }
 
-}
+    }
+    */
 }

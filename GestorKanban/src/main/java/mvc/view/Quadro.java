@@ -198,6 +198,17 @@ class ColunaMenu extends JPanel{
     }
     
     public void buttonRemoverClicked(){
+        if(getParent() instanceof TarefaColuna) {
+            TarefaColuna tarefaColuna = (TarefaColuna) getParent();
+            
+            for(int i = 0; i < tarefaColuna.getComponentCount(); i++){
+                if(tarefaColuna.getComponent(i) instanceof StikerTarefa){
+                    StikerTarefa tarefa = (StikerTarefa) tarefaColuna.getComponent(i);
+                    tarefa.removeInGrupos();
+                }
+            }
+        }
+        
         if(getParent().getParent() instanceof Estados){
             Estados estados = (Estados) getParent().getParent();
             int index = estados.getComponentZOrder(getParent());

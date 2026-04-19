@@ -287,6 +287,57 @@ public class MainWindow extends JFrame {
             return "";
     }
     
+    public String getTarefaID(MouseEvent e){
+        Component source = (Component) e.getSource();
+        
+        StikerTarefa stikerTarefa = null;
+        while(source != null){
+            if(source instanceof StikerTarefa){
+                stikerTarefa = (StikerTarefa) source;
+            }
+            source = source.getParent();
+        }
+        
+        if(stikerTarefa != null)
+            return stikerTarefa.getID();
+        else
+            return "";
+    }
+    
+    public String getTarefaTitulo(MouseEvent e){
+        Component source = (Component) e.getSource();
+        
+        StikerTarefa stikerTarefa = null;
+        while(source != null){
+            if(source instanceof StikerTarefa){
+                stikerTarefa = (StikerTarefa) source;
+            }
+            source = source.getParent();
+        }
+        
+        if(stikerTarefa != null)
+            return stikerTarefa.getTitulo();
+        else
+            return "";
+    }
+    
+    public String getTarefaDescricao(MouseEvent e){
+        Component source = (Component) e.getSource();
+        
+        StikerTarefa stikerTarefa = null;
+        while(source != null){
+            if(source instanceof StikerTarefa){
+                stikerTarefa = (StikerTarefa) source;
+            }
+            source = source.getParent();
+        }
+        
+        if(stikerTarefa != null)
+            return stikerTarefa.getDescricao();
+        else
+            return "";
+    }
+    
     public String getColunaNome(MouseEvent e){
         Component source = (Component) e.getSource();
         ColunaMenu colunaMenu = (ColunaMenu) source.getParent();
