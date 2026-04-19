@@ -25,18 +25,18 @@ public class Model{
     
     public void removeProjeto(int id) {
         for(Projeto p : projetos){
-//            if (p.getId().equals(id)) {
-//            this.projetos.remove(p);
-//            break;
-//            }
+            if (p.getId()== id) {
+            this.projetos.remove(p);
+            break;
+            }
         }
     }
     
     public Projeto getProjetoById(int id){
         for(Projeto p : projetos){
-//            if (p.getId().equals(id)) {
-//                return p;
-//            }
+            if (p.getId() == id) {
+                return p;
+            }
         }
         return null;
     }

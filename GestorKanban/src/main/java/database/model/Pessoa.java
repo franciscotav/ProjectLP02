@@ -4,6 +4,8 @@
  */
 package database.model;
 
+import java.util.List;
+
 /**
  *
  * @author bernardos
@@ -12,6 +14,7 @@ public class Pessoa{
     
     private String nome;
     private String id;
+    private List<Tarefa> tarefas;
 
     public Pessoa(String id, String nome) {
         this.nome = nome;
@@ -28,6 +31,18 @@ public class Pessoa{
 
     public String getId() {
         return id;
+    }
+
+    public List<Tarefa> getTarefa() {
+        return tarefas;
+    }
+
+    public void addTarefa(Tarefa tarefa) {
+        tarefas.add(tarefa);
+    }
+    
+    public void removedTarefa(Tarefa tarefa) {
+        tarefas.remove(tarefa);
     }
 
 }

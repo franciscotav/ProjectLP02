@@ -27,12 +27,14 @@ public class Tarefa {
     
     public void addPessoa(Pessoa pessoa) {
         this.pessoas.add(pessoa);
+        pessoa.addTarefa(this);
     }
     
     public void removePessoa(String id) {
         for(Pessoa p : pessoas){
             if (p.getId().equals(id)) {
             this.pessoas.remove(p);
+            p.removedTarefa(this);
             break;
             }
         }
