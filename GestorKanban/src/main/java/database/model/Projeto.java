@@ -44,6 +44,15 @@ public class Projeto {
         
     }
     
+    public void addPessoaToTarefa(String idEstado, String idTarefa, String idPessoa){
+        Estado estado = getEstadoById(idEstado);
+        if(estado != null){
+            Tarefa tarefa = estado.getTarefaById(idTarefa);
+            tarefa.addPessoa(grupo.getPessoaById(idPessoa));
+        }
+        
+    }
+    
     public void editarPessoa(String id, String novoNome){
         grupo.editarPessoa(id, novoNome);
     }
