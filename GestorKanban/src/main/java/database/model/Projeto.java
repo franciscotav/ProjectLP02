@@ -37,12 +37,11 @@ public class Projeto {
     }
     
     public void addTarefa(String idEstado, String idTarefa, String titulo, String descricao){
-        for(Estado estado : estados){
-            if(estado.getId().equals(idEstado)){
-                estado.addTarefa(idTarefa,titulo,descricao);
-                break;
-            }
+        Estado estado = getEstadoById(idEstado);
+        if(estado != null){
+            estado.addTarefa(idTarefa,titulo,descricao);
         }
+        
     }
     
     public void editarPessoa(String id, String novoNome){
