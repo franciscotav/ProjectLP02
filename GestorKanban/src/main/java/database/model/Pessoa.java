@@ -4,6 +4,7 @@
  */
 package database.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,11 +15,12 @@ public class Pessoa{
     
     private String nome;
     private String id;
-    private List<Tarefa> tarefas;
+    private List<String> idTarefas;
 
     public Pessoa(String id, String nome) {
         this.nome = nome;
         this.id = id;
+        this.idTarefas = new ArrayList<>();
     }
     
     public String getNome() {
@@ -33,16 +35,16 @@ public class Pessoa{
         return id;
     }
 
-    public List<Tarefa> getTarefa() {
-        return tarefas;
+    public List<String> getTarefaID() {
+        return idTarefas;
     }
 
-    public void addTarefa(Tarefa tarefa) {
-        tarefas.add(tarefa);
+    public void addTarefa(String tarefaID) {
+        idTarefas.add(tarefaID);
     }
     
-    public void removedTarefa(Tarefa tarefa) {
-        tarefas.remove(tarefa);
+    public void removedTarefa(String tarefaID) {
+        idTarefas.remove(tarefaID);
     }
 
 }
