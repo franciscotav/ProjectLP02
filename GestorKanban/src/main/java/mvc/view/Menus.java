@@ -32,6 +32,11 @@ public class Menus extends JPanel{
         topMenuPanel.setNovoProjetoClickListener(listener);
     }
     
+    public void setCarregarProjetoMouseAdapter(MouseListener listener) {
+        topMenuPanel.setCarregarProjetoMouseAdapter(listener);
+    }
+    
+    
     public void addProjeto(String nome){
         projetoMenuPanel.add(new ProjetoPanel(nome));
     }
@@ -56,15 +61,29 @@ class TopMenuPanel extends JPanel{
         add(carregarProjetoButton);
     }
     
-    public void setNovoProjetoClickListener(MouseListener listener) {
-        novoProjetoButton.removeMouseListener(novoProjetoClickListener);
-        novoProjetoButton = new JButton("Novo Projeto");
-        styleButton(novoProjetoButton);
+    public void setNovoProjetoClickListener(MouseListener listener){
+//        novoProjetoButton.removeMouseListener(novoProjetoClickListener);
+//        novoProjetoButton = new JButton("Novo Projeto");
+//        styleButton(novoProjetoButton);
         novoProjetoButton.addMouseListener(listener);
-        removeAll();
-        add(novoProjetoButton);
-        add(carregarProjetoButton);
-        revalidate();
+//        removeAll();
+//        add(novoProjetoButton);
+//        add(carregarProjetoButton);
+        //revalidate();
+    }
+    
+    public void setCarregarProjetoMouseAdapter(MouseListener listener){
+        carregarProjetoButton.addMouseListener(listener);
+    }
+    
+    public void carregarProjeto(){
+//        JFileChooser fileChooser = new JFileChooser();
+//        int response = fileChooser.showOpenDialog(null);
+//
+//        if (response == JFileChooser.APPROVE_OPTION) {
+//            String selectedFile = fileChooser.getSelectedFile().getAbsolutePath();
+//            System.out.println(selectedFile);
+//        }
     }
     
     private void styleButton(JButton jbutton){

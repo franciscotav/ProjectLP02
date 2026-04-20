@@ -6,6 +6,8 @@ package mvc.controller;
 
 import mvc.view.*;
 import database.model.*;
+import repository.data.*;
+
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -17,23 +19,50 @@ import java.awt.event.MouseMotionListener;
 public class Controlador {
     private MainWindow view;
     private Projeto model;
-    
-    private static int idPessoa = 0;
-    private static int idEstado = 0;
-    private static int idTarefa = 0;
+
+    private int idPessoa = 0;
+    private int idEstado = 0;
+    private int idTarefa = 0;
 
     public Controlador(MainWindow view, Projeto model) {
         this.view = view;
         this.model = model;
         this.view.adicionarNovoProjetoListener(new NovoProjetoMouseAdapter());
+        this.view.setCarregarProjetoMouseAdapter(new CarregarProjetoMouseAdapter());
     }
 
     class NovoProjetoMouseAdapter implements MouseListener {
         @Override
         public void mouseClicked(MouseEvent e) {
-            view.adicionarComponentesProjeto();
+            String filePath = view.getPath();
+            if(filePath.equals("")) return;
+            Repository repository = new Repository();
+            String[] split = filePath.split("\\\\");
+            model.setNome(split[split.length - 1]);
+            
+            view.adicionarComponentesProjeto(model.getNome());
             view.setMembroAddicionarMouseAdapter(new AddicionarMembroMouseAdapter());
             view.setAddicionarColunaButtonMouseAdapter(new AddicionarColunaButtonMouseAdapter());
+            
+            repository.saveToFile(filePath, model);
+        }
+        @Override
+        public void mousePressed(MouseEvent e) {}
+        @Override
+        public void mouseReleased(MouseEvent e) {}
+        @Override
+        public void mouseEntered(MouseEvent e) {}
+        @Override
+        public void mouseExited(MouseEvent e) {}
+    }
+    
+    class CarregarProjetoMouseAdapter implements MouseListener {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            String filePath = view.getPath();
+            
+            Repository repository = new Repository();
+            repository.saveToFile(filePath, model);
         }
         @Override
         public void mousePressed(MouseEvent e) {}
@@ -116,7 +145,15 @@ public class Controlador {
         }
         @Override
         public void mouseReleased(java.awt.event.MouseEvent e) {
-            view.membroMouseReleased(e);
+            boolean associarPessoaATarefa = view.membroMouseReleased(e);
+            
+            if(associarPessoaATarefa){
+                String idPessoa = view.getResponsavelID(e);
+                String idTarefa = view.getResponsavelLastStikerID(e);
+                
+                model.addPessoaToTarefa(idPessoa,idTarefa);
+            }
+            
         }
         @Override
         public void mouseEntered(java.awt.event.MouseEvent e) {}

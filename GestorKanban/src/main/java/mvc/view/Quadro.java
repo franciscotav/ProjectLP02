@@ -104,6 +104,7 @@ class TarefaColuna extends JPanel{
     private ColunaMenu colunaMenu;
     private StickerAddicionar stickerAddicionar;
     
+    private String nome;
     private String id;
 
     public String getId() {
@@ -111,7 +112,11 @@ class TarefaColuna extends JPanel{
     }
     
     public String getName(){
-        return colunaMenu.getName();
+        return nome;
+    }
+    
+    public void setName(String nome){
+        this.nome = nome;
     }
             
     public TarefaColuna(String id, String nome){
@@ -127,6 +132,7 @@ class TarefaColuna extends JPanel{
         setLayout(tarefasLayout);
         
         this.id = id;
+        this.nome = nome;
         
         colunaMenu = new ColunaMenu(nome);
         stickerAddicionar = new StickerAddicionar();
@@ -232,6 +238,7 @@ class ColunaMenu extends JPanel{
                    "Editar Estado #" + ((TarefaColuna)getParent()).getId(), JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
         if (result == JOptionPane.OK_OPTION) {
+            getParent().setName(fieldTitulo.getText());
             labelName.setText(fieldTitulo.getText());
             this.revalidate();
             this.repaint();

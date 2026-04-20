@@ -18,7 +18,7 @@ public class GestorKanban {
     
     public static void main(String[] args) {
         MainWindow view = new MainWindow();
-        Projeto model = new Projeto(10,"assa");
+        Projeto model = new Projeto(0,"");
         Controlador controlador = new Controlador(view, model);
     }    
     /*

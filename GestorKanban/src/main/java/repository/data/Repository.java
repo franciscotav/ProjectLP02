@@ -41,8 +41,6 @@ public class Repository {
     }
     
     public void saveToFile(String filePath, Projeto projeto) {
-        
-        
         String output = gson.toJson(projeto);
         String[] data = new String[]{ output };
         ioData.writeData(filePath, data);
@@ -68,7 +66,6 @@ public class Repository {
     private void removerClone(Projeto projeto){
         Map<String, Pessoa> dicionarioPessoas = new HashMap<>();
             
-        
         if (projeto.getGrupo() != null) {
             for (Pessoa pessoaVerdadeira : projeto.getGrupo().getPessoas()) {
                 dicionarioPessoas.put(pessoaVerdadeira.getId(), pessoaVerdadeira);

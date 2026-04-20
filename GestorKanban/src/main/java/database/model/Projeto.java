@@ -32,6 +32,12 @@ public class Projeto {
     }
     
     public void addPessoa(String id, String nome){
+//        Pessoa pessoa = new Pessoa(id, nome);
+//        grupo.addPessoa(pessoa);
+        Pessoa existingPessoa = grupo.getPessoaById(id);
+        if (existingPessoa != null) {
+            return;
+        }
         Pessoa pessoa = new Pessoa(id, nome);
         grupo.addPessoa(pessoa);
     }
@@ -58,13 +64,17 @@ public class Projeto {
         
     }
     
-    public void addPessoaToTarefa(String idEstado, String idTarefa, String idPessoa){
-        Estado estado = getEstadoById(idEstado);
-        if(estado != null){
+    public void addPessoaToTarefa(String idPessoa, String idTarefa){
+        Pessoa pessoa = this.getGrupo().getPessoaById(idPessoa);
+        if(pessoa != null)
+            pessoa.addTarefa(idTarefa);
+        for(Estado estado : getEstados()){
             Tarefa tarefa = estado.getTarefaById(idTarefa);
-            tarefa.addPessoa(grupo.getPessoaById(idPessoa));
+            if(tarefa != null){
+                tarefa.addPessoa(pessoa);
+                break;
+            }
         }
-        
     }
     
     public void editarPessoa(String id, String novoNome){

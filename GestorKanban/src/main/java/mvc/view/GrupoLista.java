@@ -144,8 +144,12 @@ class Responsavel extends JPanel{
         dragLabel = null;
     }
     
-    public void mouseReleased(MouseEvent e){
-        if(dragLabel == null) return;
+    public String getResponsavelLastStikerID(){
+        return stickersAtribuidos.getLast().getID();
+    }
+    
+    public boolean mouseReleased(MouseEvent e){
+        if(dragLabel == null) return false;
                 
         JLayeredPane lp = getRootPane().getLayeredPane();
 
@@ -168,6 +172,13 @@ class Responsavel extends JPanel{
             if(! stickersAtribuidos.contains(sticker)){
                 sticker.addResponsavel(local());
                 addTarefa(sticker);
+                
+                lp.remove(dragLabel);
+                dragLabel = null;
+                lp.revalidate();
+                lp.repaint();
+                
+                return true;
             }
         }
 
@@ -175,6 +186,8 @@ class Responsavel extends JPanel{
         dragLabel = null;
         lp.revalidate();
         lp.repaint();
+        
+        return false;
     }
     
     public void mouseDragged(MouseEvent e){

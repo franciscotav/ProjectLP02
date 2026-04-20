@@ -316,12 +316,16 @@ public class StikerTarefa extends JPanel {
         return idTarefa;
     }
     
+    public String getTarefaLastPessoaID() {
+        return membrosAtribuidos.getLast().getId();
+    }
+    
     public String getTitulo() {
         return labelTitulo.getText();
     }
     
     public String getDescricao(){
-        return labelDescricao.getText();
+        return stringDescricao;
     }
 
 }

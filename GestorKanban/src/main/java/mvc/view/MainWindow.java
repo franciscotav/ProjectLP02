@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -158,10 +159,16 @@ public class MainWindow extends JFrame {
         menus.adicionarNovoProjetoListener(e);
     }
     
-    public void adicionarComponentesProjeto() {
+    public void setCarregarProjetoMouseAdapter(MouseListener e) {
+        menus.setCarregarProjetoMouseAdapter(e);
+    }
+    
+    
+    
+    public void adicionarComponentesProjeto(String projetoNome) {
         limparAreaProjeto();
         
-        menus.addProjeto("Projeto");
+        menus.addProjeto(projetoNome);
         grupoLista = new GrupoLista();
         quadro = new Quadro();
 
@@ -170,6 +177,21 @@ public class MainWindow extends JFrame {
         
         revalidate();
         repaint();
+    }
+    
+    public String getPath(){
+        JFileChooser fileChooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("JSON Files (*.json)", "json");
+        fileChooser.setFileFilter(filter);
+        
+        int response = fileChooser.showOpenDialog(null);
+        
+        if (response == JFileChooser.APPROVE_OPTION) {
+            String selectedFile = fileChooser.getSelectedFile().getAbsolutePath();
+            return selectedFile;
+        }
+        
+        return "";
     }
  
     
@@ -195,9 +217,7 @@ public class MainWindow extends JFrame {
     }
     
     public String getResponsavelID(MouseEvent e){
-        JButton buttonEditar = (JButton) e.getSource();
-        JPanel panelButtons = (JPanel) buttonEditar.getParent();
-        Responsavel responsavel = (Responsavel) panelButtons.getParent();
+        Responsavel responsavel = getResponsavelFromEvent(e);
         
         return responsavel.getId();
     }
@@ -242,10 +262,13 @@ public class MainWindow extends JFrame {
             responsavel.mousePressed(e);
     }
     
-    public void membroMouseReleased(MouseEvent e){
+    public boolean membroMouseReleased(MouseEvent e){
         Responsavel responsavel = getResponsavelFromEvent(e);
-        if(responsavel != null)
-            responsavel.mouseReleased(e);
+        if(responsavel != null){
+            return responsavel.mouseReleased(e);
+        }
+            
+        return false;
     }
     
     public void membroMouseDragged(MouseEvent e){
@@ -303,6 +326,26 @@ public class MainWindow extends JFrame {
         else
             return "";
     }
+    
+    public String getResponsavelLastStikerID(MouseEvent e){
+        Component source = (Component) e.getSource();
+        
+        Responsavel responsavel = null;
+        while(source != null){
+            if(source instanceof Responsavel){
+                responsavel = (Responsavel) source;
+                break;
+            }
+            source = source.getParent();
+        }
+        
+        if(responsavel != null)
+            return responsavel.getResponsavelLastStikerID();
+        else
+            return "";
+    }
+    
+    
     
     public String getTarefaTitulo(MouseEvent e){
         Component source = (Component) e.getSource();
