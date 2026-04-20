@@ -14,43 +14,43 @@ import java.util.List;
 public class Tarefa {
     private String nome;
     private String descricao;
-    private List<Pessoa> pessoas;
+    private List<String> idPessoas;
     private String id;
 
     public Tarefa(String id, String nome, String descricao) {
         
         this.nome = nome;
         this.descricao = descricao;
-        this.pessoas = new ArrayList<>();
+        this.idPessoas = new ArrayList<>();
         this.id = id;
     }
     
-    public void addPessoa(Pessoa pessoa) {
-        this.pessoas.add(pessoa);
-        pessoa.addTarefa(this.id);
+    public void addIdPessoa(String idPessoa) {
+        this.idPessoas.add(idPessoa);
+        //pessoa.addTarefa(this.id); TO DO
     }
     
     public void removePessoa(String id) {
-        for(Pessoa p : pessoas){
-            if (p.getId().equals(id)) {
-            this.pessoas.remove(p);
-            p.removedTarefa(this.id);
+        for(String p : idPessoas){
+            if (p.equals(id)) {
+            this.idPessoas.remove(p);
+            //p.removedTarefa(this.id); TO DO
             break;
             }
         }
     }
-    
+    /* desnecessario ACHO EU
     public Pessoa getPessoaById(String id){
-        for(Pessoa p : pessoas){
+        for(Pessoa p : idPessoas){
             if (p.getId().equals(id)) {
                 return p;
             }
         }
         return null;
-    }
+    }*/
     
-    public List<Pessoa> getPessoas() {
-        return pessoas;
+    public List<String> getIdPessoas() {
+        return idPessoas;
     }
 
     public String getNome() {

@@ -18,13 +18,14 @@ import java.awt.event.MouseMotionListener;
  */
 public class Controlador {
     private MainWindow view;
-    private Projeto model;
+    private Model model;
 
     private int idPessoa = 0;
     private int idEstado = 0;
     private int idTarefa = 0;
+    private int idProjeto = 0;
 
-    public Controlador(MainWindow view, Projeto model) {
+    public Controlador(MainWindow view, Model model) {
         this.view = view;
         this.model = model;
         this.view.adicionarNovoProjetoListener(new NovoProjetoMouseAdapter());
@@ -34,17 +35,20 @@ public class Controlador {
     class NovoProjetoMouseAdapter implements MouseListener {
         @Override
         public void mouseClicked(MouseEvent e) {
+            idProjeto++;
             String filePath = view.getPath();
             if(filePath.equals("")) return;
+            
             Repository repository = new Repository();
             String[] split = filePath.split("\\\\");
-            model.setNome(split[split.length - 1]);
             
-            view.adicionarComponentesProjeto(model.getNome());
+            model.setNomeProjeto(idProjeto, split[split.length - 1]);
+            
+            view.adicionarComponentesProjeto(model.getNomeProjeto(idProjeto));
             view.setMembroAddicionarMouseAdapter(new AddicionarMembroMouseAdapter());
             view.setAddicionarColunaButtonMouseAdapter(new AddicionarColunaButtonMouseAdapter());
             
-            repository.saveToFile(filePath, model);
+            repository.saveToFile(filePath, model.getProjetoById(idProjeto));
         }
         @Override
         public void mousePressed(MouseEvent e) {}
@@ -62,7 +66,7 @@ public class Controlador {
             String filePath = view.getPath();
             
             Repository repository = new Repository();
-            repository.saveToFile(filePath, model);
+            repository.saveToFile(filePath, model.getProjetoById(idProjeto));
         }
         @Override
         public void mousePressed(MouseEvent e) {}
@@ -83,7 +87,7 @@ public class Controlador {
             String nomeDefault = "Responsavel";
             String idPessoaString = "PES-" + idPessoa;
             
-            model.addPessoa(idPessoaString, nomeDefault);
+            model.addPessoaToGrupo(idProjeto, idPessoaString, nomeDefault);
             
             view.criarNovoResponsavel(idPessoaString, nomeDefault);
             view.setMembroMouseAdapter(new MembroMouseAdapter());
@@ -106,7 +110,7 @@ public class Controlador {
             view.editarResponsavel(e);
             String id = view.getResponsavelID(e);
             String novoNome = view.getResponsavelNome(e);
-            model.editarPessoa(id, novoNome);
+            model.editarPessoa(idProjeto, id, novoNome);
         }
         @Override
         public void mousePressed(java.awt.event.MouseEvent e) {}
@@ -124,7 +128,7 @@ public class Controlador {
             view.removerResponsavel(e);
             
             String id = view.getResponsavelID(e);
-            model.removerPessoa(id);
+            model.removerPessoaFromGrupo(idProjeto, id);
         }
         @Override
         public void mousePressed(java.awt.event.MouseEvent e) {}
@@ -151,7 +155,7 @@ public class Controlador {
                 String idPessoa = view.getResponsavelID(e);
                 String idTarefa = view.getResponsavelLastStikerID(e);
                 
-                model.addPessoaToTarefa(idPessoa,idTarefa);
+                model.addPessoaToTarefa(idProjeto, idPessoa,idTarefa);
             }
             
         }
@@ -177,7 +181,7 @@ public class Controlador {
             String nomeDefault = "Estado";
             String idEstadoString = "EST-" + idEstado; 
             
-            model.addEstado(idEstadoString, nomeDefault);
+            model.addEstado(idProjeto, idEstadoString, nomeDefault);
             
             view.addicionarColunaTarefa(e, idEstadoString, nomeDefault);
             view.setAddicionarTarefaButtonMouseAdapter(new AddicionarTarefaButtonMouseAdapter());
@@ -201,7 +205,7 @@ public class Controlador {
             
             String id = view.getColunaID(e);
             String novoNome = view.getColunaNome(e);
-            model.editarEstado(id, novoNome);
+            model.editarEstado(idProjeto, id, novoNome);
         }
         @Override
         public void mousePressed(java.awt.event.MouseEvent e) {}
@@ -219,7 +223,7 @@ public class Controlador {
             view.removerColuna(e);
             
             String id = view.getColunaID(e);
-            model.removeEstado(id);
+            model.removeEstado(idProjeto, id);
         }
         @Override
         public void mousePressed(java.awt.event.MouseEvent e) {}
@@ -240,7 +244,7 @@ public class Controlador {
             String idTarefaString = "TAR-" + idTarefa; 
             String idColunaString = view.getColunaID(e); 
             
-            model.addTarefa(idColunaString, idTarefaString, tituloDefault, descricaoDefault);
+            model.addTarefa(idProjeto, idColunaString, idTarefaString, tituloDefault, descricaoDefault);
             
             view.addicionarTarefa(e, idTarefaString, tituloDefault, descricaoDefault);
             view.setTarefaMouseAdapter(e, new TarefaMouseAdapter());
@@ -274,7 +278,7 @@ public class Controlador {
             
             if(!(idEstadoOrigem.equals(idEstadoDestino))){
                 String idTarefaString = view.getTarefaID(e);
-                model.moverTarefa(idEstadoOrigem, idEstadoDestino, idTarefaString);
+                model.moverTarefa(idProjeto, idEstadoOrigem, idEstadoDestino, idTarefaString);
             }
         }
         @Override
@@ -298,7 +302,7 @@ public class Controlador {
             String idTarefaString = view.getTarefaID(e);
             String novoTitulo = view.getTarefaTitulo(e);
             String novaDescricao = view.getTarefaDescricao(e);
-            model.editarTarefa(idTarefaString, novoTitulo, novaDescricao);
+            model.editarTarefa(idProjeto, idTarefaString, novoTitulo, novaDescricao);
         }
         @Override
         public void mousePressed(java.awt.event.MouseEvent e) {}
@@ -314,7 +318,7 @@ public class Controlador {
         @Override
         public void mouseClicked(MouseEvent e) {
             String idTarefaString = view.getTarefaID(e);
-            model.removerTarefa(idTarefaString);
+            model.removerTarefa(idProjeto, idTarefaString);
             
             view.removerTarefa(e);
         }

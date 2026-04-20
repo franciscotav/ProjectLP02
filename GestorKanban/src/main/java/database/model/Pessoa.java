@@ -39,7 +39,7 @@ public class Pessoa{
         return idTarefas;
     }
 
-    public void addTarefa(String tarefaID) {
+    public void addIdTarefa(String tarefaID) {
         idTarefas.add(tarefaID);
     }
     

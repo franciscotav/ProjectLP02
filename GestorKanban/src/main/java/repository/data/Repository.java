@@ -55,15 +55,15 @@ public class Repository {
         String input = data[0];
         projetoCarregado = gson.fromJson(input, Projeto.class);
         
-        //remover objetos clone 
-        if (projetoCarregado != null) {
-            removerClone(projetoCarregado);
-        }
+        //remover objetos clone NÃO É PRECISO MAIS 
+        //if (projetoCarregado != null) {
+        //    removerClone(projetoCarregado);
+        //}
 
         return projetoCarregado;
     }
-    
-    private void removerClone(Projeto projeto){
+    /*
+    private void removerClone(Projeto projeto){ // TO BE REMOVED
         Map<String, Pessoa> dicionarioPessoas = new HashMap<>();
             
         if (projeto.getGrupo() != null) {
@@ -92,5 +92,5 @@ public class Repository {
                 }
             }
         }
-    }
+    }*/
 }
