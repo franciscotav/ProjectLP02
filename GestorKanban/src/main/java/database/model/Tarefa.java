@@ -27,27 +27,16 @@ public class Tarefa {
     
     public void addIdPessoa(String idPessoa) {
         this.idPessoas.add(idPessoa);
-        //pessoa.addTarefa(this.id); TO DO
     }
     
     public void removePessoa(String id) {
         for(String p : idPessoas){
             if (p.equals(id)) {
             this.idPessoas.remove(p);
-            //p.removedTarefa(this.id); TO DO
             break;
             }
         }
     }
-    /* desnecessario ACHO EU
-    public Pessoa getPessoaById(String id){
-        for(Pessoa p : idPessoas){
-            if (p.getId().equals(id)) {
-                return p;
-            }
-        }
-        return null;
-    }*/
     
     public List<String> getIdPessoas() {
         return idPessoas;

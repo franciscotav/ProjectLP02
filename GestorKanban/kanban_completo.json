@@ -1,0 +1,56 @@
+{
+    "id": 1,
+    "nome": "Projeto Kanban Profissional",
+    "grupo": {
+        "pessoas": [
+            {
+                "nome": "Francisco",
+                "id": "U1",
+                "idTarefas": [
+                    "T1"
+                ]
+            },
+            {
+                "nome": "Bernardo Silva",
+                "id": "U2",
+                "idTarefas": [
+                    "T1"
+                ]
+            }
+        ]
+    },
+    "estados": [
+        {
+            "nome": "To Do",
+            "tarefas": [
+                {
+                    "nome": "Criar Entidades",
+                    "descricao": "Desenvolver classes POJO",
+                    "idPessoas": [],
+                    "id": "T2"
+                }
+            ],
+            "id": "E1"
+        },
+        {
+            "nome": "In Progress",
+            "tarefas": [
+                {
+                    "nome": "Configurar Maven/GSON",
+                    "descricao": "Adicionar GSON ao pom.xml",
+                    "idPessoas": [
+                        "U1",
+                        "U2"
+                    ],
+                    "id": "T1"
+                }
+            ],
+            "id": "E2"
+        },
+        {
+            "nome": "Done",
+            "tarefas": [],
+            "id": "E3"
+        }
+    ]
+}

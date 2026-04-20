@@ -4,6 +4,7 @@
  */
 package database.model;
 
+import repository.data.Repository;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -13,10 +14,16 @@ import java.util.ArrayList;
 */
 public class Model{
     
-    private List<Projeto> projetos = new ArrayList<>();
+    private List<Projeto> projetos;
+    private Repository repository;
+
+    public Model( Repository repository) {
+        this.projetos = new ArrayList<>();
+        this.repository = repository;
+    }
     
     
-    // METODOS DO PROJETO
+    // METODOS DO Model
     public List<Projeto> getProjetos() {
         return projetos;
     }
@@ -43,7 +50,20 @@ public class Model{
         return null;
     }
     
+   
+    
     // METODOS USADOS NO CONTROLADOR
+    
+    public void saveProjeto(String filePath, int id){
+        Projeto projeto = getProjetoById(id);
+        repository.saveToFile(filePath, projeto);
+    }
+    
+    public void loadProjeto(String filePath){
+        Projeto projeto = repository.loadFromFile(filePath);
+        addProjeto(projeto);
+       
+    }
     
     
     //projeto
@@ -142,19 +162,22 @@ public class Model{
         }
     }
     
-    public void removerTarefa(Integer idProjeto ,String tarefaID){
+    public void removerTarefa(Integer idProjeto ,String tarefaIf){
         Projeto projeto = this.getProjetoById(idProjeto);
         
+        
         for(Estado estado : projeto.getEstados()){
-            Tarefa tarefa = estado.getTarefaById(tarefaID);
+            Tarefa tarefa = estado.getTarefaById(tarefaIf);
             if(tarefa != null){
-                estado.removeTarefa(tarefaID);
-                projeto.getGrupo().removeTarefaID(tarefaID);
+                estado.removeTarefa(tarefaIf);
+                projeto.getGrupo().removeTarefaID(tarefaIf);
                 break;
             }
         }
     }
-     
+    
+    //pessoa
+    
     public void editarPessoa(Integer idProjeto ,String idPessoa, String novoNome){
         Projeto projeto = this.getProjetoById(idProjeto);
         projeto.getGrupo().editarPessoa(idPessoa, novoNome);
