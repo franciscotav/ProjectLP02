@@ -43,7 +43,7 @@ public class Pessoa{
         idTarefas.add(tarefaID);
     }
     
-    public void removedTarefa(String tarefaID) {
+    public void removeTarefa(String tarefaID) {
         idTarefas.remove(tarefaID);
     }
 

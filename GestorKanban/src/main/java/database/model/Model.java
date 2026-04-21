@@ -147,6 +147,22 @@ public class Model{
         }
     }
     
+    public void removePessoaFromTarefa(Integer idProjeto ,String idPessoa, String idTarefa){
+        Projeto projeto = this.getProjetoById(idProjeto);
+        
+        Pessoa pessoa = projeto.getGrupo().getPessoaById(idPessoa);
+        if(pessoa != null)
+            pessoa.removeTarefa(idTarefa);
+        for(Estado estado : projeto.getEstados()){
+            Tarefa tarefa = estado.getTarefaById(idTarefa);
+            if(tarefa != null){
+                tarefa.removePessoa(idPessoa);
+                break;
+            }
+        }
+    }
+    
+    
     
     public void editarTarefa(Integer idProjeto ,String tarefaID, String novoTitulo, String novaDescricao){
         Projeto projeto = this.getProjetoById(idProjeto);

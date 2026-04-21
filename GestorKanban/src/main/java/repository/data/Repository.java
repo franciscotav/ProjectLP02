@@ -55,42 +55,6 @@ public class Repository {
         String input = data[0];
         projetoCarregado = gson.fromJson(input, Projeto.class);
         
-        //remover objetos clone NÃO É PRECISO MAIS 
-        //if (projetoCarregado != null) {
-        //    removerClone(projetoCarregado);
-        //}
-
         return projetoCarregado;
     }
-    /*
-    private void removerClone(Projeto projeto){ // TO BE REMOVED
-        Map<String, Pessoa> dicionarioPessoas = new HashMap<>();
-            
-        if (projeto.getGrupo() != null) {
-            for (Pessoa pessoaVerdadeira : projeto.getGrupo().getPessoas()) {
-                dicionarioPessoas.put(pessoaVerdadeira.getId(), pessoaVerdadeira);
-            }
-        }
-
-        // 2. Navegar pelas Tarefas e trocar os clones pelas pessoas verdadeiras
-        if (projeto.getEstados() != null) {
-            for (Estado estado : projeto.getEstados()) {
-                
-                if (estado.getTarefas() != null) {
-                    for (Tarefa tarefa : estado.getTarefas()) {
-                        
-                        List<Pessoa> clonesParaLer= new ArrayList<>(tarefa.getPessoas());
-                        
-                        for (Pessoa clone : clonesParaLer) {
-                            Pessoa real = dicionarioPessoas.get(clone.getId());
-                            if (real != null) {
-                                tarefa.removePessoa(clone.getId());
-                                tarefa.addPessoa(real);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }*/
 }
