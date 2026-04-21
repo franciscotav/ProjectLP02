@@ -27,7 +27,11 @@ public class Model{
     public List<Projeto> getProjetos() {
         return projetos;
     }
-
+    
+    public void addProjeto(int id, String name){
+        this.projetos.add(new Projeto(id, name));
+    }
+    
     public void addProjeto(Projeto projeto) {
         this.projetos.add(projeto);
     }

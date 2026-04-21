@@ -155,7 +155,7 @@ public class MainWindow extends JFrame {
         return menus;
     }
     
-    public void adicionarNovoProjetoListener(MouseListener e) {
+    public void setNovoProjetoListener(MouseListener e) {
         menus.adicionarNovoProjetoListener(e);
     }
     

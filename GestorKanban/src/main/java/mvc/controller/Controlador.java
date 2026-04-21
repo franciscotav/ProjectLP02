@@ -17,32 +17,33 @@ import java.awt.event.MouseMotionListener;
  * @author FTCASA
  */
 public class Controlador {
-    private MainWindow view;
     private Model model;
+    private MainWindow view;
 
     private int idPessoa = 0;
     private int idEstado = 0;
     private int idTarefa = 0;
     private int idProjeto = 0;
-
+    
     public Controlador(MainWindow view, Model model) {
         this.view = view;
         this.model = model;
-        this.view.adicionarNovoProjetoListener(new NovoProjetoMouseAdapter());
+        this.view.setNovoProjetoListener(new NovoProjetoMouseAdapter());
         this.view.setCarregarProjetoMouseAdapter(new CarregarProjetoMouseAdapter());
     }
 
     class NovoProjetoMouseAdapter implements MouseListener {
         @Override
         public void mouseClicked(MouseEvent e) {
-            idProjeto++;
             String filePath = view.getPath();
             if(filePath.equals("")) return;
+            
+            idProjeto++;
             
             Repository repository = new Repository();
             String[] split = filePath.split("\\\\");
             
-            model.setNomeProjeto(idProjeto, split[split.length - 1]);
+            model.addProjeto(idProjeto, split[split.length - 1]);
             
             view.adicionarComponentesProjeto(model.getNomeProjeto(idProjeto));
             view.setMembroAddicionarMouseAdapter(new AddicionarMembroMouseAdapter());

@@ -4,9 +4,8 @@
 
 package com.mycompany.gestorkanban;
 
-import java.util.ArrayList;
 import repository.data.Repository;
-import database.model.*;
+import database.model.Model;
 import mvc.controller.Controlador;
 import mvc.view.MainWindow;
 
