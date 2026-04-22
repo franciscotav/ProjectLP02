@@ -262,16 +262,6 @@ class Responsavel extends JPanel {
         lp.repaint();
     }
     
-    public Responsavel(String id, String nome) {
-        iniResponsavel(id,nome);
-        setupVariavels();        
-    }
-    
-    public void setTarefa(StikerTarefa stikerTarefa){
-        stickersAtribuidos.add(stikerTarefa);
-        updateStickersAtribuidos();
-    }
-    
     private void iniResponsavel(String id, String nome){
         Dimension tamanho = new Dimension(250, 250);
         setPreferredSize(tamanho);

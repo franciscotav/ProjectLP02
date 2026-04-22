@@ -66,7 +66,6 @@ public class MainWindow extends JFrame {
     public void setGuardarProjetoMouseAdapter(MouseListener e) {
         menus.setGuardarProjetoMouseAdapter(e);
     }
-<<<<<<< main
     
     public void highlightProjeto(String projetoId){
         menus.highlightProjeto(projetoId);
@@ -81,10 +80,6 @@ public class MainWindow extends JFrame {
     }
     
     public void setEditarColunaButtonMouseAdapter(MouseListener e){
-=======
-
-    public void setEditarColunaButtonMouseAdapter(MouseListener e) {
->>>>>>> Berna
         quadro.setEditarColunaButtonMouseAdapter(e);
     }
 
@@ -223,25 +218,9 @@ public class MainWindow extends JFrame {
     
     //Responsavel
     
-<<<<<<< main
     public void adicionarComponentesProjeto() {
         limparAreaProjeto();
         
-        grupoLista = new GrupoLista();
-        quadro = new Quadro();
-
-        add(grupoLista, BorderLayout.WEST);
-        add(quadro, BorderLayout.CENTER);
-        
-        revalidate();
-        repaint();
-    }
-    
-    
-    public void adicionarComponentesProjeto(String id, String projetoNome) {
-        limparAreaProjeto();
-        
-        menus.addProjeto(id, projetoNome);
         grupoLista = new GrupoLista();
         quadro = new Quadro();
 
@@ -266,22 +245,6 @@ public class MainWindow extends JFrame {
         return null;
     }
     
-    public String getPath(){
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Carregar");
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("JSON Files (*.json)", "json");
-        fileChooser.setFileFilter(filter);
-        
-        int response = fileChooser.showOpenDialog(null);
-        
-        if (response == JFileChooser.APPROVE_OPTION) {
-            String selectedFile = fileChooser.getSelectedFile().getAbsolutePath();
-            return selectedFile;
-        }
-        
-        return "";
-    }
-    
     public String setPath(String filename){
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setSelectedFile(new File(filename));
@@ -298,30 +261,12 @@ public class MainWindow extends JFrame {
         
         return "";
     }
- 
-    
-    private void limparAreaProjeto(){
-        if(grupoLista != null)
-            remove(grupoLista);
-        if(quadro != null)
-            remove(quadro);
-        
-        revalidate();
-        repaint();
-    }
     
     public void criarNovoResponsavel(String id, String nome){
         grupoLista.criarNovoResponsavel(id,nome);
     }
     
     public void editarResponsavel(MouseEvent e){
-=======
-    public void criarNovoResponsavel(String id, String nome) {
-        grupoLista.criarNovoResponsavel(id, nome);
-    }
-    
-    public void editarResponsavel(MouseEvent e) {
->>>>>>> Berna
         JButton buttonEditar = (JButton) e.getSource();
         JPanel panelButtons = (JPanel) buttonEditar.getParent();
         Responsavel responsavel = (Responsavel) panelButtons.getParent();
@@ -382,7 +327,6 @@ public class MainWindow extends JFrame {
         colunaAdd.mouseClicked(id, nome);
     }
     
-<<<<<<< main
     public void atualizar(){
         revalidate();
         repaint();
@@ -392,15 +336,14 @@ public class MainWindow extends JFrame {
     public void addicionarTarefa(String idTarefa, String titulo, String descricao){
         StickerAddicionar stickerAddicionar = quadro.getlastTarefaColuna().getStickerAddicionar();
         stickerAddicionar.mouseClicked(idTarefa, titulo, descricao);
-=======
-    //drag and drop tarefas 
-    public void tarefaMousePressed(MouseEvent e) {
-        Component source = (Component) e.getSource();
-        StikerTarefa colunaMenu = (StikerTarefa) source;
 
-        colunaMenu.mousePressed(e);
     }
-
+    
+    public void addicionarTarefa(MouseEvent e, String idTarefa, String titulo, String descricao) {
+        StickerAddicionar stickerAddicionar = (StickerAddicionar) e.getSource();
+        stickerAddicionar.mouseClicked(idTarefa, titulo, descricao);
+    }
+    
     public void tarefaMouseReleased(MouseEvent e) {
         Component source = (Component) e.getSource();
         StikerTarefa colunaMenu = (StikerTarefa) source;
@@ -447,21 +390,14 @@ public class MainWindow extends JFrame {
         if (stickerTarefa != null) {
             stickerTarefa.removerMousePressed();
         }
-
->>>>>>> Berna
     }
     
-    public void addicionarTarefa(MouseEvent e, String idTarefa, String titulo, String descricao) {
-        StickerAddicionar stickerAddicionar = (StickerAddicionar) e.getSource();
-        stickerAddicionar.mouseClicked(idTarefa, titulo, descricao);
+    public void tarefaMousePressed(MouseEvent e){
+        Component source = (Component) e.getSource();
+        StikerTarefa colunaMenu = (StikerTarefa) source;
+        
+        colunaMenu.mousePressed(e);
     }
-
-    //addiciona no ultimo loaded Sticker
-    public void addicionarTarefa(String idTarefa, String titulo, String descricao) {
-        StickerAddicionar stickerAddicionar = quadro.getlastTarefaColuna().getStickerAddicionar();
-        stickerAddicionar.mouseClicked(idTarefa, titulo, descricao);
-    }
-    
     //Getters
     public String getColunaID(MouseEvent e) {
         Component source = (Component) e.getSource();
