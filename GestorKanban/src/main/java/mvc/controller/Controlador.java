@@ -53,7 +53,8 @@ public class Controlador {
             
             view.setSelecionarProjetoMouseAdapter(new SelecionarProjetoMouseAdapter());
             view.setGuardarProjetoMouseAdapter(new GuardarProjetoMouseAdapter());
-                    
+            view.setRemoverProjetoMouseAdapter(new RemoverProjetoMouseAdapter());
+            
             view.highlightProjeto(String.valueOf(projectSelectedID));
         }
         @Override
