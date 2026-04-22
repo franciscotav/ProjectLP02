@@ -142,6 +142,19 @@ public class Controlador {
             
             idEstado = idEstadoTemp;
             idTarefa = idTarefaTemp;
+            
+            for(int i = 0; i < model.getGrupo(String.valueOf(projectSelectedID)).size(); i++){
+                Pessoa pessoa = model.getGrupo(String.valueOf(projectSelectedID)).get(i);
+                String pessoaID = pessoa.getId();
+                for(int j = 0; j < pessoa.getTarefasID().size(); j++){
+                    String tarefaID = pessoa.getTarefasID().get(j);
+                    view.sincronizarMembrosTarefas(pessoaID, tarefaID);
+                    
+                }
+                
+            }
+                    
+            boolean associarPessoaATarefa = view.membroMouseReleased(e);
         }
         @Override
         public void mousePressed(MouseEvent e) {}

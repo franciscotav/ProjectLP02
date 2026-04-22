@@ -99,6 +99,11 @@ public class StikerTarefa extends JPanel {
         buttonRemover.addMouseListener(e);
     }
     
+    public void setResponsavel(Responsavel responsavel){
+        membrosAtribuidos.add(responsavel);
+        updatePanelResponsaveis();
+    }
+    
     public void removerMousePressed(){
         if (getParent() instanceof TarefaColuna) {
             TarefaColuna coluna = (TarefaColuna) getParent();

@@ -325,6 +325,39 @@ public class MainWindow extends JFrame {
         return false;
     }
     
+    public void sincronizarMembrosTarefas(String pessoaID, String tarefaID){
+        Responsavel responsavel = null;
+        StikerTarefa stickerTarefa = null;
+        for(int i = 0; i < grupoLista.getGrupoListaPanel().getComponentCount(); i++){
+            if(grupoLista.getGrupoListaPanel().getComponent(i) instanceof Responsavel){
+                Responsavel res = (Responsavel) grupoLista.getGrupoListaPanel().getComponent(i);
+                if(res.getId().equals(pessoaID)){
+                    responsavel = res;
+                    break;
+                }
+            }
+        }
+        
+        for(int i = 0; i < quadro.getEstados().getComponentCount(); i++){
+            if(quadro.getEstados().getComponent(i) instanceof TarefaColuna){
+                TarefaColuna tarefaColuna = (TarefaColuna) quadro.getEstados().getComponent(i);
+                for(int j = 0; j < tarefaColuna.getComponentCount(); j++){
+                    if(tarefaColuna.getComponent(j) instanceof StikerTarefa){
+                        StikerTarefa tarefa = (StikerTarefa) tarefaColuna.getComponent(j);
+                        if(tarefa.getID().equals(tarefaID)){
+                            stickerTarefa = tarefa;
+                        }
+                    }
+                }
+            }
+        }
+         
+        if(responsavel != null && stickerTarefa != null){
+            responsavel.setTarefa(stickerTarefa);
+            stickerTarefa.setResponsavel(responsavel);
+        }
+    }
+    
     public void membroMouseDragged(MouseEvent e){
         Responsavel responsavel = getResponsavelFromEvent(e);
         if(responsavel != null)

@@ -76,6 +76,10 @@ public class GrupoLista extends JScrollPane {
         repaint();
     }
     
+    public GrupoListaPanel getGrupoListaPanel(){
+        return grupoListaPanel;
+    }
+    
 }
 
 class GrupoListaPanel extends JPanel{
@@ -210,6 +214,11 @@ class Responsavel extends JPanel{
     public Responsavel(String id, String nome) {
         iniResponsavel(id,nome);
         setupVariavels();        
+    }
+    
+    public void setTarefa(StikerTarefa stikerTarefa){
+        stickersAtribuidos.add(stikerTarefa);
+        updateStickersAtribuidos(); //?
     }
     
     private void iniResponsavel(String id, String nome){
