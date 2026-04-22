@@ -36,22 +36,21 @@ public class Controlador {
     class NovoProjetoMouseAdapter implements MouseListener {
         @Override
         public void mouseClicked(MouseEvent e) {
-            String filePath = view.getPath();
-            if(filePath.equals("")) return;
-            
             idProjeto++;
             projectSelectedID = idProjeto;
             
-            String[] split = filePath.split("\\\\");
+            String projetoNome = "Projeto0" + projectSelectedID + ".json";
             
-            model.addProjeto(String.valueOf(projectSelectedID), split[split.length - 1]);
+            model.addProjeto(String.valueOf(projectSelectedID), projetoNome);
             
             view.adicionarComponentesProjeto(String.valueOf(projectSelectedID), model.getNomeProjeto(String.valueOf(projectSelectedID)));
             view.setMembroAddicionarMouseAdapter(new AddicionarMembroMouseAdapter());
             view.setAddicionarColunaButtonMouseAdapter(new AddicionarColunaButtonMouseAdapter());
             
+            view.setSelecionarProjetoMouseAdapter(new SelecionarProjetoMouseAdapter());
             view.setGuardarProjetoMouseAdapter(new GuardarProjetoMouseAdapter());
-            model.saveProjeto(filePath, String.valueOf(projectSelectedID));
+                    
+            view.highlightProjeto(String.valueOf(projectSelectedID));
         }
         @Override
         public void mousePressed(MouseEvent e) {}
@@ -66,7 +65,8 @@ public class Controlador {
     class CarregarProjetoMouseAdapter implements MouseListener {
         @Override
         public void mouseClicked(MouseEvent e) {
-            String filePath = view.getPath();            
+            String filePath = view.getPath();
+            if(filePath == "") return;
             model.loadProjeto(filePath);
             
             idProjeto++;
@@ -75,11 +75,13 @@ public class Controlador {
             model.setLastProjetID(String.valueOf(projectSelectedID));
             
             view.adicionarComponentesProjeto(String.valueOf(projectSelectedID), model.getNomeProjeto(String.valueOf(projectSelectedID)));
-            view.setMembroAddicionarMouseAdapter(new AddicionarMembroMouseAdapter());
-            view.setAddicionarColunaButtonMouseAdapter(new AddicionarColunaButtonMouseAdapter());
-            
+            view.setSelecionarProjetoMouseAdapter(new SelecionarProjetoMouseAdapter());
             view.setGuardarProjetoMouseAdapter(new GuardarProjetoMouseAdapter());
+            view.setRemoverProjetoMouseAdapter(new RemoverProjetoMouseAdapter());
             
+<<<<<<< main
+            carregarProjeto(e);
+=======
             int idPessoaTemp = 0;
             for(int i = 0; i < model.getGrupo(String.valueOf(projectSelectedID)).size(); i++){
                 String nomeDefault = model.getGrupo(String.valueOf(projectSelectedID)).get(i).getNome();
@@ -142,19 +144,9 @@ public class Controlador {
             
             idEstado = idEstadoTemp;
             idTarefa = idTarefaTemp;
+>>>>>>> Berna
             
-            for(int i = 0; i < model.getGrupo(String.valueOf(projectSelectedID)).size(); i++){
-                Pessoa pessoa = model.getGrupo(String.valueOf(projectSelectedID)).get(i);
-                String pessoaID = pessoa.getId();
-                for(int j = 0; j < pessoa.getTarefasID().size(); j++){
-                    String tarefaID = pessoa.getTarefasID().get(j);
-                    view.sincronizarMembrosTarefas(pessoaID, tarefaID);
-                    
-                }
-                
-            }
-                    
-            boolean associarPessoaATarefa = view.membroMouseReleased(e);
+            view.highlightProjeto(String.valueOf(projectSelectedID));
         }
         @Override
         public void mousePressed(MouseEvent e) {}
@@ -166,15 +158,131 @@ public class Controlador {
         public void mouseExited(MouseEvent e) {}
     }
     
+    private void carregarProjeto(MouseEvent e){
+            
+        view.setMembroAddicionarMouseAdapter(new AddicionarMembroMouseAdapter());
+        view.setAddicionarColunaButtonMouseAdapter(new AddicionarColunaButtonMouseAdapter());
+
+        int idPessoaTemp = 0;
+        for(int i = 0; i < model.getGrupo(String.valueOf(projectSelectedID)).size(); i++){
+            String nomeDefault = model.getGrupo(String.valueOf(projectSelectedID)).get(i).getNome();
+            String idPessoaString = model.getGrupo(String.valueOf(projectSelectedID)).get(i).getId();
+
+            String[] splitIdString = idPessoaString.split("-");
+
+            int idFromPessoa = Integer.parseInt(splitIdString[splitIdString.length - 1]);
+            if(idPessoaTemp < idFromPessoa){
+                idPessoaTemp = idFromPessoa; 
+            }
+
+            view.criarNovoResponsavel(idPessoaString, nomeDefault);
+            view.setMembroMouseAdapter(new MembroMouseAdapter());
+            view.setEditarMembroMouseAdapter(new EditarMembroMouseAdapter());
+            view.setRemoverMembroMouseAdapter(new RemoverMembroMouseAdapter());
+        }
+
+        idPessoa = idPessoaTemp;
+
+        int idEstadoTemp = 0;
+        int idTarefaTemp = 0;
+        for(int i = 0; i < model.getEstados(String.valueOf(projectSelectedID)).size(); i++){
+
+            String nomeDefault = model.getEstados(String.valueOf(projectSelectedID)).get(i).getNome();
+            String idEstadoString = model.getEstados(String.valueOf(projectSelectedID)).get(i).getId();
+
+            String[] splitEstadosIdString = idEstadoString.split("-");
+
+            int idFromEstado = Integer.parseInt(splitEstadosIdString[splitEstadosIdString.length - 1]);
+            if(idEstadoTemp < idFromEstado){
+                idEstadoTemp = idFromEstado; 
+            }
+
+            view.addicionarColunaTarefa(idEstadoString, nomeDefault);
+            view.setAddicionarTarefaButtonMouseAdapter(new AddicionarTarefaButtonMouseAdapter());
+            view.setEditarColunaButtonMouseAdapter(new EditarColunaButtonMouseAdapter());
+            view.setRemoverColunaButtonMouseAdapter(new RemoverColunaButtonMouseAdapter());
+
+            for(int j = 0; j < model.getEstados(String.valueOf(projectSelectedID)).get(i).getTarefas().size(); j++){
+
+                String tituloDefault = model.getEstados(String.valueOf(projectSelectedID)).get(i).getTarefas().get(j).getNome();
+                String descricaoDefault = model.getEstados(String.valueOf(projectSelectedID)).get(i).getTarefas().get(j).getDescricao();
+                String idTarefaString = model.getEstados(String.valueOf(projectSelectedID)).get(i).getTarefas().get(j).getId();
+                String idColunaString = idEstadoString; 
+
+                String[] splitTarefaIdString = idTarefaString.split("-");
+
+                int idFromTarefa = Integer.parseInt(splitTarefaIdString[splitTarefaIdString.length - 1]);
+                if(idTarefaTemp < idFromTarefa){
+                    idTarefaTemp = idFromTarefa; 
+                }
+
+                view.addicionarTarefa(idTarefaString, tituloDefault, descricaoDefault);
+                view.setTarefaMouseAdapter(new TarefaMouseAdapter());
+                view.setEditarTarefaButtonMouseAdapter(new EditarTarefaButtonMouseAdapter());
+                view.setRemoverTarefaButtonMouseAdapter(new RemoverTarefaButtonMouseAdapter());
+            }
+        }
+
+        idEstado = idEstadoTemp;
+        idTarefa = idTarefaTemp;
+
+        for(int i = 0; i < model.getGrupo(String.valueOf(projectSelectedID)).size(); i++){
+            Pessoa pessoa = model.getGrupo(String.valueOf(projectSelectedID)).get(i);
+            String pessoaID = pessoa.getId();
+            for(int j = 0; j < pessoa.getTarefasID().size(); j++){
+                String tarefaID = pessoa.getTarefasID().get(j);
+                view.sincronizarMembrosTarefas(pessoaID, tarefaID);
+
+            }
+
+        }
+        
+        view.atualizar();
+    }
+    
     //-----MENUPROJETOS
     //----
     class GuardarProjetoMouseAdapter implements MouseListener {
         @Override
         public void mouseClicked(MouseEvent e) {
-            String filePath = view.getPath();
+            String filePath = view.setPath(model.getNomeProjeto(view.getProjetoId(e)));
             if(filePath.equals("")) return;
                         
-            model.saveProjeto(filePath, String.valueOf(projectSelectedID));
+            model.saveProjeto(filePath, String.valueOf(view.getProjetoId(e)));
+        }
+        @Override
+        public void mousePressed(MouseEvent e) {}
+        @Override
+        public void mouseReleased(MouseEvent e) {}
+        @Override
+        public void mouseEntered(MouseEvent e) {}
+        @Override
+        public void mouseExited(MouseEvent e) {}
+    }
+    
+    class SelecionarProjetoMouseAdapter implements MouseListener {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            String projetoId = view.getProjetoId(e);
+            projectSelectedID = Integer.valueOf(projetoId);
+            view.adicionarComponentesProjeto();
+            carregarProjeto(e);
+            view.highlightProjeto(String.valueOf(projectSelectedID));
+        }
+        @Override
+        public void mousePressed(MouseEvent e) {}
+        @Override
+        public void mouseReleased(MouseEvent e) {}
+        @Override
+        public void mouseEntered(MouseEvent e) {}
+        @Override
+        public void mouseExited(MouseEvent e) {}
+    }
+    
+    class RemoverProjetoMouseAdapter implements MouseListener {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            
         }
         @Override
         public void mousePressed(MouseEvent e) {}
