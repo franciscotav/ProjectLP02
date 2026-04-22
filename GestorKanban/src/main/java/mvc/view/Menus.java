@@ -36,6 +36,9 @@ public class Menus extends JPanel{
         topMenuPanel.setCarregarProjetoMouseAdapter(listener);
     }
     
+    public void highlightProjeto(String projetoId){
+        projetoMenuPanel.highlightProjeto(projetoId);
+    }
     
     public void addProjeto(String id, String nome){
         projetoMenuPanel.add(new ProjetoPanel(id, nome));
@@ -44,6 +47,15 @@ public class Menus extends JPanel{
     public void setGuardarProjetoMouseAdapter(MouseListener e){
         projetoMenuPanel.setGuardarProjetoMouseAdapter(e);
     }
+    
+    public void setRemoverProjetoMouseAdapter(MouseListener e){
+        projetoMenuPanel.setRemoverProjetoMouseAdapter(e);
+    }
+    
+    public void setSelecionarProjetoMouseAdapter(MouseListener e){
+        projetoMenuPanel.setSelecionarProjetoMouseAdapter(e);
+    }
+
 }
 
 class TopMenuPanel extends JPanel{
@@ -110,6 +122,22 @@ class ProjetoMenuPanel extends JPanel{
         add(projetoPanel);
     }
     
+    public void highlightProjeto(String projetoId){
+        for(int i = 0; i < getComponentCount(); i++){
+            if(getComponent(i) instanceof ProjetoPanel){
+                ProjetoPanel projetoPanel = (ProjetoPanel) getComponent(i);
+                if(projetoPanel.getId().equals(projetoId)){
+                    projetoPanel.setBackground(Color.LIGHT_GRAY);
+                    projetoPanel.setOpaque(true);
+                    projetoPanel.repaint();
+                }else{
+                    projetoPanel.setOpaque(false);
+                    projetoPanel.repaint();
+                }
+            }
+        }
+    }
+    
     public void setGuardarProjetoMouseAdapter(MouseListener e){
         ProjetoPanel projetoPanel = null;
         for(int i = 0; i < getComponentCount(); i++){
@@ -120,6 +148,28 @@ class ProjetoMenuPanel extends JPanel{
         
         projetoPanel.setGuardarProjetoMouseAdapter(e);
     }
+    
+    public void setSelecionarProjetoMouseAdapter(MouseListener e){
+        ProjetoPanel projetoPanel = null;
+        for(int i = 0; i < getComponentCount(); i++){
+            if(getComponent(i) instanceof ProjetoPanel){
+                projetoPanel = (ProjetoPanel) getComponent(i);
+            }
+        }
+        
+        projetoPanel.addMouseListener(e);
+    }
+    
+    public void setRemoverProjetoMouseAdapter(MouseListener e){
+        ProjetoPanel projetoPanel = null;
+        for(int i = 0; i < getComponentCount(); i++){
+            if(getComponent(i) instanceof ProjetoPanel){
+                projetoPanel = (ProjetoPanel) getComponent(i);
+            }
+        }
+        
+        projetoPanel.setRemoverProjetoMouseAdapter(e);
+    }
 }
 
 class ProjetoPanel extends JPanel{
@@ -127,14 +177,14 @@ class ProjetoPanel extends JPanel{
     private JLabel projetoNomeLabel;
     private String id;
     
-    JButton buttonEditar;
+//    JButton buttonEditar;
     JButton buttonGuardar;
     JButton buttonFechar;
     
     public void setGuardarProjetoMouseAdapter(MouseListener e){
         buttonGuardar.addMouseListener(e);
     }
-    
+   
     public ProjetoPanel(String id, String projetoNome){
         this.id = id;
         this.projetoNome = projetoNome;
@@ -150,8 +200,8 @@ class ProjetoPanel extends JPanel{
         projetoNomeLabel = new JLabel(projetoNome);
         styleLabel(projetoNomeLabel);
         
-        buttonEditar = new JButton("🖉");
-        buttonStyle(buttonEditar);
+//        buttonEditar = new JButton("🖉");
+//        buttonStyle(buttonEditar);
         
         buttonGuardar = new JButton("💾");
         buttonStyle(buttonGuardar);
@@ -160,9 +210,13 @@ class ProjetoPanel extends JPanel{
         buttonStyle(buttonFechar);
         
         add(projetoNomeLabel);
-        add(buttonEditar);
+//        add(buttonEditar);
         add(buttonGuardar);
         add(buttonFechar);
+    }
+    
+    public void setRemoverProjetoMouseAdapter(MouseListener e){
+        buttonFechar.addMouseListener(e);
     }
     
     private void styleLabel(JLabel jlabel){

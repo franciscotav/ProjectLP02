@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.File;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -54,6 +55,18 @@ public class MainWindow extends JFrame {
     
     public void setGuardarProjetoMouseAdapter(MouseListener e){
         menus.setGuardarProjetoMouseAdapter(e);
+    }
+    
+    public void highlightProjeto(String projetoId){
+        menus.highlightProjeto(projetoId);
+    }
+    
+    public void setRemoverProjetoMouseAdapter(MouseListener e){
+        menus.setRemoverProjetoMouseAdapter(e);
+    }
+    
+    public void setSelecionarProjetoMouseAdapter(MouseListener e){
+        menus.setSelecionarProjetoMouseAdapter(e);
     }
     
     public void setEditarColunaButtonMouseAdapter(MouseListener e){
@@ -218,6 +231,19 @@ public class MainWindow extends JFrame {
     }
     
     
+    public void adicionarComponentesProjeto() {
+        limparAreaProjeto();
+        
+        grupoLista = new GrupoLista();
+        quadro = new Quadro();
+
+        add(grupoLista, BorderLayout.WEST);
+        add(quadro, BorderLayout.CENTER);
+        
+        revalidate();
+        repaint();
+    }
+    
     
     public void adicionarComponentesProjeto(String id, String projetoNome) {
         limparAreaProjeto();
@@ -233,12 +259,44 @@ public class MainWindow extends JFrame {
         repaint();
     }
     
+    public String getProjetoId(MouseEvent e){
+        Component source = (Component) e.getSource();
+        while (source != null && !(source instanceof ProjetoPanel)){
+            source = source.getParent();
+        }
+        
+        if (source instanceof ProjetoPanel) {
+            ProjetoPanel projeto = (ProjetoPanel) source;
+            return projeto.getId();
+        }
+        
+        return null;
+    }
+    
     public String getPath(){
         JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Carregar");
         FileNameExtensionFilter filter = new FileNameExtensionFilter("JSON Files (*.json)", "json");
         fileChooser.setFileFilter(filter);
         
         int response = fileChooser.showOpenDialog(null);
+        
+        if (response == JFileChooser.APPROVE_OPTION) {
+            String selectedFile = fileChooser.getSelectedFile().getAbsolutePath();
+            return selectedFile;
+        }
+        
+        return "";
+    }
+    
+    public String setPath(String filename){
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setSelectedFile(new File(filename));
+        fileChooser.setDialogTitle("Guardar");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("JSON Files (*.json)", "json");
+        fileChooser.setFileFilter(filter);
+        
+        int response = fileChooser.showSaveDialog(null);
         
         if (response == JFileChooser.APPROVE_OPTION) {
             String selectedFile = fileChooser.getSelectedFile().getAbsolutePath();
@@ -372,6 +430,11 @@ public class MainWindow extends JFrame {
     public void addicionarColunaTarefa(MouseEvent e, String id, String nome){
         ColunaAddicionar colunaAdd = (ColunaAddicionar) e.getSource();
         colunaAdd.mouseClicked(id,nome);
+    }
+    
+    public void atualizar(){
+        revalidate();
+        repaint();
     }
     
     //addiciona no ultimo loaded Sticker

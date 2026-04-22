@@ -218,7 +218,7 @@ class Responsavel extends JPanel{
     
     public void setTarefa(StikerTarefa stikerTarefa){
         stickersAtribuidos.add(stikerTarefa);
-        updateStickersAtribuidos(); //?
+        updateStickersAtribuidos();
     }
     
     private void iniResponsavel(String id, String nome){
