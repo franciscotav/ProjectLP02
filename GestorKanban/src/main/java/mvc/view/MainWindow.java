@@ -67,10 +67,6 @@ public class MainWindow extends JFrame {
         menus.setGuardarProjetoMouseAdapter(e);
     }
     
-    public void highlightProjeto(String projetoId){
-        menus.highlightProjeto(projetoId);
-    }
-    
     public void setRemoverProjetoMouseAdapter(MouseListener e){
         menus.setRemoverProjetoMouseAdapter(e);
     }
@@ -216,7 +212,26 @@ public class MainWindow extends JFrame {
         menus.setCarregarProjetoMouseAdapter(e);
     }
     
-    //Responsavel
+    //Projeto
+    public void highlightProjeto(String projetoId){
+        menus.highlightProjeto(projetoId);
+    }
+    
+    public void removeProjeto(MouseEvent e){
+        Component source = (Component) e.getSource();
+        while (source != null && !(source instanceof ProjetoPanel)){
+            source = source.getParent();
+        }
+        
+        if(source instanceof ProjetoPanel) {
+            ProjetoPanel projeto = (ProjetoPanel) source;
+            ProjetoMenuPanel projetosPanel = (ProjetoMenuPanel) projeto.getParent();
+            
+            projetosPanel.remove(projeto);
+            projetosPanel.revalidate();
+            projetosPanel.repaint();
+        }
+    }
     
     public void adicionarComponentesProjeto() {
         limparAreaProjeto();
@@ -231,37 +246,7 @@ public class MainWindow extends JFrame {
         repaint();
     }
     
-    public String getProjetoId(MouseEvent e){
-        Component source = (Component) e.getSource();
-        while (source != null && !(source instanceof ProjetoPanel)){
-            source = source.getParent();
-        }
-        
-        if (source instanceof ProjetoPanel) {
-            ProjetoPanel projeto = (ProjetoPanel) source;
-            return projeto.getId();
-        }
-        
-        return null;
-    }
-    
-    public String setPath(String filename){
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setSelectedFile(new File(filename));
-        fileChooser.setDialogTitle("Guardar");
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("JSON Files (*.json)", "json");
-        fileChooser.setFileFilter(filter);
-        
-        int response = fileChooser.showSaveDialog(null);
-        
-        if (response == JFileChooser.APPROVE_OPTION) {
-            String selectedFile = fileChooser.getSelectedFile().getAbsolutePath();
-            return selectedFile;
-        }
-        
-        return "";
-    }
-    
+    //Responsavel
     public void criarNovoResponsavel(String id, String nome){
         grupoLista.criarNovoResponsavel(id,nome);
     }
@@ -398,6 +383,7 @@ public class MainWindow extends JFrame {
         
         colunaMenu.mousePressed(e);
     }
+    
     //Getters
     public String getColunaID(MouseEvent e) {
         Component source = (Component) e.getSource();
@@ -567,6 +553,37 @@ public class MainWindow extends JFrame {
         return "";
     }
     
+    public String getProjetoId(MouseEvent e){
+        Component source = (Component) e.getSource();
+        while (source != null && !(source instanceof ProjetoPanel)){
+            source = source.getParent();
+        }
+        
+        if (source instanceof ProjetoPanel) {
+            ProjetoPanel projeto = (ProjetoPanel) source;
+            return projeto.getId();
+        }
+        
+        return null;
+    }
+    
+    public String setPath(String filename){
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setSelectedFile(new File(filename));
+        fileChooser.setDialogTitle("Guardar");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("JSON Files (*.json)", "json");
+        fileChooser.setFileFilter(filter);
+        
+        int response = fileChooser.showSaveDialog(null);
+        
+        if (response == JFileChooser.APPROVE_OPTION) {
+            String selectedFile = fileChooser.getSelectedFile().getAbsolutePath();
+            return selectedFile;
+        }
+        
+        return "";
+    }
+    
     //auxiliares 
     public void adicionarComponentesProjeto(String id, String projetoNome) {
         limparAreaProjeto();
@@ -582,7 +599,7 @@ public class MainWindow extends JFrame {
         repaint();
     }
 
-    private void limparAreaProjeto() {
+    public void limparAreaProjeto() {
         if (grupoLista != null) {
             remove(grupoLista);
         }

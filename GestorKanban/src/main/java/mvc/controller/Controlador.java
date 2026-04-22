@@ -39,6 +39,10 @@ public class Controlador {
             idProjeto++;
             projectSelectedID = idProjeto;
             
+            idPessoa = 0;
+            idEstado = 0;
+            idTarefa = 0;
+            
             String projetoNome = "Projeto0" + projectSelectedID + ".json";
             
             model.addProjeto(String.valueOf(projectSelectedID), projetoNome);
@@ -219,7 +223,16 @@ public class Controlador {
     class RemoverProjetoMouseAdapter implements MouseListener {
         @Override
         public void mouseClicked(MouseEvent e) {
-            
+            String projetoId = view.getProjetoId(e);
+            if(String.valueOf(projectSelectedID).equals(projetoId)){
+                view.limparAreaProjeto();
+                model.removeProjeto(projetoId);
+                view.removeProjeto(e);
+                
+            }else{
+                model.removeProjeto(projetoId);
+                view.removeProjeto(e);
+            }
         }
         @Override
         public void mousePressed(MouseEvent e) {}

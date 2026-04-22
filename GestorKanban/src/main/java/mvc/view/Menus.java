@@ -45,14 +45,6 @@ public class Menus extends JPanel {
     public void setCarregarProjetoMouseAdapter(MouseListener listener) {
         topMenuPanel.setCarregarProjetoMouseAdapter(listener);
     }
-    
-    public void highlightProjeto(String projetoId){
-        projetoMenuPanel.highlightProjeto(projetoId);
-    }
-    
-    public void addProjeto(String id, String nome){
-        projetoMenuPanel.add(new ProjetoPanel(id, nome));
-    }
 
     public void setGuardarProjetoMouseAdapter(MouseListener e) {
         projetoMenuPanel.setGuardarProjetoMouseAdapter(e);
@@ -65,6 +57,15 @@ public class Menus extends JPanel {
     
     public void setSelecionarProjetoMouseAdapter(MouseListener e){
         projetoMenuPanel.setSelecionarProjetoMouseAdapter(e);
+    }
+    
+    //projeto
+    public void highlightProjeto(String projetoId){
+        projetoMenuPanel.highlightProjeto(projetoId);
+    }
+    
+    public void addProjeto(String id, String nome){
+        projetoMenuPanel.add(new ProjetoPanel(id, nome));
     }
 
 }
@@ -134,7 +135,6 @@ class ProjetoMenuPanel extends JPanel {
     public void addProjetoPanel(ProjetoPanel projetoPanel) {
         add(projetoPanel);
     }
-
     
     public void highlightProjeto(String projetoId){
         for(int i = 0; i < getComponentCount(); i++){
@@ -152,6 +152,7 @@ class ProjetoMenuPanel extends JPanel {
         }
     }
     
+    //listeners
     public void setGuardarProjetoMouseAdapter(MouseListener e){
         ProjetoPanel projetoPanel = null;
         for (int i = 0; i < getComponentCount(); i++) {

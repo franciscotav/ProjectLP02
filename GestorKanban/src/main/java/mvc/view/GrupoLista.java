@@ -262,6 +262,7 @@ class Responsavel extends JPanel {
         lp.repaint();
     }
     
+    //Setup
     private void iniResponsavel(String id, String nome){
         Dimension tamanho = new Dimension(250, 250);
         setPreferredSize(tamanho);
