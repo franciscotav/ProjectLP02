@@ -4,8 +4,8 @@
 
 package com.mycompany.gestorkanban;
 
-import repository.data.Repository;
-import database.model.Model;
+import mvc.repository.Repository;
+import mvc.model.Model;
 import mvc.controller.Controlador;
 import mvc.view.MainWindow;
 
