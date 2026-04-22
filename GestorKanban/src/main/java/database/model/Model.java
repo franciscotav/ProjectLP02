@@ -36,7 +36,7 @@ public class Model{
         this.projetos.add(projeto);
     }
     
-    public void removeProjeto(int id) {
+    public void removeProjeto(String id) {
         for(Projeto p : projetos){
             if (p.getId().equals(id)) {
             this.projetos.remove(p);
@@ -53,9 +53,7 @@ public class Model{
         }
         return null;
     }
-    
-   
-    
+
     // METODOS USADOS NO CONTROLADOR
     
     public void saveProjeto(String filePath, String id){

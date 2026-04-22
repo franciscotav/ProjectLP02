@@ -57,12 +57,12 @@ public class MainWindow extends JFrame {
         menus.setGuardarProjetoMouseAdapter(e);
     }
     
-    public void highlightProjeto(String projetoId){
-        menus.highlightProjeto(projetoId);
-    }
-    
     public void setRemoverProjetoMouseAdapter(MouseListener e){
         menus.setRemoverProjetoMouseAdapter(e);
+    }
+    
+    public void highlightProjeto(String projetoId){
+        menus.highlightProjeto(projetoId);
     }
     
     public void setSelecionarProjetoMouseAdapter(MouseListener e){
@@ -265,12 +265,28 @@ public class MainWindow extends JFrame {
             source = source.getParent();
         }
         
-        if (source instanceof ProjetoPanel) {
+        if(source instanceof ProjetoPanel) {
             ProjetoPanel projeto = (ProjetoPanel) source;
             return projeto.getId();
         }
         
         return null;
+    }
+    
+    public void removeProjeto(MouseEvent e){
+        Component source = (Component) e.getSource();
+        while (source != null && !(source instanceof ProjetoPanel)){
+            source = source.getParent();
+        }
+        
+        if(source instanceof ProjetoPanel) {
+            ProjetoPanel projeto = (ProjetoPanel) source;
+            ProjetoMenuPanel projetosPanel = (ProjetoMenuPanel) projeto.getParent();
+            
+            projetosPanel.remove(projeto);
+            projetosPanel.revalidate();
+            projetosPanel.repaint();
+        }
     }
     
     public String getPath(){
@@ -307,7 +323,7 @@ public class MainWindow extends JFrame {
     }
  
     
-    private void limparAreaProjeto(){
+    public void limparAreaProjeto(){
         if(grupoLista != null)
             remove(grupoLista);
         if(quadro != null)
