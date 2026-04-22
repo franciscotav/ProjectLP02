@@ -4,9 +4,9 @@
  */
 package mvc.controller;
 
+import mvc.model.Pessoa;
+import mvc.model.Model;
 import mvc.view.*;
-import database.model.*;
-import repository.data.*;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -93,7 +93,7 @@ public class Controlador {
                 }
                 
                 view.criarNovoResponsavel(idPessoaString, nomeDefault);
-                view.setMembroMouseAdapter(new MembroMouseAdapter());
+                view.setResponsavelListener(new MembroMouseAdapter());
                 view.setEditarMembroMouseAdapter(new EditarMembroMouseAdapter());
                 view.setRemoverMembroMouseAdapter(new RemoverMembroMouseAdapter());
             }
@@ -199,7 +199,7 @@ public class Controlador {
             model.addPessoaToGrupo(String.valueOf(projectSelectedID), idPessoaString, nomeDefault);
             
             view.criarNovoResponsavel(idPessoaString, nomeDefault);
-            view.setMembroMouseAdapter(new MembroMouseAdapter());
+            view.setResponsavelListener(new MembroMouseAdapter());
             view.setEditarMembroMouseAdapter(new EditarMembroMouseAdapter());
             view.setRemoverMembroMouseAdapter(new RemoverMembroMouseAdapter());
         }
