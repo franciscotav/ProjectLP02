@@ -28,7 +28,7 @@ public class Model{
         return projetos;
     }
     
-    public void addProjeto(int id, String name){
+    public void addProjeto(String id, String name){
         this.projetos.add(new Projeto(id, name));
     }
     
@@ -38,16 +38,16 @@ public class Model{
     
     public void removeProjeto(int id) {
         for(Projeto p : projetos){
-            if (p.getId()== id) {
+            if (p.getId().equals(id)) {
             this.projetos.remove(p);
             break;
             }
         }
     }
     
-    public Projeto getProjetoById(int id){
+    public Projeto getProjetoById(String id){
         for(Projeto p : projetos){
-            if (p.getId() == id) {
+            if (p.getId().equals(id)) {
                 return p;
             }
         }
@@ -58,7 +58,7 @@ public class Model{
     
     // METODOS USADOS NO CONTROLADOR
     
-    public void saveProjeto(String filePath, int id){
+    public void saveProjeto(String filePath, String id){
         Projeto projeto = getProjetoById(id);
         repository.saveToFile(filePath, projeto);
     }
@@ -66,22 +66,25 @@ public class Model{
     public void loadProjeto(String filePath){
         Projeto projeto = repository.loadFromFile(filePath);
         addProjeto(projeto);
-       
+    }
+    
+    public void setLastProjetID(String id){
+        projetos.getLast().setId(id);
     }
     
     
     //projeto
-    public String getNomeProjeto(Integer idProjeto) {
+    public String getNomeProjeto(String idProjeto) {
         return this.getProjetoById(idProjeto).getNome();
     }
 
-    public void setNomeProjeto(Integer idProjeto,String nome) {
+    public void setNomeProjeto(String idProjeto,String nome) {
         this.getProjetoById(idProjeto).setNome(nome);
     }
     
     //grupo
     
-    public void addPessoaToGrupo(Integer idProjeto ,String idPessoa, String nome){
+    public void addPessoaToGrupo(String idProjeto ,String idPessoa, String nome){
         Projeto projeto = this.getProjetoById(idProjeto);
         Pessoa pessoa = new Pessoa(idPessoa, nome);
         
@@ -90,7 +93,12 @@ public class Model{
 
     }
     
-    public void removerPessoaFromGrupo(Integer idProjeto ,String idPessoa){
+    public List<Pessoa> getGrupo(String idProjeto){
+        Projeto projeto = this.getProjetoById(idProjeto);
+        return projeto.getGrupo().getPessoas();
+    }
+    
+    public void removerPessoaFromGrupo(String idProjeto ,String idPessoa){
         Projeto projeto = this.getProjetoById(idProjeto);
         
         for(Estado estado : projeto.getEstados()){
@@ -109,7 +117,7 @@ public class Model{
     
     //tarefa
     
-    public void addTarefa(Integer idProjeto ,String idEstado, String idTarefa, String titulo, String descricao){
+    public void addTarefa(String idProjeto ,String idEstado, String idTarefa, String titulo, String descricao){
         Projeto projeto = this.getProjetoById(idProjeto);    
         
         Estado estado = projeto.getEstadoById(idEstado);
@@ -119,7 +127,7 @@ public class Model{
         
     }
 
-    public void moverTarefa(Integer idProjeto ,String idEstadoOrigem, String idEstadoDestino, String idTarefaString){
+    public void moverTarefa(String idProjeto ,String idEstadoOrigem, String idEstadoDestino, String idTarefaString){
         
         Projeto projeto = this.getProjetoById(idProjeto);    
         
@@ -136,7 +144,7 @@ public class Model{
         
     }
     
-    public void addPessoaToTarefa(Integer idProjeto ,String idPessoa, String idTarefa){
+    public void addPessoaToTarefa(String idProjeto ,String idPessoa, String idTarefa){
         Projeto projeto = this.getProjetoById(idProjeto);
         
         Pessoa pessoa = projeto.getGrupo().getPessoaById(idPessoa);
@@ -151,7 +159,7 @@ public class Model{
         }
     }
     
-    public void removePessoaFromTarefa(Integer idProjeto ,String idPessoa, String idTarefa){
+    public void removePessoaFromTarefa(String idProjeto ,String idPessoa, String idTarefa){
         Projeto projeto = this.getProjetoById(idProjeto);
         
         Pessoa pessoa = projeto.getGrupo().getPessoaById(idPessoa);
@@ -168,7 +176,7 @@ public class Model{
     
     
     
-    public void editarTarefa(Integer idProjeto ,String tarefaID, String novoTitulo, String novaDescricao){
+    public void editarTarefa(String idProjeto ,String tarefaID, String novoTitulo, String novaDescricao){
         Projeto projeto = this.getProjetoById(idProjeto);
         
         for(Estado estado : projeto.getEstados()){
@@ -182,7 +190,7 @@ public class Model{
         }
     }
     
-    public void removerTarefa(Integer idProjeto ,String tarefaIf){
+    public void removerTarefa(String idProjeto ,String tarefaIf){
         Projeto projeto = this.getProjetoById(idProjeto);
         
         
@@ -198,18 +206,18 @@ public class Model{
     
     //pessoa
     
-    public void editarPessoa(Integer idProjeto ,String idPessoa, String novoNome){
+    public void editarPessoa(String idProjeto ,String idPessoa, String novoNome){
         Projeto projeto = this.getProjetoById(idProjeto);
         projeto.getGrupo().editarPessoa(idPessoa, novoNome);
     }
     
      // estado
-    public void addEstado(Integer idProjeto, String id, String nome){
+    public void addEstado(String idProjeto, String id, String nome){
         Projeto projeto = this.getProjetoById(idProjeto);
         projeto.addEstado(id, nome);
     }
     
-    public void editarEstado(Integer idProjeto, String id, String novoNome){
+    public void editarEstado(String idProjeto, String id, String novoNome){
         Projeto projeto = this.getProjetoById(idProjeto);
         for(Estado estado: projeto.getEstados()){
         if (estado.getId().equals(id)) {
@@ -219,7 +227,7 @@ public class Model{
         }
     }
     
-    public void removeEstado(Integer idProjeto, String id){
+    public void removeEstado(String idProjeto, String id){
         Projeto projeto = this.getProjetoById(idProjeto);
         Estado estadoToRemove = null;
         
@@ -238,4 +246,9 @@ public class Model{
             projeto.getEstados().remove(estadoToRemove);
         }
     }
+    
+    public List<Estado> getEstados(String idProjeto){
+        return this.getProjetoById(idProjeto).getEstados();
+    }
+    
 }

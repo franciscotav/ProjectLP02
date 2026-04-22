@@ -38,6 +38,22 @@ public class Quadro extends JScrollPane {
     public void setRemoverColunaButtonMouseAdapter(MouseListener e){
         estados.setRemoverColunaButtonMouseAdapter(e);
     }
+    
+    public Estados getEstados(){
+        return estados;
+    }
+    
+    public TarefaColuna getlastTarefaColuna(){
+        TarefaColuna tarefaColuna = null;
+        
+        for(int i = 0; i < estados.getComponentCount(); i++){
+            if(estados.getComponent(i) instanceof TarefaColuna){
+                tarefaColuna = (TarefaColuna) estados.getComponent(i);
+            }
+        }
+        
+        return tarefaColuna;
+    }
 }
 
 class Estados extends JPanel {
@@ -55,6 +71,10 @@ class Estados extends JPanel {
         //add(new TarefaColuna("A fazer"));
         //add(new TarefaColuna("Conluido"));
         add(colunaAddiconar);
+    }
+    
+    public ColunaAddicionar getColunaAddicionar(){
+        return colunaAddiconar;
     }
     
     public void setAddicionarColunaButtonMouseAdapter(MouseListener e){
@@ -118,7 +138,11 @@ class TarefaColuna extends JPanel{
     public void setName(String nome){
         this.nome = nome;
     }
-            
+    
+    public StickerAddicionar getStickerAddicionar(){
+        return stickerAddicionar;
+    }
+    
     public TarefaColuna(String id, String nome){
         tarefasLayout = new BoxLayout(this,BoxLayout.Y_AXIS);
         setAlignmentY(Component.TOP_ALIGNMENT);

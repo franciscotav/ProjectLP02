@@ -37,8 +37,12 @@ public class Menus extends JPanel{
     }
     
     
-    public void addProjeto(String nome){
-        projetoMenuPanel.add(new ProjetoPanel(nome));
+    public void addProjeto(String id, String nome){
+        projetoMenuPanel.add(new ProjetoPanel(id, nome));
+    }
+    
+    public void setGuardarProjetoMouseAdapter(MouseListener e){
+        projetoMenuPanel.setGuardarProjetoMouseAdapter(e);
     }
 }
 
@@ -105,13 +109,34 @@ class ProjetoMenuPanel extends JPanel{
     public void addProjetoPanel(ProjetoPanel projetoPanel){
         add(projetoPanel);
     }
+    
+    public void setGuardarProjetoMouseAdapter(MouseListener e){
+        ProjetoPanel projetoPanel = null;
+        for(int i = 0; i < getComponentCount(); i++){
+            if(getComponent(i) instanceof ProjetoPanel){
+                projetoPanel = (ProjetoPanel) getComponent(i);
+            }
+        }
+        
+        projetoPanel.setGuardarProjetoMouseAdapter(e);
+    }
 }
 
 class ProjetoPanel extends JPanel{
     private String projetoNome;
     private JLabel projetoNomeLabel;
+    private String id;
     
-    public ProjetoPanel(String projetoNome){
+    JButton buttonEditar;
+    JButton buttonGuardar;
+    JButton buttonFechar;
+    
+    public void setGuardarProjetoMouseAdapter(MouseListener e){
+        buttonGuardar.addMouseListener(e);
+    }
+    
+    public ProjetoPanel(String id, String projetoNome){
+        this.id = id;
         this.projetoNome = projetoNome;
         
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
@@ -125,13 +150,13 @@ class ProjetoPanel extends JPanel{
         projetoNomeLabel = new JLabel(projetoNome);
         styleLabel(projetoNomeLabel);
         
-        JButton buttonEditar = new JButton("🖉");
+        buttonEditar = new JButton("🖉");
         buttonStyle(buttonEditar);
         
-        JButton buttonGuardar = new JButton("💾");
+        buttonGuardar = new JButton("💾");
         buttonStyle(buttonGuardar);
         
-        JButton buttonFechar = new JButton("𝗫");
+        buttonFechar = new JButton("𝗫");
         buttonStyle(buttonFechar);
         
         add(projetoNomeLabel);
@@ -153,4 +178,14 @@ class ProjetoPanel extends JPanel{
         button.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+    
+    
 }

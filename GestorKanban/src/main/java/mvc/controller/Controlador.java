@@ -19,7 +19,8 @@ import java.awt.event.MouseMotionListener;
 public class Controlador {
     private Model model;
     private MainWindow view;
-
+    
+    private int projectSelectedID = 0;
     private int idPessoa = 0;
     private int idEstado = 0;
     private int idTarefa = 0;
@@ -39,17 +40,18 @@ public class Controlador {
             if(filePath.equals("")) return;
             
             idProjeto++;
+            projectSelectedID = idProjeto;
             
-            Repository repository = new Repository();
             String[] split = filePath.split("\\\\");
             
-            model.addProjeto(idProjeto, split[split.length - 1]);
+            model.addProjeto(String.valueOf(projectSelectedID), split[split.length - 1]);
             
-            view.adicionarComponentesProjeto(model.getNomeProjeto(idProjeto));
+            view.adicionarComponentesProjeto(String.valueOf(projectSelectedID), model.getNomeProjeto(String.valueOf(projectSelectedID)));
             view.setMembroAddicionarMouseAdapter(new AddicionarMembroMouseAdapter());
             view.setAddicionarColunaButtonMouseAdapter(new AddicionarColunaButtonMouseAdapter());
             
-            repository.saveToFile(filePath, model.getProjetoById(idProjeto));
+            view.setGuardarProjetoMouseAdapter(new GuardarProjetoMouseAdapter());
+            model.saveProjeto(filePath, String.valueOf(projectSelectedID));
         }
         @Override
         public void mousePressed(MouseEvent e) {}
@@ -64,10 +66,82 @@ public class Controlador {
     class CarregarProjetoMouseAdapter implements MouseListener {
         @Override
         public void mouseClicked(MouseEvent e) {
-            String filePath = view.getPath();
+            String filePath = view.getPath();            
+            model.loadProjeto(filePath);
             
-            Repository repository = new Repository();
-            repository.saveToFile(filePath, model.getProjetoById(idProjeto));
+            idProjeto++;
+            projectSelectedID = idProjeto;
+            
+            model.setLastProjetID(String.valueOf(projectSelectedID));
+            
+            view.adicionarComponentesProjeto(String.valueOf(projectSelectedID), model.getNomeProjeto(String.valueOf(projectSelectedID)));
+            view.setMembroAddicionarMouseAdapter(new AddicionarMembroMouseAdapter());
+            view.setAddicionarColunaButtonMouseAdapter(new AddicionarColunaButtonMouseAdapter());
+            
+            view.setGuardarProjetoMouseAdapter(new GuardarProjetoMouseAdapter());
+            
+            int idPessoaTemp = 0;
+            for(int i = 0; i < model.getGrupo(String.valueOf(projectSelectedID)).size(); i++){
+                String nomeDefault = model.getGrupo(String.valueOf(projectSelectedID)).get(i).getNome();
+                String idPessoaString = model.getGrupo(String.valueOf(projectSelectedID)).get(i).getId();
+                
+                String[] splitIdString = idPessoaString.split("-");
+                
+                int idFromPessoa = Integer.parseInt(splitIdString[splitIdString.length - 1]);
+                if(idPessoaTemp < idFromPessoa){
+                    idPessoaTemp = idFromPessoa; 
+                }
+                
+                view.criarNovoResponsavel(idPessoaString, nomeDefault);
+                view.setMembroMouseAdapter(new MembroMouseAdapter());
+                view.setEditarMembroMouseAdapter(new EditarMembroMouseAdapter());
+                view.setRemoverMembroMouseAdapter(new RemoverMembroMouseAdapter());
+            }
+            
+            idPessoa = idPessoaTemp;
+            
+            int idEstadoTemp = 0;
+            int idTarefaTemp = 0;
+            for(int i = 0; i < model.getEstados(String.valueOf(projectSelectedID)).size(); i++){
+                
+                String nomeDefault = model.getEstados(String.valueOf(projectSelectedID)).get(i).getNome();
+                String idEstadoString = model.getEstados(String.valueOf(projectSelectedID)).get(i).getId();
+                
+                String[] splitEstadosIdString = idEstadoString.split("-");
+                
+                int idFromEstado = Integer.parseInt(splitEstadosIdString[splitEstadosIdString.length - 1]);
+                if(idEstadoTemp < idFromEstado){
+                    idEstadoTemp = idFromEstado; 
+                }
+                
+                view.addicionarColunaTarefa(idEstadoString, nomeDefault);
+                view.setAddicionarTarefaButtonMouseAdapter(new AddicionarTarefaButtonMouseAdapter());
+                view.setEditarColunaButtonMouseAdapter(new EditarColunaButtonMouseAdapter());
+                view.setRemoverColunaButtonMouseAdapter(new RemoverColunaButtonMouseAdapter());
+                
+                for(int j = 0; j < model.getEstados(String.valueOf(projectSelectedID)).get(i).getTarefas().size(); j++){
+                    
+                    String tituloDefault = model.getEstados(String.valueOf(projectSelectedID)).get(i).getTarefas().get(j).getNome();
+                    String descricaoDefault = model.getEstados(String.valueOf(projectSelectedID)).get(i).getTarefas().get(j).getDescricao();
+                    String idTarefaString = model.getEstados(String.valueOf(projectSelectedID)).get(i).getTarefas().get(j).getId();
+                    String idColunaString = idEstadoString; 
+                    
+                    String[] splitTarefaIdString = idTarefaString.split("-");
+                
+                    int idFromTarefa = Integer.parseInt(splitTarefaIdString[splitTarefaIdString.length - 1]);
+                    if(idTarefaTemp < idFromTarefa){
+                        idTarefaTemp = idFromTarefa; 
+                    }
+
+                    view.addicionarTarefa(idTarefaString, tituloDefault, descricaoDefault);
+                    view.setTarefaMouseAdapter(new TarefaMouseAdapter());
+                    view.setEditarTarefaButtonMouseAdapter(new EditarTarefaButtonMouseAdapter());
+                    view.setRemoverTarefaButtonMouseAdapter(new RemoverTarefaButtonMouseAdapter());
+                }
+            }
+            
+            idEstado = idEstadoTemp;
+            idTarefa = idTarefaTemp;
         }
         @Override
         public void mousePressed(MouseEvent e) {}
@@ -78,7 +152,28 @@ public class Controlador {
         @Override
         public void mouseExited(MouseEvent e) {}
     }
-
+    
+    //-----MENUPROJETOS
+    //----
+    class GuardarProjetoMouseAdapter implements MouseListener {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            String filePath = view.getPath();
+            if(filePath.equals("")) return;
+                        
+            model.saveProjeto(filePath, String.valueOf(projectSelectedID));
+        }
+        @Override
+        public void mousePressed(MouseEvent e) {}
+        @Override
+        public void mouseReleased(MouseEvent e) {}
+        @Override
+        public void mouseEntered(MouseEvent e) {}
+        @Override
+        public void mouseExited(MouseEvent e) {}
+    }
+    
+    
     //-------GRUPOLISTA
     //---------------------------
     class AddicionarMembroMouseAdapter implements MouseListener {
@@ -88,7 +183,7 @@ public class Controlador {
             String nomeDefault = "Responsavel";
             String idPessoaString = "PES-" + idPessoa;
             
-            model.addPessoaToGrupo(idProjeto, idPessoaString, nomeDefault);
+            model.addPessoaToGrupo(String.valueOf(projectSelectedID), idPessoaString, nomeDefault);
             
             view.criarNovoResponsavel(idPessoaString, nomeDefault);
             view.setMembroMouseAdapter(new MembroMouseAdapter());
@@ -111,7 +206,7 @@ public class Controlador {
             view.editarResponsavel(e);
             String id = view.getResponsavelID(e);
             String novoNome = view.getResponsavelNome(e);
-            model.editarPessoa(idProjeto, id, novoNome);
+            model.editarPessoa(String.valueOf(projectSelectedID), id, novoNome);
         }
         @Override
         public void mousePressed(java.awt.event.MouseEvent e) {}
@@ -129,7 +224,7 @@ public class Controlador {
             view.removerResponsavel(e);
             
             String id = view.getResponsavelID(e);
-            model.removerPessoaFromGrupo(idProjeto, id);
+            model.removerPessoaFromGrupo(String.valueOf(projectSelectedID), id);
         }
         @Override
         public void mousePressed(java.awt.event.MouseEvent e) {}
@@ -156,7 +251,7 @@ public class Controlador {
                 String idPessoa = view.getResponsavelID(e);
                 String idTarefa = view.getResponsavelLastStikerID(e);
                 
-                model.addPessoaToTarefa(idProjeto, idPessoa,idTarefa);
+                model.addPessoaToTarefa(String.valueOf(projectSelectedID), idPessoa,idTarefa);
             }
             
         }
@@ -182,7 +277,7 @@ public class Controlador {
             String nomeDefault = "Estado";
             String idEstadoString = "EST-" + idEstado; 
             
-            model.addEstado(idProjeto, idEstadoString, nomeDefault);
+            model.addEstado(String.valueOf(projectSelectedID), idEstadoString, nomeDefault);
             
             view.addicionarColunaTarefa(e, idEstadoString, nomeDefault);
             view.setAddicionarTarefaButtonMouseAdapter(new AddicionarTarefaButtonMouseAdapter());
@@ -206,7 +301,7 @@ public class Controlador {
             
             String id = view.getColunaID(e);
             String novoNome = view.getColunaNome(e);
-            model.editarEstado(idProjeto, id, novoNome);
+            model.editarEstado(String.valueOf(projectSelectedID), id, novoNome);
         }
         @Override
         public void mousePressed(java.awt.event.MouseEvent e) {}
@@ -224,7 +319,7 @@ public class Controlador {
             view.removerColuna(e);
             
             String id = view.getColunaID(e);
-            model.removeEstado(idProjeto, id);
+            model.removeEstado(String.valueOf(projectSelectedID), id);
         }
         @Override
         public void mousePressed(java.awt.event.MouseEvent e) {}
@@ -245,7 +340,7 @@ public class Controlador {
             String idTarefaString = "TAR-" + idTarefa; 
             String idColunaString = view.getColunaID(e); 
             
-            model.addTarefa(idProjeto, idColunaString, idTarefaString, tituloDefault, descricaoDefault);
+            model.addTarefa(String.valueOf(projectSelectedID), idColunaString, idTarefaString, tituloDefault, descricaoDefault);
             
             view.addicionarTarefa(e, idTarefaString, tituloDefault, descricaoDefault);
             view.setTarefaMouseAdapter(e, new TarefaMouseAdapter());
@@ -265,21 +360,25 @@ public class Controlador {
     //----StikerTarefa
     //---
     class TarefaMouseAdapter implements MouseListener, MouseMotionListener {
+        String idEstadoOrigem;
         @Override
         public void mouseClicked(MouseEvent e) {}
         @Override
         public void mousePressed(java.awt.event.MouseEvent e) {
+            idEstadoOrigem = view.getColunaID(e);
             view.tarefaMousePressed(e);
         }
         @Override
         public void mouseReleased(java.awt.event.MouseEvent e) {
-            String idEstadoOrigem = view.getColunaID(e);
+            String idTarefa = view.getTarefaID(e);
+
             view.tarefaMouseReleased(e);
-            String idEstadoDestino = view.getColunaID(e);
+                    
+            String idEstadoDestino = view.getColunabyTarefaID(idTarefa);
             
             if(!(idEstadoOrigem.equals(idEstadoDestino))){
                 String idTarefaString = view.getTarefaID(e);
-                model.moverTarefa(idProjeto, idEstadoOrigem, idEstadoDestino, idTarefaString);
+                model.moverTarefa(String.valueOf(projectSelectedID), idEstadoOrigem, idEstadoDestino, idTarefaString);
             }
         }
         @Override
@@ -303,7 +402,7 @@ public class Controlador {
             String idTarefaString = view.getTarefaID(e);
             String novoTitulo = view.getTarefaTitulo(e);
             String novaDescricao = view.getTarefaDescricao(e);
-            model.editarTarefa(idProjeto, idTarefaString, novoTitulo, novaDescricao);
+            model.editarTarefa(String.valueOf(projectSelectedID), idTarefaString, novoTitulo, novaDescricao);
         }
         @Override
         public void mousePressed(java.awt.event.MouseEvent e) {}
@@ -319,7 +418,7 @@ public class Controlador {
         @Override
         public void mouseClicked(MouseEvent e) {
             String idTarefaString = view.getTarefaID(e);
-            model.removerTarefa(idProjeto, idTarefaString);
+            model.removerTarefa(String.valueOf(projectSelectedID), idTarefaString);
             
             view.removerTarefa(e);
         }

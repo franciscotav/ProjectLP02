@@ -52,6 +52,10 @@ public class MainWindow extends JFrame {
         quadro.setAddicionarColunaButtonMouseAdapter(e);
     }
     
+    public void setGuardarProjetoMouseAdapter(MouseListener e){
+        menus.setGuardarProjetoMouseAdapter(e);
+    }
+    
     public void setEditarColunaButtonMouseAdapter(MouseListener e){
         quadro.setEditarColunaButtonMouseAdapter(e);
     }
@@ -83,6 +87,24 @@ public class MainWindow extends JFrame {
 //        
 //    }
     
+    public void setTarefaMouseAdapter(MouseListener e) {
+        StikerTarefa targetSticker = null;
+        TarefaColuna coluna = quadro.getlastTarefaColuna();
+
+        for(int i = 0; i < coluna.getComponentCount(); i++){
+            if(coluna.getComponent(i) instanceof StikerTarefa){
+                targetSticker = (StikerTarefa) coluna.getComponent(i);
+                break;
+            }
+        }
+
+        if(targetSticker != null){
+            targetSticker.addMouseListener(e);
+            targetSticker.addMouseMotionListener((MouseMotionListener) e);
+        }
+    }
+    
+    
     public void setTarefaMouseAdapter(MouseEvent sourceEvent, MouseListener e) {
         Component source = (Component) sourceEvent.getSource();
         StikerTarefa targetSticker = null;
@@ -107,6 +129,22 @@ public class MainWindow extends JFrame {
         }
     }
     
+    public void setEditarTarefaButtonMouseAdapter(MouseListener e) {
+        StikerTarefa targetSticker = null;
+        TarefaColuna coluna = quadro.getlastTarefaColuna();
+
+        for(int i = 0; i < coluna.getComponentCount(); i++){
+            if(coluna.getComponent(i) instanceof StikerTarefa){
+                targetSticker = (StikerTarefa) coluna.getComponent(i);
+                break;
+            }
+        }
+        
+        if(targetSticker != null){
+            targetSticker.setEditarTarefaButtonMouseAdapter(e);
+        }
+    }
+    
     public void setEditarTarefaButtonMouseAdapter(MouseEvent sourceEvent, MouseListener e) {
         Component source = (Component) sourceEvent.getSource();
         StikerTarefa targetSticker = null;
@@ -126,6 +164,22 @@ public class MainWindow extends JFrame {
 
         if(targetSticker != null){
             targetSticker.setEditarTarefaButtonMouseAdapter(e);
+        }
+    }
+    
+    public void setRemoverTarefaButtonMouseAdapter(MouseListener e) {
+        StikerTarefa targetSticker = null;
+        TarefaColuna coluna = quadro.getlastTarefaColuna();
+
+        for(int i = 0; i < coluna.getComponentCount(); i++){
+            if(coluna.getComponent(i) instanceof StikerTarefa){
+                targetSticker = (StikerTarefa) coluna.getComponent(i);
+                break;
+            }
+        }
+
+        if(targetSticker != null){
+            targetSticker.setRemoverTarefaButtonMouseAdapter(e);
         }
     }
     
@@ -165,10 +219,10 @@ public class MainWindow extends JFrame {
     
     
     
-    public void adicionarComponentesProjeto(String projetoNome) {
+    public void adicionarComponentesProjeto(String id, String projetoNome) {
         limparAreaProjeto();
         
-        menus.addProjeto(projetoNome);
+        menus.addProjeto(id, projetoNome);
         grupoLista = new GrupoLista();
         quadro = new Quadro();
 
@@ -277,9 +331,20 @@ public class MainWindow extends JFrame {
             responsavel.mouseDragged(e);
     }
     
+    public void addicionarColunaTarefa(String id, String nome){
+        ColunaAddicionar colunaAdd = quadro.getEstados().getColunaAddicionar();
+        colunaAdd.mouseClicked(id,nome);
+    }
+    
     public void addicionarColunaTarefa(MouseEvent e, String id, String nome){
         ColunaAddicionar colunaAdd = (ColunaAddicionar) e.getSource();
         colunaAdd.mouseClicked(id,nome);
+    }
+    
+    //addiciona no ultimo loaded Sticker
+    public void addicionarTarefa(String idTarefa, String titulo, String descricao){
+        StickerAddicionar stickerAddicionar = quadro.getlastTarefaColuna().getStickerAddicionar();
+        stickerAddicionar.mouseClicked(idTarefa, titulo, descricao);
     }
     
     public void addicionarTarefa(MouseEvent e, String idTarefa, String titulo, String descricao){
@@ -325,6 +390,24 @@ public class MainWindow extends JFrame {
             return stikerTarefa.getID();
         else
             return "";
+    }
+    
+    public String getColunabyTarefaID(String ID){
+        for(int i = 0; i < quadro.getEstados().getComponentCount(); i++){
+            if(quadro.getEstados().getComponent(i) instanceof TarefaColuna){
+                TarefaColuna tarefaColuna = (TarefaColuna) quadro.getEstados().getComponent(i);
+                for(int j = 0; j < tarefaColuna.getComponentCount(); j++){
+                    if(tarefaColuna.getComponent(j) instanceof StikerTarefa){
+                        StikerTarefa tarefa = (StikerTarefa) tarefaColuna.getComponent(j);
+                        if(tarefa.getID().equals(ID)){
+                            return tarefaColuna.getId();
+                        }
+                    }              
+                }
+            }
+        }
+            
+        return "";
     }
     
     public String getResponsavelLastStikerID(MouseEvent e){

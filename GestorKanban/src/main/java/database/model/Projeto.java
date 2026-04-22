@@ -13,12 +13,12 @@ import java.util.List;
  */
 public class Projeto {
     
-    private int id;
+    private String id;
     private String nome;
     private Grupo grupo;
     private List<Estado> estados;
 
-    public Projeto(int id, String nome) {
+    public Projeto(String id, String nome) {
         this.id = id;
         this.nome = nome;
         this.grupo = new Grupo();
@@ -59,9 +59,12 @@ public class Projeto {
         this.grupo = grupo;
     }
     
-    public int getId() {
+    public String getId() {
         return id;
     }
-
+    
+    public void setId(String id){
+        this.id = id;
+    }
     
 }

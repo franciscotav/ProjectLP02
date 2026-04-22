@@ -231,9 +231,9 @@ public class StikerTarefa extends JPanel {
                 newColumn.add(local(), originalIndex);
                 newColumn.add(Box.createRigidArea(new Dimension(0, 10)), originalIndex + 1);
             } else {
-                int pos = Math.max(0, newColumn.getComponentCount() - 1);
-                newColumn.add(local(), pos);
-                newColumn.add(Box.createRigidArea(new Dimension(0, 10)), pos + 1);
+                //int pos = Math.max(0, newColumn.getComponentCount() - 1);
+                newColumn.add(local(), 1);
+                newColumn.add(Box.createRigidArea(new Dimension(0, 10)), 2);
             }
         } else {
             originalParent.add(local(), originalIndex);
