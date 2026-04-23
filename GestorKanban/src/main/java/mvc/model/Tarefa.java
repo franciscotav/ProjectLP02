@@ -12,11 +12,14 @@ import java.util.List;
  * @author bernardos
  */
 public class Tarefa {
+    
+    //atributos
     private String nome;
     private String descricao;
     private List<String> idPessoas;
     private String id;
 
+    //Construtor
     public Tarefa(String id, String nome, String descricao) {
         
         this.nome = nome;
@@ -25,6 +28,7 @@ public class Tarefa {
         this.id = id;
     }
     
+    //Actions
     public void addIdPessoa(String idPessoa) {
         this.idPessoas.add(idPessoa);
     }
@@ -38,6 +42,7 @@ public class Tarefa {
         }
     }
     
+    // getters
     public List<String> getIdPessoas() {
         return idPessoas;
     }
@@ -46,20 +51,21 @@ public class Tarefa {
         return nome;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
     public String getDescricao() {
         return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
     }
 
     public String getId() {
         return id;
     }
     
+    //setters
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
 }

@@ -18,22 +18,25 @@ import java.util.ArrayList;
  * @author FTCASA
  */
 public class Controlador {
+    
+    //atributos
     private Model model;
     private MainWindow view;
-    
     private int projectSelectedID = 0;
     private int idPessoa = 0;
     private int idEstado = 0;
     private int idTarefa = 0;
     private int idProjeto = 0;
     
+    //Construtor
     public Controlador(MainWindow view, Model model) {
         this.view = view;
         this.model = model;
         this.view.setNovoProjetoListener(new NovoProjetoMouseAdapter());
         this.view.setCarregarProjetoMouseAdapter(new CarregarProjetoMouseAdapter());
     }
-
+    
+    //Classes Menu projeto Listeners
     class NovoProjetoMouseAdapter implements MouseListener {
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -90,6 +93,71 @@ public class Controlador {
 
             
             view.highlightProjeto(String.valueOf(projectSelectedID));
+        }
+        @Override
+        public void mousePressed(MouseEvent e) {}
+        @Override
+        public void mouseReleased(MouseEvent e) {}
+        @Override
+        public void mouseEntered(MouseEvent e) {}
+        @Override
+        public void mouseExited(MouseEvent e) {}
+    }
+    
+    class GuardarProjetoMouseAdapter implements MouseListener {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            String filePath = view.setPath(model.getNomeProjeto(view.getProjetoId(e)));
+            if(filePath.equals("")) return;
+            
+            String[] filePathSplit = filePath.split("\\\\");
+            
+            model.setNomeProjeto(String.valueOf(view.getProjetoId(e)), filePathSplit[filePathSplit.length - 1]);
+            model.saveProjeto(filePath, String.valueOf(view.getProjetoId(e)));
+            view.setNomeProjeto(String.valueOf(view.getProjetoId(e)), filePathSplit[filePathSplit.length - 1]);
+        }
+        @Override
+        public void mousePressed(MouseEvent e) {}
+        @Override
+        public void mouseReleased(MouseEvent e) {}
+        @Override
+        public void mouseEntered(MouseEvent e) {}
+        @Override
+        public void mouseExited(MouseEvent e) {}
+    }
+    
+    class SelecionarProjetoMouseAdapter implements MouseListener {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            String projetoId = view.getProjetoId(e);
+            projectSelectedID = Integer.valueOf(projetoId);
+            view.adicionarComponentesProjeto();
+            carregarProjeto(e);
+            view.highlightProjeto(String.valueOf(projectSelectedID));
+        }
+        @Override
+        public void mousePressed(MouseEvent e) {}
+        @Override
+        public void mouseReleased(MouseEvent e) {}
+        @Override
+        public void mouseEntered(MouseEvent e) {}
+        @Override
+        public void mouseExited(MouseEvent e) {}
+    }
+    
+    class RemoverProjetoMouseAdapter implements MouseListener {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            String projetoId = view.getProjetoId(e);
+            if(String.valueOf(projectSelectedID).equals(projetoId)){
+                view.limparAreaProjeto();
+                model.removeProjeto(projetoId);
+                view.removeProjeto(e);
+                
+            }else{
+                model.removeProjeto(projetoId);
+                view.removeProjeto(e);
+            }
         }
         @Override
         public void mousePressed(MouseEvent e) {}
@@ -182,77 +250,9 @@ public class Controlador {
         
         view.atualizar();
     }
+ 
     
-    //-----MENUPROJETOS
-    //----
-    class GuardarProjetoMouseAdapter implements MouseListener {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            String filePath = view.setPath(model.getNomeProjeto(view.getProjetoId(e)));
-            if(filePath.equals("")) return;
-            
-            String[] filePathSplit = filePath.split("\\\\");
-            
-            model.setNomeProjeto(String.valueOf(view.getProjetoId(e)), filePathSplit[filePathSplit.length - 1]);
-            model.saveProjeto(filePath, String.valueOf(view.getProjetoId(e)));
-            view.setNomeProjeto(String.valueOf(view.getProjetoId(e)), filePathSplit[filePathSplit.length - 1]);
-        }
-        @Override
-        public void mousePressed(MouseEvent e) {}
-        @Override
-        public void mouseReleased(MouseEvent e) {}
-        @Override
-        public void mouseEntered(MouseEvent e) {}
-        @Override
-        public void mouseExited(MouseEvent e) {}
-    }
-    
-    class SelecionarProjetoMouseAdapter implements MouseListener {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            String projetoId = view.getProjetoId(e);
-            projectSelectedID = Integer.valueOf(projetoId);
-            view.adicionarComponentesProjeto();
-            carregarProjeto(e);
-            view.highlightProjeto(String.valueOf(projectSelectedID));
-        }
-        @Override
-        public void mousePressed(MouseEvent e) {}
-        @Override
-        public void mouseReleased(MouseEvent e) {}
-        @Override
-        public void mouseEntered(MouseEvent e) {}
-        @Override
-        public void mouseExited(MouseEvent e) {}
-    }
-    
-    class RemoverProjetoMouseAdapter implements MouseListener {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            String projetoId = view.getProjetoId(e);
-            if(String.valueOf(projectSelectedID).equals(projetoId)){
-                view.limparAreaProjeto();
-                model.removeProjeto(projetoId);
-                view.removeProjeto(e);
-                
-            }else{
-                model.removeProjeto(projetoId);
-                view.removeProjeto(e);
-            }
-        }
-        @Override
-        public void mousePressed(MouseEvent e) {}
-        @Override
-        public void mouseReleased(MouseEvent e) {}
-        @Override
-        public void mouseEntered(MouseEvent e) {}
-        @Override
-        public void mouseExited(MouseEvent e) {}
-    }
-    
-    
-    //-------GRUPOLISTA
-    //---------------------------
+    //Classes Grupo(lista de membros) Listeners
     class AddicionarMembroMouseAdapter implements MouseListener {
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -351,8 +351,7 @@ public class Controlador {
         public void mouseMoved(java.awt.event.MouseEvent e) {}
     }
 
-    //-----Quadro
-    //---
+    //Classes Estados + adicionar Tarefas aos estados Listeners
     class AddicionarColunaButtonMouseAdapter implements MouseListener {
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -440,8 +439,7 @@ public class Controlador {
         public void mouseExited(java.awt.event.MouseEvent e) {}
     }
 
-    //----StikerTarefa
-    //---
+    //Classes responsaveis pelo Sticker 
     class TarefaMouseAdapter implements MouseListener, MouseMotionListener {
         String idEstadoOrigem;
         @Override

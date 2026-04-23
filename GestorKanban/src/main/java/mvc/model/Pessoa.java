@@ -13,24 +13,23 @@ import java.util.List;
  */
 public class Pessoa{
     
+    //atributos
     private String nome;
     private String id;
     private List<String> idTarefas;
 
+    //construtor
     public Pessoa(String id, String nome) {
         this.nome = nome;
         this.id = id;
         this.idTarefas = new ArrayList<>();
     }
     
+    //getters
     public String getNome() {
         return nome;
     }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
+    
     public String getId() {
         return id;
     }
@@ -38,7 +37,13 @@ public class Pessoa{
     public List<String> getTarefasID() {
         return idTarefas;
     }
-
+    
+    //setters
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+    
+    //actions
     public void addIdTarefa(String tarefaID) {
         idTarefas.add(tarefaID);
     }

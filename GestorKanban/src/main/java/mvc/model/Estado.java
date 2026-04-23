@@ -12,16 +12,20 @@ import java.util.List;
  * @author bernardos
  */
 public class Estado {
+    
+    //atributos
     private String nome;
     private List<Tarefa> tarefas;
     private String id;
-
+    
+    //construtor
     public Estado(String id, String nome) {
         this.nome = nome;
         this.tarefas =  new ArrayList<>();
         this.id = id;
     }
     
+    //actions
     public void addTarefa(Tarefa tarefa){
         this.tarefas.add(tarefa);
     }
@@ -39,6 +43,7 @@ public class Estado {
         }
     }
     
+    //getters
     public Tarefa getTarefaById(String id){
         for(Tarefa t : tarefas){
             if (t.getId().equals(id)) {
@@ -56,11 +61,12 @@ public class Estado {
         return nome;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
     public String getId() {
         return id;
     } 
+    
+    //setters
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 }

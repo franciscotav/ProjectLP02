@@ -12,12 +12,16 @@ import java.util.List;
  * @author bernardos
  */
 public class Grupo{
+    
+    //atributos
     private List<Pessoa> pessoas;
-
+    
+    //constutor
     public Grupo() {
         this.pessoas = new ArrayList<>();
     }
-
+    
+    //actions
     public void addPessoa(Pessoa pessoa){
         pessoas.add(pessoa);
     }
@@ -60,6 +64,7 @@ public class Grupo{
         }
     }
     
+    //getters
     public Pessoa getPessoaById(String id){
         for(Pessoa p : pessoas){
             if (p.getId().equals(id)) {

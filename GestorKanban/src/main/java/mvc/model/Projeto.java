@@ -13,11 +13,13 @@ import java.util.List;
  */
 public class Projeto {
     
+    //atributos
     private String id;
     private String nome;
     private Grupo grupo;
     private List<Estado> estados;
 
+    //construtor
     public Projeto(String id, String nome) {
         this.id = id;
         this.nome = nome;
@@ -25,10 +27,12 @@ public class Projeto {
         this.estados = new ArrayList<>();
     }
     
+    //actions
     public void addEstado(String id, String nome){
         this.estados.add(new Estado(id, nome));
     }
     
+    //getters
     public Estado getEstadoById(String id){
         for(Estado e : estados){
             if (e.getId().equals(id)) {
@@ -46,20 +50,21 @@ public class Projeto {
         return nome;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
     public Grupo getGrupo() {
         return grupo;
-    }
-
-    public void setGrupo(Grupo grupo) {
-        this.grupo = grupo;
     }
     
     public String getId() {
         return id;
+    }
+    
+    //setters
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setGrupo(Grupo grupo) {
+        this.grupo = grupo;
     }
     
     public void setId(String id){
