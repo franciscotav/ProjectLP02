@@ -28,7 +28,6 @@ public class Projeto {
     public void addEstado(String id, String nome){
         this.estados.add(new Estado(id, nome));
     }
-
     
     public Estado getEstadoById(String id){
         for(Estado e : estados){

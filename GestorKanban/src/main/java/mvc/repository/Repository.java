@@ -4,10 +4,6 @@
  */
 package mvc.repository;
 import mvc.model.Projeto;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import trabalho2.IODataClass;
@@ -19,10 +15,6 @@ import trabalho2.IODataClass;
  * * Breakdown técnico:
  * - saveToFile(): Faz o dump do Model para uma string JSON escreve no ficherio atraves de IODataClass.
  * - loadFromFile(): Faz o fetch do data array, o parse via Gson e arranca o post-processing.
- * - removerClone() [Internal]: Garante a referential integrity. 
- * Como o Gson por default cria clones para o mesmo ID, este método usa o 'Grupo' 
- * como Single Source of Truth. Faz um loop pelas 'Tarefas' e dá replace aos clones 
- * pelas Pessoas reais.
  * Exemplo de uso:
  * 
  * repo.saveToFile("projeto_1.json", Projeto projeto1)

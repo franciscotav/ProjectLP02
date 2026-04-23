@@ -37,9 +37,6 @@ public class Menus extends JPanel {
         add(projetoMenuPanel);
     }
     
-    public void setNomeProjeto(String projetoID, String nome){
-        projetoMenuPanel.setNomeProjeto(projetoID,nome);
-    }
     
     //listeneres
     public void adicionarNovoProjetoListener(MouseListener listener) {
@@ -71,7 +68,11 @@ public class Menus extends JPanel {
     public void addProjeto(String id, String nome){
         projetoMenuPanel.add(new ProjetoPanel(id, nome));
     }
-
+    
+    public void setNomeProjeto(String projetoID, String nome){
+            projetoMenuPanel.setNomeProjeto(projetoID,nome);
+        }
+    
 }
 
 /**
@@ -211,16 +212,10 @@ class ProjetoPanel extends JPanel {
     private String projetoNome;
     private JLabel projetoNomeLabel;
     private String id;
-
-    
-//    JButton buttonEditar;
     JButton buttonGuardar;
     JButton buttonFechar;
     
-    public void setGuardarProjetoMouseAdapter(MouseListener e){
-        buttonGuardar.addMouseListener(e);
-    }
-   
+    //construtor
     public ProjetoPanel(String id, String projetoNome){
 
         this.id = id;
@@ -252,17 +247,16 @@ class ProjetoPanel extends JPanel {
         add(buttonFechar);
     }
     
+    //listeners
+    public void setGuardarProjetoMouseAdapter(MouseListener e){
+        buttonGuardar.addMouseListener(e);
+    }
+    
     public void setRemoverProjetoMouseAdapter(MouseListener e){
         buttonFechar.addMouseListener(e);
     }
     
-    public void setNome(String projetoNome){
-        this.projetoNome = projetoNome;
-        projetoNomeLabel.setText(projetoNome);
-        this.revalidate();
-        this.repaint();
-    }
-    
+    //styles
     private void styleLabel(JLabel jlabel){
         jlabel.setFont(new Font("Segoe UI", Font.BOLD, 22));
         jlabel.setForeground(Color.gray);
@@ -276,13 +270,21 @@ class ProjetoPanel extends JPanel {
         button.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
-
+    
+    //getters
     public String getId() {
         return id;
     }
-
+    
+    //setters 
     public void setId(String id) {
         this.id = id;
     }
-
+    
+    public void setNome(String projetoNome){
+        this.projetoNome = projetoNome;
+        projetoNomeLabel.setText(projetoNome);
+        this.revalidate();
+        this.repaint();
+    }
 }

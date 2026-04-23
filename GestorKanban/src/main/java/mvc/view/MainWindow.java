@@ -234,6 +234,24 @@ public class MainWindow extends JFrame {
         }
     }
     
+    public void setNomeProjeto(String projetoID, String nome){
+        menus.setNomeProjeto(projetoID, nome);
+    }
+    
+    public void adicionarComponentesProjeto(String id, String projetoNome) {
+        limparAreaProjeto();
+
+        menus.addProjeto(id, projetoNome);
+        grupoLista = new GrupoLista();
+        quadro = new Quadro();
+
+        add(grupoLista, BorderLayout.WEST);
+        add(quadro, BorderLayout.CENTER);
+
+        revalidate();
+        repaint();
+    }
+    
     public void adicionarComponentesProjeto() {
         limparAreaProjeto();
         
@@ -587,20 +605,6 @@ public class MainWindow extends JFrame {
     }
     
     //auxiliares 
-    public void adicionarComponentesProjeto(String id, String projetoNome) {
-        limparAreaProjeto();
-
-        menus.addProjeto(id, projetoNome);
-        grupoLista = new GrupoLista();
-        quadro = new Quadro();
-
-        add(grupoLista, BorderLayout.WEST);
-        add(quadro, BorderLayout.CENTER);
-
-        revalidate();
-        repaint();
-    }
-
     public void limparAreaProjeto() {
         if (grupoLista != null) {
             remove(grupoLista);
@@ -611,10 +615,6 @@ public class MainWindow extends JFrame {
 
         revalidate();
         repaint();
-    }
-    
-    public void setNomeProjeto(String projetoID, String nome){
-        menus.setNomeProjeto(projetoID, nome);
     }
     
     public void sincronizarMembrosTarefas(String pessoaID, String tarefaID) {

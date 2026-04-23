@@ -174,8 +174,6 @@ public class Model{
         }
     }
     
-    
-    
     public void editarTarefa(String idProjeto ,String tarefaID, String novoTitulo, String novaDescricao){
         Projeto projeto = this.getProjetoById(idProjeto);
         
@@ -211,7 +209,7 @@ public class Model{
         projeto.getGrupo().editarPessoa(idPessoa, novoNome);
     }
     
-     // estado
+    // estado
     public void addEstado(String idProjeto, String id, String nome){
         Projeto projeto = this.getProjetoById(idProjeto);
         projeto.addEstado(id, nome);
