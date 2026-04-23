@@ -159,7 +159,7 @@ public class StikerTarefa extends JPanel {
         }
     }
 
-    public void editarMousePressed() {
+    public ArrayList<String> editarMousePressed() {
         JPanel panelEdicao = new JPanel();
         panelEdicao.setLayout(new BoxLayout(panelEdicao, BoxLayout.Y_AXIS));
 
@@ -182,26 +182,39 @@ public class StikerTarefa extends JPanel {
 
         int result = JOptionPane.showConfirmDialog(this, panelEdicao,
                 "Editar Tarefa #" + idTarefa, JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-
+        
+        ArrayList<String> tarefasRemovidas = new ArrayList();
+        
         if (result == JOptionPane.OK_OPTION) {
             labelTitulo.setText(fieldTitulo.getText());
             stringDescricao = areaDesc.getText();
             labelDescricao.setText("<html><body style='width: 180px;'>" + stringDescricao + "</body></html>");
-
+           
+            ArrayList<Integer> indicesToRemove = new ArrayList<>();
+            int checkBoxIndex = 0;
             for (int i = 0; i < selectResponsavel.getComponentCount(); i++) {
-                if (selectResponsavel.getComponent(i) instanceof JCheckBox) {
+                if(selectResponsavel.getComponent(i) instanceof JCheckBox) {
                     JCheckBox checkBox = (JCheckBox) selectResponsavel.getComponent(i);
-                    if (!checkBox.isSelected()) {
-                        membrosAtribuidos.get(i).removeStickers(this);
-                        removeResponsavel(membrosAtribuidos.get(i));
+                    if(!checkBox.isSelected()) {
+                        indicesToRemove.add(checkBoxIndex);
                     }
+                    checkBoxIndex++;
                 }
+            }
+            
+            for (int i = indicesToRemove.size() - 1; i >= 0; i--) {
+                int index = indicesToRemove.get(i);
+                tarefasRemovidas.add(membrosAtribuidos.get(index).getId());
+                membrosAtribuidos.get(index).removeStickers(this);
+                removeResponsavel(membrosAtribuidos.get(index));
             }
 
             updateStickers();
             this.revalidate();
             this.repaint();
         }
+        
+        return tarefasRemovidas;
     }
 
     //drag and drop Sticker

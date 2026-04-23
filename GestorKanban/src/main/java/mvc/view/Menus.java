@@ -37,6 +37,10 @@ public class Menus extends JPanel {
         add(projetoMenuPanel);
     }
     
+    public void setNomeProjeto(String projetoID, String nome){
+        projetoMenuPanel.setNomeProjeto(projetoID,nome);
+    }
+    
     //listeneres
     public void adicionarNovoProjetoListener(MouseListener listener) {
         topMenuPanel.setNovoProjetoClickListener(listener);
@@ -134,6 +138,17 @@ class ProjetoMenuPanel extends JPanel {
 
     public void addProjetoPanel(ProjetoPanel projetoPanel) {
         add(projetoPanel);
+    }
+    
+    public void setNomeProjeto(String projetoID, String nome){
+        for(int i = 0; i < getComponentCount(); i++){
+            if(getComponent(i) instanceof ProjetoPanel){
+                ProjetoPanel projetoPanel = (ProjetoPanel) getComponent(i);
+                if(projetoPanel.getId().equals(projetoID))
+                    projetoPanel.setNome(nome);
+            }
+
+        }
     }
     
     public void highlightProjeto(String projetoId){
@@ -239,6 +254,13 @@ class ProjetoPanel extends JPanel {
     
     public void setRemoverProjetoMouseAdapter(MouseListener e){
         buttonFechar.addMouseListener(e);
+    }
+    
+    public void setNome(String projetoNome){
+        this.projetoNome = projetoNome;
+        projetoNomeLabel.setText(projetoNome);
+        this.revalidate();
+        this.repaint();
     }
     
     private void styleLabel(JLabel jlabel){

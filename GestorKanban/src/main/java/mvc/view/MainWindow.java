@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.io.File;
+import java.util.ArrayList;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -251,11 +252,11 @@ public class MainWindow extends JFrame {
         grupoLista.criarNovoResponsavel(id,nome);
     }
     
-    public void editarResponsavel(MouseEvent e){
+    public ArrayList<String> editarResponsavel(MouseEvent e){
         JButton buttonEditar = (JButton) e.getSource();
         JPanel panelButtons = (JPanel) buttonEditar.getParent();
         Responsavel responsavel = (Responsavel) panelButtons.getParent();
-        responsavel.editar();
+        return responsavel.editar();
     }
 
     public void removerResponsavel(MouseEvent e) {
@@ -344,7 +345,7 @@ public class MainWindow extends JFrame {
     }
     
     //tarefas
-    public void editarTarefa(MouseEvent e) {
+    public ArrayList<String> editarTarefa(MouseEvent e) {
         Component source = (Component) e.getSource();
         StikerTarefa stickerTarefa = null;
         while (source != null) {
@@ -356,9 +357,10 @@ public class MainWindow extends JFrame {
         }
 
         if (stickerTarefa != null) {
-            stickerTarefa.editarMousePressed();
+            return stickerTarefa.editarMousePressed();
         }
-
+        
+        return null;
     }
 
     public void removerTarefa(MouseEvent e) {
@@ -610,7 +612,11 @@ public class MainWindow extends JFrame {
         revalidate();
         repaint();
     }
-
+    
+    public void setNomeProjeto(String projetoID, String nome){
+        menus.setNomeProjeto(projetoID, nome);
+    }
+    
     public void sincronizarMembrosTarefas(String pessoaID, String tarefaID) {
         Responsavel responsavel = null;
         StikerTarefa stickerTarefa = null;

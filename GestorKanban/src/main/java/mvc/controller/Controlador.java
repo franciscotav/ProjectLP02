@@ -11,6 +11,7 @@ import mvc.view.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
 
 /**
  *
@@ -189,8 +190,12 @@ public class Controlador {
         public void mouseClicked(MouseEvent e) {
             String filePath = view.setPath(model.getNomeProjeto(view.getProjetoId(e)));
             if(filePath.equals("")) return;
-                        
+            
+            String[] filePathSplit = filePath.split("\\\\");
+            
+            model.setNomeProjeto(String.valueOf(view.getProjetoId(e)), filePathSplit[filePathSplit.length - 1]);
             model.saveProjeto(filePath, String.valueOf(view.getProjetoId(e)));
+            view.setNomeProjeto(String.valueOf(view.getProjetoId(e)), filePathSplit[filePathSplit.length - 1]);
         }
         @Override
         public void mousePressed(MouseEvent e) {}
@@ -275,10 +280,16 @@ public class Controlador {
     class EditarMembroMouseAdapter implements MouseListener {
         @Override
         public void mouseClicked(MouseEvent e) {
-            view.editarResponsavel(e);
+            ArrayList<String> idTarefaRemovida = view.editarResponsavel(e);
             String id = view.getResponsavelID(e);
             String novoNome = view.getResponsavelNome(e);
             model.editarPessoa(String.valueOf(projectSelectedID), id, novoNome);
+            
+            if(idTarefaRemovida != null) 
+            for(int i = 0; i < idTarefaRemovida.size(); i++){
+                model.removePessoaFromTarefa(String.valueOf(projectSelectedID), id, idTarefaRemovida.get(i));
+            }
+            
         }
         @Override
         public void mousePressed(java.awt.event.MouseEvent e) {}
@@ -469,12 +480,17 @@ public class Controlador {
     class EditarTarefaButtonMouseAdapter implements MouseListener {
         @Override
         public void mouseClicked(MouseEvent e) {
-            view.editarTarefa(e);
+            ArrayList<String> idReponsavelRemovido = view.editarTarefa(e);
             
             String idTarefaString = view.getTarefaID(e);
             String novoTitulo = view.getTarefaTitulo(e);
             String novaDescricao = view.getTarefaDescricao(e);
             model.editarTarefa(String.valueOf(projectSelectedID), idTarefaString, novoTitulo, novaDescricao);
+
+            if(idReponsavelRemovido != null)
+            for(int i = 0; i < idReponsavelRemovido.size(); i++){
+                model.removePessoaFromTarefa(String.valueOf(projectSelectedID), idReponsavelRemovido.get(i), idTarefaString);
+            }
         }
         @Override
         public void mousePressed(java.awt.event.MouseEvent e) {}

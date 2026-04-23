@@ -338,7 +338,7 @@ class Responsavel extends JPanel {
         coluna.repaint();
     }
 
-    public void editar() {
+    public ArrayList<String> editar() {
         JPanel panelEdicao = new JPanel();
         panelEdicao.setLayout(new BoxLayout(panelEdicao, BoxLayout.Y_AXIS));
 
@@ -358,26 +358,41 @@ class Responsavel extends JPanel {
 
         int result = JOptionPane.showConfirmDialog(this, panelEdicao,
                 "Editar Membro #" + id, JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-
+        
+        ArrayList<String> tarefasRemovidas = new ArrayList<>();
+        
         if (result == JOptionPane.OK_OPTION) {
             nome = fieldTitulo.getText();
             labelname.setText("<html><body style='width: 180px;'>" + "👤 " + nome + "</body></html>");
-
-            for (int i = 0; i < selectSticker.getComponentCount(); i++) {
-                if (selectSticker.getComponent(i) instanceof JCheckBox) {
+            
+            ArrayList<Integer> indicesToRemove = new ArrayList<>();
+            int checkBoxIndex = 0;
+            for(int i = 0; i < selectSticker.getComponentCount(); i++) {
+                if(selectSticker.getComponent(i) instanceof JCheckBox) {
                     JCheckBox checkBox = (JCheckBox) selectSticker.getComponent(i);
-                    if (!checkBox.isSelected()) {
-                        stickersAtribuidos.get(i).removeResponsavel(this);
-                        removeStickers(stickersAtribuidos.get(i));
+                    if(!checkBox.isSelected()){
+                        indicesToRemove.add(checkBoxIndex);
                     }
+                    checkBoxIndex++;
                 }
+            }
+            
+            for(int i = indicesToRemove.size() - 1; i >= 0; i--) {
+                int index = indicesToRemove.get(i);
+                tarefasRemovidas.add(stickersAtribuidos.get(index).getID());
+                stickersAtribuidos.get(index).removeResponsavel(this);
+                removeStickers(stickersAtribuidos.get(index));
             }
 
             updateStickers();
             revalidate();
             repaint();
+
         }
+        
+        return tarefasRemovidas;
     }
+    
 
     private void removeInStickers() {
         for (StikerTarefa tarefa : stickersAtribuidos) {
