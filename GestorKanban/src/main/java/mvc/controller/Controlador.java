@@ -342,7 +342,6 @@ public class Controlador {
         public void mouseEntered(java.awt.event.MouseEvent e) {}
         @Override
         public void mouseExited(java.awt.event.MouseEvent e) {}
-        //MouseMotionListener
         @Override
         public void mouseDragged(java.awt.event.MouseEvent e) {
             view.membroMouseDragged(e);

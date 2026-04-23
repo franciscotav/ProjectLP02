@@ -87,9 +87,6 @@ class Estados extends JPanel {
         colunaAddiconar = new ColunaAddicionar();
 
         add(Box.createVerticalGlue());
-        //add(new TarefaColuna("Para fazer"));
-        //add(new TarefaColuna("A fazer"));
-        //add(new TarefaColuna("Conluido"));
         add(colunaAddiconar);
     }
     

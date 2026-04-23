@@ -232,9 +232,6 @@ class ProjetoPanel extends JPanel {
         projetoNomeLabel = new JLabel(projetoNome);
         styleLabel(projetoNomeLabel);
         
-//        buttonEditar = new JButton("🖉");
-//        buttonStyle(buttonEditar);
-        
         buttonGuardar = new JButton("💾");
         buttonStyle(buttonGuardar);
 
@@ -242,7 +239,6 @@ class ProjetoPanel extends JPanel {
         buttonStyle(buttonFechar);
 
         add(projetoNomeLabel);
-//        add(buttonEditar);
         add(buttonGuardar);
         add(buttonFechar);
     }

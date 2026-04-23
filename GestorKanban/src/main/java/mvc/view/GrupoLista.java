@@ -463,7 +463,7 @@ class Responsavel extends JPanel {
         return stickersAtribuidos.getLast().getID();
     }
     
-    private Responsavel local() {   //TODO: questionar se faz sentido ter isto
+    private Responsavel local() {   
         return this;
     }
     
